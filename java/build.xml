@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<project name="merge" default="test" basedir=".">
+   <target name="compile">
+      <mkdir dir="build"/>
+      <javac destdir="build"
+             debug="on"
+			 optimize="on"
+			 includeantruntime="false"
+			 >
+         <src path="merge"/>
+		 <compilerarg value="-Xlint"/>
+      </javac>
+   </target>
+
+   <target name="test" depends="compile">
+      <java fork="yes" failonerror="yes"
+            classname="com.khivi.merge.test.MergeSortTest"
+            classpath="build">  
+          <arg line=""/>
+		  <assertions><enable/></assertions>
+      </java>
+      <java fork="yes" failonerror="yes"
+            classname="com.khivi.merge.test.MergeSortFileTest"
+            classpath="build">  
+			<arg line="../data/test.txt"/>
+		  <assertions><enable/></assertions>
+      </java>
+   </target>
+
+   <target name="clean">
+      <delete dir="build"/>
+   </target>
+
+</project>
