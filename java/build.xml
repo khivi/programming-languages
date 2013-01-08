@@ -14,13 +14,13 @@
 
    <target name="test" depends="compile">
       <java fork="yes" failonerror="yes"
-            classname="com.khivi.merge.test.MergeSortTest"
+            classname="com.khivi.merge.test.MergeSortedTest"
             classpath="build">  
           <arg line=""/>
 		  <assertions><enable/></assertions>
       </java>
       <java fork="yes" failonerror="yes"
-            classname="com.khivi.merge.test.MergeSortFileTest"
+            classname="com.khivi.merge.test.MergeSortedFileTest"
             classpath="build">  
 			<arg line="../data/test.txt"/>
 		  <assertions><enable/></assertions>

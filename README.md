@@ -3,14 +3,15 @@
 
   Solving same problem in multiple programming languages.
 
-  class MergeSort<E> {
-	 MergeSort(List<Iterable<E>> collections);
+  class MergeSorted<E> {
+	 MergeSorted(List<Iterable<E>> collections);
 	 public Iterator<E> iterator();
   }
 
-  in each language use the language specific idioms for iterators.
+  in each language use the language specific idioms.
+
+  To simulate a test use data file test.txt. Read the file one
+  time for each collection. Assert the result is equal to the OUTPUT line.
 
 
-  Add unit test for the class.
-  Use data file text.txt to test your implementation.
 

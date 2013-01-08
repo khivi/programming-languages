@@ -1,7 +1,7 @@
 package com.khivi.merge.test;
 
 
-import com.khivi.merge.MergeSort;
+import com.khivi.merge.MergeSorted;
 
 import java.lang.Iterable;
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
 
-public class MergeSortFileTest {
+public class MergeSortedFileTest {
 
 	private static class TestFileReader {
 		TestFileReader(String filename, String linePrefix) throws FileNotFoundException, IOException {
@@ -56,7 +56,7 @@ public class MergeSortFileTest {
 
 		List<Integer> needResult = new TestFileReader(filename, "OUTPUT").elems;
 
-		MergeSort<Integer> ms = new MergeSort<Integer>(collections);
+		MergeSorted<Integer> ms = new MergeSorted<Integer>(collections);
 		List<Integer> result = Util.asList(ms.iterator());
 		assert(needResult.equals(result));
 		System.out.println("Checked file " + filename);

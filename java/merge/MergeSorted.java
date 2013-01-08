@@ -7,15 +7,12 @@ import java.lang.Iterable;
 import java.lang.UnsupportedOperationException;
 import java.util.NoSuchElementException;
 
-// Comparable provides compareTo 
-// Iteratble provides interator()
-
-public class MergeSort<E extends Comparable<E>> implements Iterable<E> {
+public class MergeSorted<E extends Comparable<E>> implements Iterable<E> {
 
 	@Override
 	public Iterator<E> iterator() { return new MyIterator(); }
 
-	public MergeSort(List<Iterable<E>> collections) {
+	public MergeSorted(List<Iterable<E>> collections) {
 		m_collections = collections;
 	}
 	private final List<Iterable<E>> m_collections;
