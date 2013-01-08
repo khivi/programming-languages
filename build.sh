@@ -8,3 +8,7 @@ echo "****Java****"
 cd $TOP_DIR/java
 ant test
 
+echo "****Scala****"
+cd $TOP_DIR/scala
+sbt test
+

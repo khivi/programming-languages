@@ -1,10 +1,10 @@
 package com.khivi.merge
 
 object MergeSorted {
-  def apply[T <% Ordered[T]](collections: List[Iterable[T]]) =  new MergeSorted(collections)
+  def apply[T <% Ordered[T]](collections: Seq[Iterable[T]]) =  new MergeSorted(collections)
 }
 
-class MergeSorted[T <% Ordered[T]](collections: List[Iterable[T]]) extends Iterable[T] {
+class MergeSorted[T <% Ordered[T]](collections: Seq[Iterable[T]]) extends Iterable[T] {
     override def iterator: Iterator[T] = new MyIterator()
 
 	class MyIterator extends Iterator[T] {
