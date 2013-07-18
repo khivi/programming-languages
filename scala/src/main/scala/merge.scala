@@ -10,7 +10,7 @@ class MergeSorted[T <% Ordered[T]](streams: Seq[Stream[T]]) {
 
       private[this] def getStream(streams: Seq[SI]): Stream[T] = {
 
-        def  getMin: Option[SI] = streams.foldRight(None: Option[SI]){ (stream, min)  =>
+        def getMin: Option[SI] = streams.foldRight(None: Option[SI]){ (stream, min) =>
           if (stream._1.isEmpty)
             min
           else if (min.isEmpty || stream._1.head < min.get._1.head)
@@ -19,13 +19,17 @@ class MergeSorted[T <% Ordered[T]](streams: Seq[Stream[T]]) {
             min
         }
 
-        getMin  match {
-          case None  => Stream.empty
-          case Some(min) =>  val newStreams: Seq[SI] = streams.updated(min._2, (min._1.tail, min._2))
-            //.map(_._1).filter(!_.isEmpty).zipWithIndex
-                             min._1.head #:: getStream(newStreams)
+        getMin match {
+          case None => Stream.empty
+          case Some(min) => val stream = min._1
+                            val idx = min._2
+                            val newStreams = stream.tail.isEmpty match  {
+                                case false => streams.updated(idx, (stream.tail, idx))
+                                case true => streams.filter(_._2 != idx).map(_._1).zipWithIndex
+                             }
+                             stream.head #:: getStream(newStreams)
         }
       }
 
-    private def toStream: Stream[T] = getStream(streams.zipWithIndex)
+    private def toStream: Stream[T] = getStream(streams.filter(!_.isEmpty).zipWithIndex)
 }
