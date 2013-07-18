@@ -22,7 +22,8 @@ class MergeSorted[T <% Ordered[T]](streams: Seq[Stream[T]]) {
         getMin  match {
           case None  => Stream.empty
           case Some(min) =>  val newStreams: Seq[SI] = streams.updated(min._2, (min._1.tail, min._2))
-                                 min._1.head #:: getStream(newStreams)
+            //.map(_._1).filter(!_.isEmpty).zipWithIndex
+                             min._1.head #:: getStream(newStreams)
         }
       }
 

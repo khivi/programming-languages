@@ -20,16 +20,13 @@ class TestSuite extends FunSuite {
       private[this] val regex = new Regex(linePrefix + ":(.*)")
       private[this] def getStream(lines: Stream[String], data: Stream[Int]): Stream[Int] = {
         data.isEmpty match {
-          case true => lines.headOption match {
-                          case Some(line) =>  regex.findPrefixOf(line) match {
+          case true => lines.isEmpty match {
+                          case false =>  regex.findPrefixOf(lines.head) match {
                                                 case Some(regex(x)) => val data = x.split(",").map(_.toInt).toStream 
-                                                                        data.isEmpty match {
-                                                                          case true => getStream(lines.tail, Stream.empty)
-                                                                          case false => data.head #:: getStream(lines.tail, data.tail)
-                                                                        }
+                                                                       getStream(lines.tail, data)
                                                 case None => getStream(lines.tail, Stream.empty)
                                               }
-                          case None => Stream.empty
+                          case true => Stream.empty
                         }
           case false => data.head #:: getStream(lines, data.tail)
         }
