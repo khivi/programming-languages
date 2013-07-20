@@ -38,8 +38,9 @@ class TestSuite extends FunSuite {
 
   test("File error" ) {
     val testFile = TestFile("../data/err.txt")
-    assert(testFile.output.size === 1)
-    assert(testFile.output.head === 2)
+    assert(testFile.output.size === 3)
+    assert(testFile.output.head === 10)
+    assert(testFile.output.last === 3000)
     val gotResult = MergeSorted(testFile.collections)
     assert(gotResult.head === 1)
     assert(gotResult != testFile.output)
@@ -59,15 +60,17 @@ object TestFile {
 
 
 class FileMatchIterator(filename: String, linePrefix: String) {
-  private[this] val regex = new Regex(linePrefix + ":(.*)")
   private[this] def getStream(lines: Stream[String], data: Stream[Int] = Stream.empty): Stream[Int] = {
     data.isEmpty match {
       case true => lines.isEmpty match {
-                      case false =>  regex.findPrefixOf(lines.head) match {
-                                            case Some(regex(x)) => val data = x.split(",").map(_.toInt).toStream 
-                                                                   getStream(lines.tail, data)
-                                            case None => getStream(lines.tail, Stream.empty)
-                                          }
+                      case false => val line = lines.head
+                                    val prefix = linePrefix + ":"
+                                    line.startsWith(linePrefix) match {
+                                      case true => val values = line.stripPrefix(linePrefix)
+                                                   val data = """\d+""".r.findAllIn(values).toStream.map(_.toInt)
+                                                   getStream(lines.tail, data)
+                                      case false =>  getStream(lines.tail, Stream.empty)
+                                    }
                       case true => Stream.empty
                     }
       case false => data.head #:: getStream(lines, data.tail)
