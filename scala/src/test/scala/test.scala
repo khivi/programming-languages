@@ -49,7 +49,9 @@ class TestSuite extends FunSuite {
 }
 
 class TestFile(filename: String) {
-    private val number = Source.fromFile(filename).getLines.next.replaceAll("NUMBER=","").toInt
+    //private val number = Source.fromFile(filename).getLines.next.replaceAll("NUMBER=","").toInt
+    private val header = Source.fromFile(filename).getLines.next
+    private val number = """NUMBER=(\d+)""".r.findMatchIn(header).get.group(1).toInt
     val collections = (0 until number).map(n=>FileMatchIterator(filename, "COLLECTION"+n))
     val output = FileMatchIterator(filename, "OUTPUT")
 }
