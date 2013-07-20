@@ -6,6 +6,7 @@ object MergeSorted {
 
 class MergeSorted[T <% Ordered[T]](streams: Seq[Stream[T]]) {
       private[this] type SI = (Stream[T], Int)
+
       private[this] def getStream(streams: Seq[SI]): Stream[T] = {
         def getMin: Option[SI] = streams.foldRight(None: Option[SI]){ (stream, min) =>
           if (stream._1.isEmpty)
