@@ -6,7 +6,7 @@ import scala.util.matching.Regex
 
 class TestSuite extends FunSuite {
   test("Simple test") {
-    val collections = Seq(
+    val collections = IndexedSeq(
                         Seq("a", "d"),
                         Seq("a", "e", "g"),
                         Seq("d", "g", "z")
@@ -18,7 +18,7 @@ class TestSuite extends FunSuite {
   test("Infinite streams first" ) {
     // Input is from n...infinity
     // Output is -1,-1,-1...
-    val collections = (0 until 1000).foldLeft(List[Stream[Int]]())((r, i) => Stream.from(i) :: r)
+    val collections = (0 until 1000).foldLeft(List[Stream[Int]]())((r, i) => Stream.from(i) :: r).toIndexedSeq
     val output = Stream.from(-1,0)
     assert(MergeSorted(collections) != output)
   }
@@ -26,7 +26,7 @@ class TestSuite extends FunSuite {
   test("Infinite streams second" ) {
     // Input is from 1...infinity
     // Output is 1,1,1,...
-    val collections = (0 until 1000).foldLeft(List[Stream[Int]]())((r, _) => Stream.from(1) :: r)
+    val collections = (0 until 1000).foldLeft(List[Stream[Int]]())((r, _) => Stream.from(1) :: r).toIndexedSeq
     val output = Stream.from(1,0)
     assert(MergeSorted(collections) != output)
   }

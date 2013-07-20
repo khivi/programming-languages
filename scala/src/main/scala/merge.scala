@@ -1,13 +1,13 @@
 package com.khivi.merge
 
 object MergeSorted {
-  def apply[T <% Ordered[T]](streams: Seq[Stream[T]]): Stream[T] =  new MergeSorted(streams).toStream
+  def apply[T <% Ordered[T]](streams: IndexedSeq[Stream[T]]): Stream[T] =  new MergeSorted(streams).toStream
 }
 
-class MergeSorted[T <% Ordered[T]](streams: Seq[Stream[T]]) {
+class MergeSorted[T <% Ordered[T]](streams: IndexedSeq[Stream[T]]) {
       private[this] type SI = (Stream[T], Int)
 
-      private[this] def getStream(streams: Seq[SI]): Stream[T] = {
+      private[this] def getStream(streams: IndexedSeq[SI]): Stream[T] = {
         def getMin: Option[SI] = streams.foldRight(None: Option[SI]){ (stream, min) =>
           if (stream._1.isEmpty)
             min
