@@ -62,14 +62,14 @@ object TestFile {
 
 
 class FileMatchIterator(filename: String, linePrefix: String) {
+  import com.khivi.lazysplit.StreamSplit._
   private[this] def getStream(lines: Stream[String], data: Stream[Int] = Stream.empty): Stream[Int] = {
     data.isEmpty match {
       case true => lines.isEmpty match {
                       case false => val line = lines.head
                                     val prefix = linePrefix + ":"
-                                    line.startsWith(linePrefix) match {
-                                      case true => val values = line.stripPrefix(linePrefix)
-                                                   val data = """\d+""".r.findAllIn(values).toStream.map(_.toInt)
+                                    line.startsWith(prefix) match {
+                                      case true => val data = line.stripPrefix(prefix).splitAsStream(',').map(_.toInt)
                                                    getStream(lines.tail, data)
                                       case false =>  getStream(lines.tail, Stream.empty)
                                     }
