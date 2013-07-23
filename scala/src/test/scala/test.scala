@@ -1,5 +1,6 @@
 import com.khivi.merge.MergeSorted
 
+import com.khivi.lazysplit.StreamSplit._
 import scala.io.Source
 import org.scalatest.FunSuite
 import scala.util.matching.Regex
@@ -62,14 +63,15 @@ object TestFile {
 
 
 class FileMatchIterator(filename: String, linePrefix: String) {
-  import com.khivi.lazysplit.StreamSplit._
+  private val prefix = linePrefix + ":"
   private[this] def getStream(lines: Stream[String], data: Stream[Int] = Stream.empty): Stream[Int] = {
     data.isEmpty match {
       case true => lines.isEmpty match {
                       case false => val line = lines.head
-                                    val prefix = linePrefix + ":"
                                     line.startsWith(prefix) match {
-                                      case true => val data = line.stripPrefix(prefix).splitAsStream(',').map(_.toInt)
+                                      case true => val data = line.stripPrefix(prefix).
+                                                                   splitAsStream(',').
+                                                                   map(_.toInt)
                                                    getStream(lines.tail, data)
                                       case false =>  getStream(lines.tail, Stream.empty)
                                     }

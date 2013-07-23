@@ -1,9 +1,9 @@
-# Exploration of  Languages
+# Exploratation of Languages
 
   Solving same problem in multiple programming languages.
 
 ## Problem Statement
-  Implement a class that takes a list of sorted collections and returns a  sorted list.
+  Implement a class that takes a list of sorted collections and returns a sorted iterator.
 
 ```
 class MergeSorted<E> {
@@ -23,7 +23,7 @@ class MergeSorted<E> {
  * data/err.txt is a error test. The data is larger. 
 * Each file has:
  * Header line of format NUMBER=\d+ for number of collections in file.
- * Note collections and results are multiline. Concatenate all the lines.
- * Collection lines of form COLLECTION<num>=\d+,\d+,... where num is collection number
+ * Note collections and results can span multiple lines.
+ * Collection lines of form COLLECTION{num}=\d+,\d+,... where num is collection number
  * Collection numbers are from 0 to n-1
- * Result lines of form OUTPUT=\d+,\d+,
+ * Result lines are of form OUTPUT=\d+,\d+,

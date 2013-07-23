@@ -23,7 +23,7 @@ public class MergeSorted<E extends Comparable<E>> implements Iterable<E> {
 			int size = m_collections.size();
 			m_iters = new ArrayList<Iterator<E>>(size);
 			m_elems = new ArrayList<E>(size);
-			for (int i=0;i< size; i++) {
+			for (int i=0; i< size; i++) {
 				Iterator<E> iter = m_collections.get(i).iterator(); // we get a new iterator each time
 				m_iters.add(i, iter);
 				m_elems.add(i, next(iter));
@@ -59,7 +59,7 @@ public class MergeSorted<E extends Comparable<E>> implements Iterable<E> {
 
 		private int minIdx() {
 			int min = -1;
-			for (int i=0;i< m_collections.size(); i++) {
+			for (int i=0; i< m_collections.size(); i++) {
 				E elem = m_elems.get(i);
 				if (elem != null && (min == -1 || elem.compareTo(m_elems.get(min)) < 0))
 					min = i;
