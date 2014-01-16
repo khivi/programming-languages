@@ -27,3 +27,6 @@ class MergeSorted<E> {
  * Collection lines of form COLLECTION{num}=\d+,\d+,... where num is collection number
  * Collection numbers are from 0 to n-1
  * Result lines are of form OUTPUT=\d+,\d+,
+
+
+[![Build Status](https://travis-ci.org/khivi/programming-languages.png?branch=master)](https://travis-ci.org/khivi/programming-languages)
