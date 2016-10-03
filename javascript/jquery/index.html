@@ -9,18 +9,18 @@
 <body>
 
 <div class="container">
+  <div class="row"> Inputs </div>
   <div id="inputs">
-    Inputs
     <div class="row" style="display: none;">
-      <div class="elem" class="col-md-1" style="display: none;"></div>
-    </div> 
+      <div class="elem" style="display: none;"></div>
+    </div>
   </div>
   <div class="row">
-  <button id="nextButton" type="button" class="btn btn-default">Next</button>
+    <button id="nextButton" type="button" class="btn btn-default">Next</button>
   </div>
-    <div class="row"> Output </div>
-  <div id="output" class="row"/>
-    <div class="elem" class="col-md-1" style="display: none;"></div>
+  <div class="row"> Output </div>
+  <div id="output" class="row">
+    <div class="elem" style="display: none;"></div>
   </div>
 </div>
   <script   src="http://code.jquery.com/jquery-3.1.1.slim.min.js"   integrity="sha256-/SIrNqv8h6QGKDuNoLGA4iret+kyesCkHGzVUUV0shc="   crossorigin="anonymous"></script>
@@ -31,44 +31,44 @@
      data[0] = [1, 2, 4, 7];
      data[1] = [2, 4, 6];
      var output = [];
-     
-     var checkButton = function() { 
+
+     var checkButton = function() {
         var enabled = false;
         $.each(data, function () {
-          if (this.length != 0) { 
+          if (this.length != 0) {
             enabled = true;
          }
        });
-       if (!enabled) { 
-         $("#inputs").hide();
+       if (!enabled) {
          $("#nextButton").hide();
        }
      };
 
-     var draw = function() { 
+     var hiddenInputRow = $("#inputs .row:hidden");
+     var hiddenInputElem = $("#inputs .elem:hidden");
+     var hiddenOutputElem = $("#output .elem:hidden");
+     var draw = function() {
         $("#inputs .row:visible").remove();
         $("#output .elem:visible").remove();
 
-        var inputRow = $("#inputs .row:hidden");
-        var inputElem = $("#inputs .elem:hidden");  
         $.each(data, function () {
-          var row = inputRow.clone().show();
+          var row = hiddenInputRow.clone().show();
           $.each(this, function() {
-            var elem = inputElem.clone().text(this.toString()).show().addClass("col-md-1");
+            var elem = hiddenInputElem.clone().text(this.toString()).show().addClass("col-md-1");
             row.append(elem);
           });
           $("#inputs").append(row);
-       }); 
-       var outputElem = $("#output .elem:hidden");  
+       });
+
        $.each(output, function () {
-         var elem = inputElem.clone().text(this.toString()).show().addClass("col-md-1");
+         var elem = hiddenOutputElem.clone().text(this.toString()).show().addClass("col-md-1");
          $("#output").append(elem);
        });
 
        checkButton();
      };
 
-     var mergeData = function () { 
+     var mergeData = function () {
         var minIdx = -1;
         $.each(data, function (idx) {
           if (minIdx == -1 && this.length != 0) {
@@ -78,15 +78,14 @@
             minIdx = idx;
           }
         });
+
         if (minIdx != -1) {
           var value = data[minIdx].shift();
           output.push(value);
         }
+     };
 
-     }
-
-
-    $( document ).ready(function() {
+    $(document).ready(function() {
        draw();
     });
 
