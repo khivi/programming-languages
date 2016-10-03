@@ -11,24 +11,21 @@ $(function() {
      }
    };
 
-   var hiddenInputRow = $("#inputs .row:hidden");
-   var hiddenInputElem = $("#inputs .elem:hidden");
-   var hiddenOutputElem = $("#output .elem:hidden");
    var draw = function(data, output) {
       $("#inputs .row:visible").remove();
       $("#output .elem:visible").remove();
 
       $.each(data, function () {
-        var row = hiddenInputRow.clone().show();
+        var row = $("<div>").addClass("row");
         $.each(this, function() {
-          var elem = hiddenInputElem.clone().text(this.toString()).show().addClass("col-md-1");
+          var elem = $("<div>").text(this.toString()).addClass("elem").addClass("col-md-1");
           row.append(elem);
         });
         $("#inputs").append(row);
      });
 
      $.each(output, function () {
-       var elem = hiddenOutputElem.clone().text(this.toString()).show().addClass("col-md-1");
+       var elem = $("<div>").text(this.toString()).addClass("elem").addClass("col-md-1");
        $("#output").append(elem);
      });
 
