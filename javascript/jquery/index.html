@@ -23,77 +23,9 @@
     <div class="elem" style="display: none;"></div>
   </div>
 </div>
-  <script   src="http://code.jquery.com/jquery-3.1.1.slim.min.js"   integrity="sha256-/SIrNqv8h6QGKDuNoLGA4iret+kyesCkHGzVUUV0shc="   crossorigin="anonymous"></script>
+  <script src="http://code.jquery.com/jquery-3.1.1.slim.min.js"   integrity="sha256-/SIrNqv8h6QGKDuNoLGA4iret+kyesCkHGzVUUV0shc="   crossorigin="anonymous"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <script>
-     var data = [];
-     data[0] = [1, 2, 4, 7];
-     data[1] = [2, 4, 6];
-     var output = [];
-
-     var checkButton = function() {
-        var enabled = false;
-        $.each(data, function () {
-          if (this.length != 0) {
-            enabled = true;
-         }
-       });
-       if (!enabled) {
-         $("#nextButton").hide();
-       }
-     };
-
-     var hiddenInputRow = $("#inputs .row:hidden");
-     var hiddenInputElem = $("#inputs .elem:hidden");
-     var hiddenOutputElem = $("#output .elem:hidden");
-     var draw = function() {
-        $("#inputs .row:visible").remove();
-        $("#output .elem:visible").remove();
-
-        $.each(data, function () {
-          var row = hiddenInputRow.clone().show();
-          $.each(this, function() {
-            var elem = hiddenInputElem.clone().text(this.toString()).show().addClass("col-md-1");
-            row.append(elem);
-          });
-          $("#inputs").append(row);
-       });
-
-       $.each(output, function () {
-         var elem = hiddenOutputElem.clone().text(this.toString()).show().addClass("col-md-1");
-         $("#output").append(elem);
-       });
-
-       checkButton();
-     };
-
-     var mergeData = function () {
-        var minIdx = -1;
-        $.each(data, function (idx) {
-          if (minIdx == -1 && this.length != 0) {
-            minIdx = idx;
-          }
-          else if(minIdx != -1 && this.length > 0 && data[minIdx][0] > this[0]) {
-            minIdx = idx;
-          }
-        });
-
-        if (minIdx != -1) {
-          var value = data[minIdx].shift();
-          output.push(value);
-        }
-     };
-
-    $(document).ready(function() {
-       draw();
-    });
-
-    $("#nextButton").click(function() {
-        mergeData();
-        draw();
-    });
-  </script>
-
+  <script src="js/index.js"></script>
 </body>
 </html>
