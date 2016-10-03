@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Merge sorted lists</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body>
+
+<div class="container">
+  <div id="inputs">
+    Inputs
+    <div class="row" style="display: none;">
+      <div class="elem" class="col-md-1" style="display: none;"></div>
+    </div> 
+  </div>
+  <div class="row">
+  <button id="nextButton" type="button" class="btn btn-default">Next</button>
+  </div>
+    <div class="row"> Output </div>
+  <div id="output" class="row"/>
+    <div class="elem" class="col-md-1" style="display: none;"></div>
+  </div>
+</div>
+  <script   src="http://code.jquery.com/jquery-3.1.1.slim.min.js"   integrity="sha256-/SIrNqv8h6QGKDuNoLGA4iret+kyesCkHGzVUUV0shc="   crossorigin="anonymous"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script>
+     var data = [];
+     data[0] = [1, 2, 4, 7];
+     data[1] = [2, 4, 6];
+     var output = [];
+     
+     var checkButton = function() { 
+        var enabled = false;
+        $.each(data, function () {
+          if (this.length != 0) { 
+            enabled = true;
+         }
+       });
+       if (!enabled) { 
+         $("#inputs").hide();
+         $("#nextButton").hide();
+       }
+     };
+
+     var draw = function() { 
+        $("#inputs .row:visible").remove();
+        $("#output .elem:visible").remove();
+
+        var inputRow = $("#inputs .row:hidden");
+        var inputElem = $("#inputs .elem:hidden");  
+        $.each(data, function () {
+          var row = inputRow.clone().show();
+          $.each(this, function() {
+            var elem = inputElem.clone().text(this.toString()).show().addClass("col-md-1");
+            row.append(elem);
+          });
+          $("#inputs").append(row);
+       }); 
+       var outputElem = $("#output .elem:hidden");  
+       $.each(output, function () {
+         var elem = inputElem.clone().text(this.toString()).show().addClass("col-md-1");
+         $("#output").append(elem);
+       });
+
+       checkButton();
+     };
+
+     var mergeData = function () { 
+        var minIdx = -1;
+        $.each(data, function (idx) {
+          if (minIdx == -1 && this.length != 0) {
+            minIdx = idx;
+          }
+          else if(minIdx != -1 && this.length > 0 && data[minIdx][0] > this[0]) {
+            minIdx = idx;
+          }
+        });
+        if (minIdx != -1) {
+          var value = data[minIdx].shift();
+          output.push(value);
+        }
+
+     }
+
+
+    $( document ).ready(function() {
+       draw();
+    });
+
+    $("#nextButton").click(function() {
+        mergeData();
+        draw();
+    });
+  </script>
+
+</body>
+</html>
