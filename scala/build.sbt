@@ -1,9 +1,10 @@
 name := "mergesorter"
 
-scalaVersion := "2.9.2"
+scalaVersion := "2.12.1"
 
 scalacOptions += "-deprecation"
 
 resolvers += "Typesafe repository" at "http://repo.typesafe.com/typesafe/releases/"
 
-libraryDependencies += "org.scalatest" %% "scalatest" % "1.6.1" % "test"
+libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.1" % "test"
+
