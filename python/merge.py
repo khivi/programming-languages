@@ -1,7 +1,4 @@
 
-
-
-
 class Merge:
     def __init__(self, lists):
         self._lists = lists

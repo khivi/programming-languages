@@ -2,6 +2,7 @@ import unittest
 import sys
 
 from merge import Merge
+from file import Data
 
 class TestMerge(unittest.TestCase):
     def test_numbers(self):
@@ -36,3 +37,21 @@ class TestMerge(unittest.TestCase):
             for _ in range(cnt):
                 assert(next(generator) == value)
 
+    @staticmethod
+    def merge_file(filename):
+        data = Data(filename)
+        output = data.get('OUTPUT')
+        collections = data.collections()
+        merge = Merge(collections)
+        generator = merge.generator()
+        return (generator, output)
+
+    def test_data(self):
+        generator, output = TestMerge.merge_file('../data/test.txt')
+        assert(list(generator) == list(output))
+
+    def test_error(self):
+        generator, output = TestMerge.merge_file('../data/err.txt')
+        assert(next(generator) != next(output))
+        assert(next(generator) != next(output))
+        assert(next(generator) != next(output))
