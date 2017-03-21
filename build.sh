@@ -12,3 +12,7 @@ echo "****Scala****"
 cd $TOP_DIR/scala
 sbt test
 
+echo "****Python****"
+cd $TOP_DIR/python
+nosetests test 
+
