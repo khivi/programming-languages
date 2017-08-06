@@ -2,7 +2,7 @@
 class Merge:
     def __init__(self, lists):
         self._lists = lists
-        self._len =  len(lists)
+        self._len = len(lists)
         self._nexts = [None] * self._len
 
     def _next(self):

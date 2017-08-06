@@ -8,7 +8,7 @@ class Data:
     def count(self):
         with open(self._filename, 'r') as f:
             line = f.readline().rstrip()
-            m = re.match('NUMBER=(\d+)', line)
+            m = re.match(r'NUMBER=(\d+)', line)
             return int(m.group(1))
 
     def get(self, match):
@@ -16,7 +16,7 @@ class Data:
             m = re.match(match+':', line)
             if not m:
                 continue
-            numbers  =  line[m.end():]
+            numbers = line[m.end():]
             for n in Data.lazy_split(numbers):
                 yield int(n)
 
@@ -29,14 +29,14 @@ class Data:
 
     @staticmethod
     def lazy_split(s, sep=','):
-	exp = re.compile(re.escape(sep))
-	pos = 0
-	while True:
-	    m = exp.search(s, pos)
-	    if not m:
-		if pos < len(s):
-		    yield s[pos:]
-		break
-	    if pos < m.start():
-		yield s[pos:m.start()]
-	    pos = m.end()
+        exp = re.compile(re.escape(sep))
+        pos = 0
+        while True:
+            m = exp.search(s, pos)
+            if not m:
+                if pos < len(s):
+                    yield s[pos:]
+                break
+            if pos < m.start():
+                yield s[pos:m.start()]
+            pos = m.end()
