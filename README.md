@@ -19,14 +19,13 @@ class MergeSorted<E> {
 * Read test file one time for each colection
 * Assume data is too large to fit into memory at same time
 * There are 2 files 
- * data/test.txt is successful test 
- * data/err.txt is a error test. The data is larger. 
+   * data/test.txt is successful test 
+   * data/err.txt is a error test. The data is larger. 
 * Each file has:
- * Header line of format NUMBER=\d+ for number of collections in file.
- * Note collections and results can span multiple lines.
- * Collection lines of form COLLECTION{num}=\d+,\d+,... where num is collection number
- * Collection numbers are from 0 to n-1
- * Result lines are of form OUTPUT=\d+,\d+,
+   * Header line of format NUMBER=\d+ for number of collections in file.
+   * Note collections and results can span multiple lines.
+   * Collection lines of form COLLECTION{num}=\d+,\d+,... where num is collection number
+   * Collection numbers are from 0 to n-1
+   * Result lines are of form OUTPUT=\d+,\d+,
 
 
-[![Build Status](https://travis-ci.org/khivi/programming-languages.png?branch=master)](https://travis-ci.org/khivi/programming-languages)
