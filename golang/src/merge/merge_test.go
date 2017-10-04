@@ -12,11 +12,10 @@ func TestF1(t *testing.T) {
 var fileName = "../../../data/test.txt"
 
 func TestReadFile(t *testing.T) {
-    lines := readFileWithPrefixMatch(fileName, "NUMBER=")
-    if (len(lines) != 1)  {
-        t.Error(`len(lines) failed`)
-    }
-    if (lines[0] != "3") {
+    ch := make(chan string)
+    go readFileWithPrefixMatch(fileName, "NUMBER=", ch)
+    line := <- ch
+    if (line != "3") {
         t.Error(`lines[0] failed`)
     }
 }
@@ -29,7 +28,12 @@ func TestReadNumber(t *testing.T) {
 }
 
 func TestReadNumberList(t *testing.T) {
-    numbers := readNumberList(fileName, "OUTPUT:")
+    ch := make(chan int)
+    go readNumberList(fileName, "OUTPUT:", ch)
+    var numbers []int
+    for number :=  range ch {
+        numbers = append(numbers, number)
+    }
     expected := []int {1,1,2,2,3,4,4,6,7,9,9,20,21}
     if (!reflect.DeepEqual(numbers, expected)) {
         t.Error(`TestReadNumberList failed`)
