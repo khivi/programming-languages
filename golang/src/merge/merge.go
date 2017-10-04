@@ -33,10 +33,13 @@ func readNumberList(fileName string, pattern string, out chan<- int) {
 	ch := make(chan string)
 	go readFileWithPrefixMatch(fileName, pattern, ch)
 	for line := range ch {
-		for _, s := range strings.Split(line, ",") {
+		ch1 := make(chan string)
+		go lazySplit(line, ",", ch1)
+		for s := range ch1 {
 			number, _ := strconv.Atoi(s)
 			out <- number
 		}
+
 	}
 	close(out)
 	return
@@ -49,6 +52,19 @@ func getNumber(fileName string) int {
 func getOutput(fileName string, out chan<- int) {
 	readNumberList(fileName, "OUTPUT:", out)
 	return
+}
+
+func lazySplit(s, sep string, out chan<- string) {
+	for {
+		idx := strings.Index(s, sep)
+		if idx == -1 {
+			out <- s
+			close(out)
+			return
+		}
+		out <- s[0:idx]
+		s = s[idx+1:]
+	}
 }
 
 func findMin(numbers []*int) (minIdx int) {
