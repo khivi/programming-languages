@@ -16,3 +16,7 @@ echo "****Python****"
 cd $TOP_DIR/python
 nosetests test 
 
+echo "****Golang****"
+cd $TOP_DIR/golang
+go test -v src/merge/*.go
+
