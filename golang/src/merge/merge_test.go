@@ -14,17 +14,17 @@ func TestReadFile(t *testing.T) {
 	}
 }
 
-func TestFindMin(t* testing.T) {
-    var numbers []*int
-    numbers = append(numbers, nil)
-    for _, n := range []int{10,2,4,5,6,1,11} {
-        var number int = n
-        numbers = append(numbers, &number)
-    }
-    numbers = append(numbers, nil)
-    if findMin(numbers) != 6 {
+func TestFindMin(t *testing.T) {
+	var numbers []*int
+	numbers = append(numbers, nil)
+	for _, n := range []int{10, 2, 4, 5, 6, 1, 11} {
+		var number int = n
+		numbers = append(numbers, &number)
+	}
+	numbers = append(numbers, nil)
+	if findMin(numbers) != 6 {
 		t.Error(`TestFindMin failed`)
-    }
+	}
 
 }
 
@@ -36,10 +36,10 @@ func TestReadNumber(t *testing.T) {
 }
 
 func TestGetNumber(t *testing.T) {
-    number := getNumber(fileName)
+	number := getNumber(fileName)
 	if number != 3 {
 		t.Error(`TestGetNumber failed`)
-    }
+	}
 }
 
 func TestReadNumberList(t *testing.T) {
