@@ -7,10 +7,6 @@ import "regexp"
 import "strconv"
 import "strings"
 
-func f1(v int) int {
-	return v + 1
-}
-
 func readFileWithPrefixMatch(fileName string, pattern string, out chan<- string) {
 	file, _ := os.Open(fileName)
 	scanner := bufio.NewScanner(file)
@@ -59,7 +55,7 @@ func findMin(numbers []*int) (minIdx int) {
 	minIdx = -1
 	for idx, number := range numbers {
 		if number != nil {
-			if minIdx == -1 || *numbers[minIdx] > *numbers[idx] {
+			if minIdx == -1 || *numbers[minIdx] > *number {
 				minIdx = idx
 			}
 		}

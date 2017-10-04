@@ -3,13 +3,7 @@ package merge
 import "reflect"
 import "testing"
 
-func TestF1(t *testing.T) {
-	if f1(1) != 2 {
-		t.Error(`f1 failed`)
-	}
-}
-
-var fileName = "../../../data/test.txt"
+const fileName = "../../../data/test.txt"
 
 func TestReadFile(t *testing.T) {
 	ch := make(chan string)
@@ -20,11 +14,32 @@ func TestReadFile(t *testing.T) {
 	}
 }
 
+func TestFindMin(t* testing.T) {
+    var numbers []*int
+    numbers = append(numbers, nil)
+    for _, n := range []int{10,2,4,5,6,1,11} {
+        var number int = n
+        numbers = append(numbers, &number)
+    }
+    numbers = append(numbers, nil)
+    if findMin(numbers) != 6 {
+		t.Error(`TestFindMin failed`)
+    }
+
+}
+
 func TestReadNumber(t *testing.T) {
 	number := readNumber(fileName, "NUMBER=")
 	if number != 3 {
 		t.Error(`TestReadNumber failed`)
 	}
+}
+
+func TestGetNumber(t *testing.T) {
+    number := getNumber(fileName)
+	if number != 3 {
+		t.Error(`TestGetNumber failed`)
+    }
 }
 
 func TestReadNumberList(t *testing.T) {
@@ -34,6 +49,16 @@ func TestReadNumberList(t *testing.T) {
 	expected := []int{1, 1, 2, 2, 3, 4, 4, 6, 7, 9, 9, 20, 21}
 	if !reflect.DeepEqual(actual, expected) {
 		t.Error(`TestReadNumberList failed`)
+	}
+}
+
+func TestGetOutput(t *testing.T) {
+	ch := make(chan int)
+	go getOutput(fileName, ch)
+	actual := chanToSlice(ch)
+	expected := []int{1, 1, 2, 2, 3, 4, 4, 6, 7, 9, 9, 20, 21}
+	if !reflect.DeepEqual(actual, expected) {
+		t.Error(`TestGetOutput failed`)
 	}
 }
 
@@ -70,8 +95,7 @@ func TestMerge(t *testing.T) {
 func TestBadMerge(t *testing.T) {
 	actual := make(chan int)
 	expected := make(chan int)
-	fileName = "../../../data/err.txt"
-	go Merge(fileName, actual)
+	go Merge("../../../data/err.txt", actual)
 	go getOutput(fileName, expected)
 	if compareChannels(actual, expected) {
 		t.Error(`TestBadMerge failed`)
