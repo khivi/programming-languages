@@ -7,14 +7,18 @@ import "regexp"
 import "strconv"
 import "strings"
 
-func readFileWithPrefixMatch(fileName string, pattern string, out chan<- string) {
+func readFileWithPrefixMatch(done <-chan struct{}, fileName string, pattern string, out chan<- string) {
 	file, _ := os.Open(fileName)
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		var line = scanner.Text()
 		if matched, _ := regexp.MatchString("^"+pattern, line); matched {
 			line = strings.TrimPrefix(line, pattern)
-			out <- line
+			select {
+			case <-done:
+				break
+			case out <- line:
+			}
 		}
 	}
 	close(out)
@@ -23,21 +27,28 @@ func readFileWithPrefixMatch(fileName string, pattern string, out chan<- string)
 
 func readNumber(fileName string, pattern string) int {
 	ch := make(chan string)
-	go readFileWithPrefixMatch(fileName, pattern, ch)
+	done := make(chan struct{})
+	defer close(done)
+	go readFileWithPrefixMatch(done, fileName, pattern, ch)
 	line := <-ch
 	number, _ := strconv.Atoi(line)
 	return number
 }
 
-func readNumberList(fileName string, pattern string, out chan<- int) {
+func readNumberList(done <-chan struct{}, fileName string, pattern string, out chan<- int) {
 	ch := make(chan string)
-	go readFileWithPrefixMatch(fileName, pattern, ch)
+	go readFileWithPrefixMatch(done, fileName, pattern, ch)
+loop:
 	for line := range ch {
 		ch1 := make(chan string)
-		go lazySplit(line, ",", ch1)
+		go lazySplit(done, line, ",", ch1)
 		for s := range ch1 {
 			number, _ := strconv.Atoi(s)
-			out <- number
+			select {
+			case <-done:
+				break loop
+			case out <- number:
+			}
 		}
 
 	}
@@ -49,22 +60,28 @@ func getNumber(fileName string) int {
 	return readNumber(fileName, "NUMBER=")
 }
 
-func getOutput(fileName string, out chan<- int) {
-	readNumberList(fileName, "OUTPUT:", out)
+func getOutput(done <-chan struct{}, fileName string, out chan<- int) {
+	readNumberList(done, fileName, "OUTPUT:", out)
 	return
 }
 
-func lazySplit(s, sep string, out chan<- string) {
+func lazySplit(done <-chan struct{}, s, sep string, out chan<- string) {
 	for {
+		select {
+		case <-done:
+			break
+		default:
+		}
 		idx := strings.Index(s, sep)
 		if idx == -1 {
 			out <- s
-			close(out)
-			return
+			break
 		}
 		out <- s[0:idx]
 		s = s[idx+1:]
 	}
+	close(out)
+	return
 }
 
 func findMin(numbers []*int) (minIdx int) {
@@ -79,13 +96,13 @@ func findMin(numbers []*int) (minIdx int) {
 	return
 }
 
-func Merge(fileName string, out chan<- int) {
+func Merge(done <-chan struct{}, fileName string, out chan<- int) {
 	number := getNumber(fileName)
 	channels := make([]chan int, number)
 	for i := 0; i < number; i++ {
 		pattern := fmt.Sprintf("COLLECTION%d:", i)
 		ch := make(chan int)
-		go readNumberList(fileName, pattern, ch)
+		go readNumberList(done, fileName, pattern, ch)
 		channels[i] = ch
 	}
 	values := make([]*int, number)
@@ -102,7 +119,11 @@ func Merge(fileName string, out chan<- int) {
 		if minIdx == -1 {
 			break
 		}
-		out <- *values[minIdx]
+		select {
+		case <-done:
+			break
+		case out <- *values[minIdx]:
+		}
 		values[minIdx] = nil
 	}
 	close(out)

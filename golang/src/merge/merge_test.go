@@ -7,7 +7,7 @@ const fileName = "../../../data/test.txt"
 
 func TestReadFile(t *testing.T) {
 	ch := make(chan string)
-	go readFileWithPrefixMatch(fileName, "NUMBER=", ch)
+	go readFileWithPrefixMatch(nil, fileName, "NUMBER=", ch)
 	line := <-ch
 	if line != "3" {
 		t.Error(`lines[0] failed`)
@@ -44,7 +44,7 @@ func TestGetNumber(t *testing.T) {
 
 func TestReadNumberList(t *testing.T) {
 	ch := make(chan int)
-	go readNumberList(fileName, "OUTPUT:", ch)
+	go readNumberList(nil, fileName, "OUTPUT:", ch)
 	actual := chanToSlice(ch)
 	expected := []int{1, 1, 2, 2, 3, 4, 4, 6, 7, 9, 9, 20, 21}
 	if !reflect.DeepEqual(actual, expected) {
@@ -54,7 +54,7 @@ func TestReadNumberList(t *testing.T) {
 
 func TestGetOutput(t *testing.T) {
 	ch := make(chan int)
-	go getOutput(fileName, ch)
+	go getOutput(nil, fileName, ch)
 	actual := chanToSlice(ch)
 	expected := []int{1, 1, 2, 2, 3, 4, 4, 6, 7, 9, 9, 20, 21}
 	if !reflect.DeepEqual(actual, expected) {
@@ -85,8 +85,10 @@ func compareChannels(ch1 <-chan int, ch2 <-chan int) bool {
 func TestMerge(t *testing.T) {
 	actual := make(chan int)
 	expected := make(chan int)
-	go Merge(fileName, actual)
-	go getOutput(fileName, expected)
+	done := make(chan struct{})
+	defer close(done)
+	go Merge(done, fileName, actual)
+	go getOutput(done, fileName, expected)
 	if !compareChannels(actual, expected) {
 		t.Error(`TestMerge failed`)
 	}
@@ -95,8 +97,10 @@ func TestMerge(t *testing.T) {
 func TestBadMerge(t *testing.T) {
 	actual := make(chan int)
 	expected := make(chan int)
-	go Merge("../../../data/err.txt", actual)
-	go getOutput(fileName, expected)
+	done := make(chan struct{})
+	defer close(done)
+	go Merge(done, "../../../data/err.txt", actual)
+	go getOutput(done, fileName, expected)
 	if compareChannels(actual, expected) {
 		t.Error(`TestBadMerge failed`)
 	}
