@@ -66,19 +66,20 @@ func getOutput(done <-chan struct{}, fileName string, out chan<- int) {
 }
 
 func lazySplit(done <-chan struct{}, s, sep string, out chan<- string) {
+forLoop:
 	for {
 		select {
 		case <-done:
-			break
+			break forLoop
 		default:
+			idx := strings.Index(s, sep)
+			if idx == -1 {
+				out <- s
+				break forLoop
+			}
+			out <- s[0:idx]
+			s = s[idx+1:]
 		}
-		idx := strings.Index(s, sep)
-		if idx == -1 {
-			out <- s
-			break
-		}
-		out <- s[0:idx]
-		s = s[idx+1:]
 	}
 	close(out)
 	return
