@@ -99,8 +99,9 @@ func TestBadMerge(t *testing.T) {
 	expected := make(chan int)
 	done := make(chan struct{})
 	defer close(done)
-	go Merge(done, "../../../data/err.txt", actual)
-	go getOutput(done, fileName, expected)
+	errFileName := "../../../data/err.txt"
+	go Merge(done, errFileName, actual)
+	go getOutput(done, errFileName, expected)
 	if compareChannels(actual, expected) {
 		t.Error(`TestBadMerge failed`)
 	}
