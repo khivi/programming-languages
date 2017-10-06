@@ -73,12 +73,12 @@ func lazySplit(done <-chan struct{}, s, sep string, out chan<- string) {
 	}
 }
 
-func findMinIdx(values []Value) (minIdx int) {
-	minIdx = -1
-	for idx, value := range values {
+func findMin(values []Value) (min *Value) {
+	for idx, _ := range values {
+		value := &values[idx]
 		if value.valid {
-			if minIdx == -1 || values[minIdx].value > value.value {
-				minIdx = idx
+			if min == nil || min.value > value.value {
+				min = value
 			}
 		}
 	}
@@ -104,19 +104,20 @@ func Merge(done <-chan struct{}, fileName string, out chan<- int) {
 	defer close(out)
 	values := make([]Value, number)
 	for {
-		for i, value := range values {
+		for i, _ := range values {
+			value := &values[i]
 			if !value.valid {
 				if number, ok := <-channels[i]; ok {
-					values[i].value = number
-					values[i].valid = true
+					value.value = number
+					value.valid = true
 				}
 			}
 		}
-		minIdx := findMinIdx(values)
-		if minIdx == -1 {
+		min := findMin(values)
+		if min == nil {
 			return
 		}
-		out <- values[minIdx].value
-		values[minIdx].valid = false
+		out <- min.value
+		min.valid = false
 	}
 }

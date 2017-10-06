@@ -22,7 +22,7 @@ func TestFindMin(t *testing.T) {
 		values = append(values, value)
 	}
 	values = append(values, Value{})
-	if findMinIdx(values) != 6 {
+	if findMin(values).value != 1 {
 		t.Error(`TestFindMin failed`)
 	}
 
