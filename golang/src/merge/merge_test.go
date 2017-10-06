@@ -15,14 +15,14 @@ func TestReadFile(t *testing.T) {
 }
 
 func TestFindMin(t *testing.T) {
-	var numbers []*int
-	numbers = append(numbers, nil)
+	var values []Value
+	values = append(values, Value{})
 	for _, n := range []int{10, 2, 4, 5, 6, 1, 11} {
-		var number int = n
-		numbers = append(numbers, &number)
+		value := Value{n, true}
+		values = append(values, value)
 	}
-	numbers = append(numbers, nil)
-	if findMin(numbers) != 6 {
+	values = append(values, Value{})
+	if findMinIdx(values) != 6 {
 		t.Error(`TestFindMin failed`)
 	}
 
