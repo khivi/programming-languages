@@ -38,30 +38,13 @@ func readNumber(fileName string, pattern string) int {
 func readNumberList(done <-chan struct{}, fileName string, pattern string, out chan<- int) {
 	ch := make(chan string)
 	go readFileWithPrefixMatch(done, fileName, pattern, ch)
-ch:
-	for {
-		select {
-		case <-done:
-			break ch
-		case line, ok := <-ch:
-			if !ok {
-				break ch
-			}
-			ch1 := make(chan string)
-			go lazySplit(done, line, ",", ch1)
-		ch1:
-			for {
-				select {
-				case <-done:
-					break ch
-				case s, ok := <-ch1:
-					if !ok {
-						break ch1
-					}
-					number, _ := strconv.Atoi(s)
-					out <- number
-				}
-			}
+	for line := range ch {
+		ch1 := make(chan string)
+		go lazySplit(done, line, ",", ch1)
+		for s := range ch1 {
+			number, _ := strconv.Atoi(s)
+			out <- number
+			fmt.Printf("%d\n", number)
 		}
 	}
 	close(out)
@@ -82,7 +65,7 @@ forLoop:
 	for {
 		select {
 		case <-done:
-			break forLoop
+			break
 		default:
 			idx := strings.Index(s, sep)
 			if idx == -1 {
@@ -132,11 +115,7 @@ func Merge(done <-chan struct{}, fileName string, out chan<- int) {
 		if minIdx == -1 {
 			break
 		}
-		select {
-		case <-done:
-			break
-		case out <- *values[minIdx]:
-		}
+		out <- *values[minIdx]
 		values[minIdx] = nil
 	}
 	close(out)
