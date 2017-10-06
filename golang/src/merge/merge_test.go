@@ -29,7 +29,7 @@ func TestFindMin(t *testing.T) {
 }
 
 func TestReadNumber(t *testing.T) {
-	number := readNumber(fileName, "NUMBER=")
+	number := readNumber(nil, fileName, "NUMBER=")
 	if number != 3 {
 		t.Error(`TestReadNumber failed`)
 	}

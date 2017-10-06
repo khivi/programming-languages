@@ -24,9 +24,9 @@ func readFileWithPrefixMatch(done <-chan struct{}, fileName string, pattern stri
 	}
 }
 
-func readNumber(fileName string, pattern string) int {
+func readNumber(done <-chan struct{}, fileName string, pattern string) int {
 	ch := make(chan string)
-	go readFileWithPrefixMatch(nil, fileName, pattern, ch)
+	go readFileWithPrefixMatch(done, fileName, pattern, ch)
 	line := <-ch
 	number, _ := strconv.Atoi(line)
 	return number
@@ -48,7 +48,7 @@ func readNumberList(done <-chan struct{}, fileName string, pattern string, out c
 }
 
 func getNumber(fileName string) int {
-	return readNumber(fileName, "NUMBER=")
+	return readNumber(nil, fileName, "NUMBER=")
 }
 
 func getOutput(done <-chan struct{}, fileName string, out chan<- int) {
