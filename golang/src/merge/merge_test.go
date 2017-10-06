@@ -83,25 +83,31 @@ func compareChannels(ch1 <-chan int, ch2 <-chan int) bool {
 }
 
 func TestMerge(t *testing.T) {
-	actual := make(chan int)
-	expected := make(chan int)
 	done := make(chan struct{})
 	defer close(done)
+
+	actual := make(chan int)
 	go Merge(done, fileName, actual)
+
+	expected := make(chan int)
 	go getOutput(done, fileName, expected)
+
 	if !compareChannels(actual, expected) {
 		t.Error(`TestMerge failed`)
 	}
 }
 
 func TestBadMerge(t *testing.T) {
-	actual := make(chan int)
-	expected := make(chan int)
 	done := make(chan struct{})
 	defer close(done)
+
 	errFileName := "../../../data/err.txt"
+	actual := make(chan int)
 	go Merge(done, errFileName, actual)
+
+	expected := make(chan int)
 	go getOutput(done, errFileName, expected)
+
 	if compareChannels(actual, expected) {
 		t.Error(`TestBadMerge failed`)
 	}
