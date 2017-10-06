@@ -13,14 +13,14 @@ class MergeSorted<E> {
 ```
 
 * In each language use the language specific idioms.
-* Try to use iterators specific to each language.
+* Try to use iterators  (lazy) specific to each language.
 
 ### Testing
 * Read test file one time for each colection
 * Assume data is too large to fit into memory at same time
 * There are 2 files 
    * data/test.txt is successful test 
-   * data/err.txt is a error test. The data is larger. 
+   * data/err.txt is a error test. The data is larger. (The full file should not be read to indicate the data is invalid. aka lazy)
 * Each file has:
    * Header line of format NUMBER=\d+ for number of collections in file.
    * Note collections and results can span multiple lines.
