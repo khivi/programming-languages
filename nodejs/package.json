@@ -5,10 +5,13 @@
   },
   "devDependencies": {
     "ava": "*",
+    "eslint": "^6.8.0",
+    "eslint-config-google": "^0.14.0",
     "nyc": "*"
   },
   "scripts": {
     "test": "ava --watch",
-    "coverage": "nyc ava"
+    "coverage": "nyc ava",
+    "eslint": "eslint \"**/*.js\" --ignore-pattern node_modules/"
   }
 }
