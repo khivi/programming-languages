@@ -10,8 +10,9 @@
     "nyc": "*"
   },
   "scripts": {
+    "pretest": "npm run eslint",
     "test": "ava --watch",
     "coverage": "nyc ava",
-    "eslint": "eslint \"**/*.js\" --ignore-pattern node_modules/"
+    "eslint": "eslint --ext .js --ignore-pattern .gitignore ."
   }
 }
