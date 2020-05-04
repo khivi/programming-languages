@@ -4,12 +4,11 @@
     "test": "^0.6.0"
   },
   "devDependencies": {
-    "ava": "*"
+    "ava": "*",
+    "nyc": "*"
   },
   "scripts": {
-    "test": "ava"
-  },
-  "ava": { 
-      "watch": true
+    "test": "ava --watch",
+    "coverage": "nyc ava"
   }
 }
