@@ -4,10 +4,9 @@
     "test": "^0.6.0"
   },
   "devDependencies": {
-    "mocha": "*",
-    "chai": "*"
+    "ava": "*"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "ava"
   }
 }
