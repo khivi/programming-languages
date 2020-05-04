@@ -8,5 +8,8 @@
   },
   "scripts": {
     "test": "ava"
+  },
+  "ava": { 
+      "watch": true
   }
 }
