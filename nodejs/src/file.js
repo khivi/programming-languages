@@ -2,10 +2,13 @@ const fs = require('fs');
 const readline = require('readline');
 
 async function getNumber(file) {
-  const matchNumber = (line) =>  {
-      const regex = /^NUMBER=(\d+)$/;
-      const match = line.match(regex);
-      return match? parseInt(match[1]): undefined;
+  const matchNumber = (line) => {
+    const regex = /^NUMBER=(\d+)$/;
+    const match = line.match(regex);
+    if (match) {
+      return parseInt(match[1]);
+    }
+    return undefined;
   };
 
   const lineReader = readline.createInterface({
@@ -15,7 +18,10 @@ async function getNumber(file) {
   const matchLine = (resolve, reject) => {
     lineReader.once('line', function(line) {
       const number = matchNumber(line);
-      number? resolve(number): reject(new Error("Number not found"));
+      if (number) {
+        return resolve(number);
+      }
+      return reject(new Error('Number not found'));
     });
   };
 
