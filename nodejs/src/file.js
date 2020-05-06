@@ -38,7 +38,7 @@ async function getNumber(file) {
   return new Promise(matchLine);
 }
 
-async function getData(file, key) {
+async function* getData(file, key) {
   const regex = new Regex(`^${key}:(.+)$`);
   const line = function(line) {
     //const match = line.match(regex);
@@ -61,7 +61,8 @@ async function getData(file, key) {
   //rl.on('line', line);
   //rl.on('error', error);
   await once(rl, 'close');
-  return [2];
+  yield 2;
+  return;
 
 }
 
