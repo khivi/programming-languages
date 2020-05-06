@@ -3,15 +3,15 @@ const file = require('../src/file');
 const DATA = require('./helpers/data');
 
 
-test('read output from test', (t) => {
-  return file.getNumber(DATA.TEST).then((number) => {
-    t.is(number, 3);
-  });
+test('read output from test', async (t) => {
+  t.plan(1);
+  const data = await file.getData(DATA.TEST, 'OUTPUT');
+  t.deepEqual([...data], [2]);
 });
 
-test('read output from err', (t) => {
-  return file.getNumber(DATA.ERR).then((number) => {
-    t.is(number, 1);
-  });
+test('read output from err', async (t) => {
+  t.plan(1);
+  const data = await file.getData(DATA.ERR, 'OUTPUT');
+  t.deepEqual([...data], [3]);
 });
 
