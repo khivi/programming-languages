@@ -1,8 +1,5 @@
-const {once} = require('events');
 const fs = require('fs');
 const readline = require('readline');
-const Regex = require('regex');
-// const fp = require('lodash/fp');
 
 async function getNumber(file) {
   const matchNumber = (line) => {
@@ -13,7 +10,6 @@ async function getNumber(file) {
     }
     return undefined;
   };
-
 
   const matchLine = (resolve, reject) => {
     const error = function(error) {
@@ -39,31 +35,19 @@ async function getNumber(file) {
 }
 
 async function* getData(file, key) {
-  const regex = new Regex(`^${key}:(.+)$`);
-  const line = function(line) {
-    //const match = line.match(regex);
-    /*
-    if (!match) {
-      return;
-    }
-    const number = function(number) {
-    };
-    fp.forEach(fp.split(match[1], ','), number);
-    */
-  };
-  //const error = function(error) {
-    //return error;
-  //};
-
+  const regex = new RegExp(`^${key}:(.+)$`);
   const rl = readline.createInterface({
     input: fs.createReadStream(file),
   });
-  //rl.on('line', line);
-  //rl.on('error', error);
-  await once(rl, 'close');
-  yield 2;
-  return;
-
+  for await (const line of rl) {
+    const match = line.match(regex);
+    if (!match) {
+      continue;
+    }
+    for (const n of match[1].split(',')) {
+      yield parseInt(n);
+    }
+  }
 }
 
 exports.getNumber = getNumber;
