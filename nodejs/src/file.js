@@ -38,17 +38,29 @@ async function* getData(file, key) {
   const matchLine = (line) => {
     const regex = new RegExp(`^${key}:(.+)$`);
     return line.match(regex);
-  }
+  };
+
   const rl = readline.createInterface({
     input: fs.createReadStream(file),
   });
+
   for await (const line of rl) {
     const match = matchLine(line);
     if (!match) {
       continue;
     }
-    for (const n of match[1].split(',')) {
-      yield parseInt(n);
+
+    const str = match[1];
+    let pos = 0;
+    const number = (end) => parseInt(str.substr(pos, end));
+    while (true) {
+      const idx = str.indexOf(',', pos);
+      if (idx == -1) {
+        yield number();
+        return;
+      }
+      yield number(idx);
+      pos = idx+1;
     }
   }
 }
