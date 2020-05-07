@@ -24,7 +24,7 @@ test('read collection not found', async (t) => {
   t.deepEqual(actual, expected);
 });
 
-test('read output from err', async (t) => {
+test('read collection from err', async (t) => {
   t.plan(2);
   const data = getCollection(DATA.ERR, 0);
   const next = async () => (await data.next()).value;
