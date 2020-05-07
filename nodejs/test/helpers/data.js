@@ -5,6 +5,8 @@ exports.TEST= path.resolve(_DATA_DIR, 'test.txt');
 exports.ERR= path.resolve(_DATA_DIR, 'err.txt');
 exports.BAD= path.resolve(_DATA_DIR, 'bad.txt');
 
+
+// data is a async generator so we need to do for.await...of
 async function fromData(data) {
   const actual = [];
   for await (const n of data) {
