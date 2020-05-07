@@ -1,5 +1,6 @@
 {
   "private": true,
+
   "dependencies": {
     "fs": "0.0.1-security",
     "lodash": "^4.17.15",
@@ -7,6 +8,7 @@
     "regex": "^0.1.1",
     "test": "^0.6.0"
   },
+
   "devDependencies": {
     "ava": "*",
     "eslint": "^6.8.0",
@@ -14,13 +16,35 @@
     "eslint-plugin-ava": "^10.3.0",
     "nyc": "*"
   },
+
   "scripts": {
-    "pretest": "npm run eslint",
+    "pretest": "npm run lint",
     "test": "ava --watch",
     "coverage": "nyc ava",
-    "eslint": "eslint --ext .js --ignore-pattern .gitignore ."
+    "lint": "eslint --ext .js --ignore-pattern .gitignore ."
   },
+
   "eslintConfig": {
-    "extends": "plugin:ava/recommended"
+    "env": {
+        "commonjs": true,
+        "es6": true,
+        "node": true
+    },
+    "extends": [
+      "google",
+      "plugin:ava/recommended"
+    ],
+    "globals": {
+        "Atomics": "readonly",
+        "SharedArrayBuffer": "readonly"
+    },
+    "parserOptions": {
+        "ecmaVersion": 2018
+    },
+    "rules": {
+      "require-jsdoc": "off",
+      "spaced-comment": "off"
+
+    }
   }
 }
