@@ -7,7 +7,7 @@ class Merge {
   };
 
 
-  async * merge() {
+  async* merge() {
     yield* await getOutput(this.filename);
   };
 };

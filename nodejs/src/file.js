@@ -40,7 +40,7 @@ async function* getData(file, key) {
     return line.match(regex);
   };
 
-  const split = function*(str) {
+  const split = function* (str) {
     let pos = 0;
     const number = (end) => parseInt(str.substr(pos, end));
     while (true) {
