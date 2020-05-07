@@ -3,7 +3,7 @@ const file = require('../src/file');
 const DATA = require('./helpers/data');
 
 
-async function output(filename) { 
+function output(filename) { 
   async function _actual(data) {
     let actual = []
     for await (const n of data) {
@@ -12,7 +12,7 @@ async function output(filename) {
     return actual;
   }
   const data = file.getData(filename, 'OUTPUT');
-  return await _actual(data);
+  return _actual(data);
 }
 
 test('read output from test', async (t) => {
