@@ -1,11 +1,11 @@
 const path = require('path');
 
 const _DATA_DIR = path.resolve(__dirname, '..', '..', '..', 'data');
-const TEST= path.resolve(_DATA_DIR, 'test.txt');
-const ERR= path.resolve(_DATA_DIR, 'err.txt');
-const BAD= path.resolve(_DATA_DIR, 'bad.txt');
+exports.TEST= path.resolve(_DATA_DIR, 'test.txt');
+exports.ERR= path.resolve(_DATA_DIR, 'err.txt');
+exports.BAD= path.resolve(_DATA_DIR, 'bad.txt');
 
-async function from_data(data) {
+async function fromData(data) {
   const actual = [];
   for await (const n of data) {
     actual.push(n);
@@ -13,7 +13,4 @@ async function from_data(data) {
   return actual;
 }
 
-exports.TEST=TEST;
-exports.ERR=ERR;
-exports.BAD=BAD;
-exports.from_data=from_data;
+exports.fromData=fromData;

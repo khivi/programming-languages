@@ -1,12 +1,12 @@
 const test = require('ava');
 const file = require('../src/file');
 const DATA = require('./helpers/data');
-const {from_data} = require('./helpers/data');
+const {fromData} = require('./helpers/data');
 
 
 function output(filename) {
   const data = file.getData(filename, 'OUTPUT');
-  return from_data(data);
+  return fromData(data);
 }
 
 test('read output from test', async (t) => {

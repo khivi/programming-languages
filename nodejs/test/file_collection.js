@@ -1,12 +1,12 @@
 const test = require('ava');
 const file = require('../src/file');
 const DATA = require('./helpers/data');
-const {from_data} = require('./helpers/data');
+const {fromData} = require('./helpers/data');
 
 
 function collection(filename, num) {
   const data = file.getData(filename, 'COLLECTION' + num);
-  return from_data(data);
+  return fromData(data);
 }
 
 test('read collection', async (t) => {
@@ -28,7 +28,7 @@ test('read output from err', async (t) => {
   t.plan(2);
   const data = file.getData(DATA.ERR, 'COLLECTION0');
   const next = async () => (await data.next()).value;
-  t.deepEqual(1, await next());
-  t.deepEqual(1, await next());
+  t.is(1, await next());
+  t.is(1, await next());
 });
 
