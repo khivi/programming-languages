@@ -57,7 +57,7 @@ async function* getData(file, key) {
       const idx = str.indexOf(',', pos);
       if (idx == -1) {
         yield number();
-        return;
+        break;
       }
       yield number(idx);
       pos = idx+1;
