@@ -3,9 +3,9 @@ const file = require('../src/file');
 const DATA = require('./helpers/data');
 
 
-function output(filename) { 
+function output(filename) {
   async function _actual(data) {
-    let actual = []
+    const actual = [];
     for await (const n of data) {
       actual.push(n);
     }
@@ -18,21 +18,21 @@ function output(filename) {
 test('read output from test', async (t) => {
   t.plan(1);
   const expected = [1, 1, 2, 2, 3, 4, 4, 6, 7, 9, 9, 20, 21];
-  let actual = await output(DATA.TEST);
+  const actual = await output(DATA.TEST);
   t.deepEqual(actual, expected);
 });
 
 test('read output from err', async (t) => {
   t.plan(1);
   const expected = [10, 200, 3000];
-  let actual = await output(DATA.ERR);
+  const actual = await output(DATA.ERR);
   t.deepEqual(actual, expected);
 });
 
 test('read output from bad', async (t) => {
   t.plan(1);
   const expected = [];
-  let actual = await output(DATA.BAD);
+  const actual = await output(DATA.BAD);
   t.deepEqual(actual, expected);
 });
 
