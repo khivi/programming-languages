@@ -1,11 +1,11 @@
 const test = require('ava');
-const file = require('../src/file');
+const {getData} = require('../src/file');
 const DATA = require('./helpers/data');
 const {fromData} = require('./helpers/data');
 
 
 function collection(filename, num) {
-  const data = file.getData(filename, 'COLLECTION' + num);
+  const data = getData(filename, 'COLLECTION' + num);
   return fromData(data);
 }
 
@@ -26,7 +26,7 @@ test('read collection not found', async (t) => {
 
 test('read output from err', async (t) => {
   t.plan(2);
-  const data = file.getData(DATA.ERR, 'COLLECTION0');
+  const data = getData(DATA.ERR, 'COLLECTION0');
   const next = async () => (await data.next()).value;
   t.is(1, await next());
   t.is(1, await next());
