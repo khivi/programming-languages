@@ -1,18 +1,12 @@
 const test = require('ava');
 const file = require('../src/file');
 const DATA = require('./helpers/data');
+const {from_data} = require('./helpers/data');
 
 
 function output(filename) {
-  async function _actual(data) {
-    const actual = [];
-    for await (const n of data) {
-      actual.push(n);
-    }
-    return actual;
-  }
   const data = file.getData(filename, 'OUTPUT');
-  return _actual(data);
+  return from_data(data);
 }
 
 test('read output from test', async (t) => {
