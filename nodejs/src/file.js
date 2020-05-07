@@ -40,6 +40,20 @@ async function* getData(file, key) {
     return line.match(regex);
   };
 
+  const split = function*(str) {
+    let pos = 0;
+    const number = (end) => parseInt(str.substr(pos, end));
+    while (true) {
+      const idx = str.indexOf(',', pos);
+      if (idx == -1) {
+        yield number();
+        return;
+      }
+      yield number(idx);
+      pos = idx+1;
+    }
+  };
+
   const rl = readline.createInterface({
     input: fs.createReadStream(file),
   });
@@ -49,19 +63,7 @@ async function* getData(file, key) {
     if (!match) {
       continue;
     }
-
-    const str = match[1];
-    let pos = 0;
-    const number = (end) => parseInt(str.substr(pos, end));
-    while (true) {
-      const idx = str.indexOf(',', pos);
-      if (idx == -1) {
-        yield number();
-        break;
-      }
-      yield number(idx);
-      pos = idx+1;
-    }
+    yield* split(match[1]);
   }
 }
 
