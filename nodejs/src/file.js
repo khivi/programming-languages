@@ -67,6 +67,8 @@ async function* getData(file, key) {
   }
 }
 
+exports.getOutput = (filename) => getData(filename, 'OUTPUT');
+exports.getCollection = (filename, num) => getData(filename, 'COLLECTION'+num);
+
 exports.getNumber = getNumber;
-exports.getData = getData;
 

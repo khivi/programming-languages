@@ -1,11 +1,11 @@
 const test = require('ava');
-const {getData} = require('../src/file');
+const {getOutput} = require('../src/file');
 const DATA = require('./helpers/data');
 const {fromData} = require('./helpers/data');
 
 
 function output(filename) {
-  const data = getData(filename, 'OUTPUT');
+  const data = getOutput(filename);
   return fromData(data);
 }
 
