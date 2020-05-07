@@ -35,12 +35,15 @@ async function getNumber(file) {
 }
 
 async function* getData(file, key) {
-  const regex = new RegExp(`^${key}:(.+)$`);
+  const matchLine = (line) => {
+    const regex = new RegExp(`^${key}:(.+)$`);
+    return line.match(regex);
+  }
   const rl = readline.createInterface({
     input: fs.createReadStream(file),
   });
   for await (const line of rl) {
-    const match = line.match(regex);
+    const match = matchLine(line);
     if (!match) {
       continue;
     }
