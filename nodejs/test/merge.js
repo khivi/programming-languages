@@ -23,14 +23,14 @@ async function equal(t, expected, actual) {
 async function notEqual(t, expected, actual) {
   while (true) {
     const [e, a] = await next2(expected, actual);
-    t.pass();
-    if (e == a) {
-      if (e === undefined) {
-        break;
-      }
-      continue;
+    if (e != a) {
+      break;
     }
-    break;
+    t.pass();
+    if (e === undefined) {
+      break;
+    }
+    continue;
   }
 }
 
@@ -43,7 +43,7 @@ test('merge test data', async (t) => {
 });
 
 test('merge err data', async (t) => {
-  t.plan(1);
+  t.plan(0);
   const fileName = DATA.ERR;
   const expected = getOutput(fileName);
   const actual = new Merge(fileName).merge();
