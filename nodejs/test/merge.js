@@ -3,11 +3,11 @@ const {getOutput} = require('../src/file');
 const DATA = require('./helpers/data');
 const {Merge} = require('../src/merge');
 
-const next = async (d) => (await d.next()).value;
-const next2 = async (data1, data2) => {
-  const d1 = await next(data1);
-  const d2 = await next(data2);
-  return [d1, d2];
+const next2 = (data1, data2) => {
+  const next = (d) => d.next().then((x)=>x.value);
+  const d1 = next(data1);
+  const d2 = next(data2);
+  return Promise.all([d1, d2]);
 };
 
 async function equal(t, expected, actual) {

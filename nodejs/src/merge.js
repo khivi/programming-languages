@@ -26,7 +26,7 @@ class Merge {
     const collections = _.map(_.range(number), (i) => {
       return getCollection(this.filename, i);
     });
-    const next = async (i) => (await collections[i].next()).value;
+    const next = (i) => collections[i].next().then(x=>x.value);
 
     const initialValues = function* () {
       for (const i of _.range(number)) {
