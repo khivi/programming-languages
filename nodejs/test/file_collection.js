@@ -25,7 +25,7 @@ test('read collection not found', async (t) => {
 test('read collection from err', async (t) => {
   t.plan(2);
   const data = getCollection(DATA.ERR, 0);
-  const next = () => data.next().then((x)=>x.value);
+  const next = () => data.next().then((x) => x.value);
   t.is(1, await next());
   t.is(1, await next());
 });
