@@ -3,7 +3,6 @@ const {getCollection} = require('../src/file');
 const DATA = require('./helpers/data');
 const {fromData} = require('./helpers/data');
 
-
 function collection(filename, num) {
   const data = getCollection(filename, num);
   return fromData(data);
@@ -15,7 +14,6 @@ test('read collection', async (t) => {
   const actual = await collection(DATA.TEST, 1);
   t.deepEqual(actual, expected);
 });
-
 
 test('read collection not found', async (t) => {
   t.plan(1);
@@ -31,4 +29,3 @@ test('read collection from err', async (t) => {
   t.is(1, await next());
   t.is(1, await next());
 });
-

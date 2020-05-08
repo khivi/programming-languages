@@ -1,12 +1,10 @@
 const _ = require('lodash');
 const {getNumber, getCollection} = require('./file');
 
-
 class Merge {
   constructor(filename) {
     this.filename = filename;
-  };
-
+  }
 
   async* merge() {
     const findMin = (values) => {
@@ -16,11 +14,11 @@ class Merge {
         if (_.isUndefined(v)) {
           continue;
         }
-        minIdx = (minIdx === undefined) ? idx : minIdx;
+        minIdx = minIdx === undefined ? idx : minIdx;
         if (v < values[minIdx]) {
           minIdx = idx;
         }
-      };
+      }
       return minIdx;
     };
 
@@ -46,7 +44,7 @@ class Merge {
       yield values[minIdx];
       values[minIdx] = await next(minIdx);
     }
-  };
-};
+  }
+}
 
-exports.Merge=Merge;
+exports.Merge = Merge;

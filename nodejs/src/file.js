@@ -50,7 +50,7 @@ async function* getData(file, key) {
         return;
       }
       yield number(idx);
-      pos = idx+1;
+      pos = idx + 1;
     }
   };
 
@@ -68,7 +68,7 @@ async function* getData(file, key) {
 }
 
 exports.getOutput = (filename) => getData(filename, 'OUTPUT');
-exports.getCollection = (filename, num) => getData(filename, 'COLLECTION'+num);
+exports.getCollection = (filename, num) =>
+  getData(filename, 'COLLECTION' + num);
 
 exports.getNumber = getNumber;
-

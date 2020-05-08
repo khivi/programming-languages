@@ -11,7 +11,8 @@
     "eslint": "^6.8.0",
     "eslint-config-google": "^0.14.0",
     "eslint-plugin-ava": "^10.3.0",
-    "nyc": "^15.0.1"
+    "nyc": "^15.0.1",
+    "prettier-eslint-cli": "^5.0.0"
   },
   "scripts": {
     "pretest": "npm run lint",
@@ -19,6 +20,7 @@
     "posttest": "npm run coverage",
     "test:watch": "ava --watch",
     "coverage": "nyc ava",
+    "prettier": "prettier-eslint  --write $PWD/'**/*.js'",
     "lint": "eslint --ext .js --ignore-pattern .gitignore ."
   },
   "eslintConfig": {

@@ -3,7 +3,6 @@ const {getOutput} = require('../src/file');
 const DATA = require('./helpers/data');
 const {fromData} = require('./helpers/data');
 
-
 function output(filename) {
   const data = getOutput(filename);
   return fromData(data);
@@ -29,4 +28,3 @@ test('read output from bad', async (t) => {
   const actual = await output(DATA.BAD);
   t.deepEqual(actual, expected);
 });
-
