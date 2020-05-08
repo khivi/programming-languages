@@ -10,28 +10,25 @@ const next2 = (data1, data2) => {
   return Promise.all([d1, d2]);
 };
 
-async function equal(t, expected, actual) {
-  while (true) {
-    const [e, a] = await next2(expected, actual);
-    t.is(e, a);
-    if (e === undefined) {
-      break;
-    }
-  }
-}
-
-async function notEqual(t, expected, actual) {
+async function isEqual(t, expected, actual) {
   while (true) {
     const [e, a] = await next2(expected, actual);
     if (e != a) {
-      break;
+      return false;
+    }
+    if (e === undefined) {
+      return true;
     }
     t.pass();
-    if (e === undefined) {
-      break;
-    }
-    continue;
   }
+}
+
+async function equal(t, expected, actual) {
+  t.truthy(await isEqual(t, expected, actual));
+}
+
+async function notEqual(t, expected, actual) {
+  t.falsy(await isEqual(t, expected, actual));
 }
 
 test('merge test data', async (t) => {
@@ -43,7 +40,7 @@ test('merge test data', async (t) => {
 });
 
 test('merge err data', async (t) => {
-  t.plan(0);
+  t.plan(1);
   const fileName = DATA.ERR;
   const expected = getOutput(fileName);
   const actual = new Merge(fileName).merge();
