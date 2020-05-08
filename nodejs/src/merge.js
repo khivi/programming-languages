@@ -33,10 +33,12 @@ class Merge {
     });
     const next = async (i) => (await collections[i].next()).value;
 
-    const initialValues = _.map(_.range(number), async (i) => {
-      return await next(i);
-    });
-    const values = await Promise.all(initialValues);
+    const initialValues = function* () {
+      for (const i of _.range(number)) {
+        yield next(i);
+      }
+    };
+    const values = await Promise.all(initialValues());
 
     while (true) {
       if (_.every(values, (v) => _.isUndefined(v))) {
