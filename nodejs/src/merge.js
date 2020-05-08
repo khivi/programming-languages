@@ -33,23 +33,19 @@ class Merge {
     });
     const next = async (i) => (await collections[i].next()).value;
 
-    let values = new Array(number).fill(null);
-    while (true) {
-      const updatedValues = _.map(values, async (v, i) => {
-        if (_.isNull(v)) {
-          v = await next(i);
-        }
-        return v;
-      });
-      values = await Promise.all(updatedValues);
+    const initialValues = _.map(_.range(number), async (i) => {
+      return await next(i);
+    });
+    const values = await Promise.all(initialValues);
 
+    while (true) {
       if (_.every(values, (v) => _.isUndefined(v))) {
         break;
       }
 
       const [min, minIdx] = findMin(values);
-      values[minIdx] = null;
       yield min;
+      values[minIdx] = await next(minIdx);
     }
   };
 };
