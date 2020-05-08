@@ -15,7 +15,9 @@
   },
   "scripts": {
     "pretest": "npm run lint",
-    "test": "ava --watch",
+    "test": "ava",
+    "posttest": "npm run coverage",
+    "test:watch": "ava --watch",
     "coverage": "nyc ava",
     "lint": "eslint --ext .js --ignore-pattern .gitignore ."
   },
