@@ -1,4 +1,4 @@
-const _ = require('lodash');
+const fp = require('lodash/fp');
 const {getNumber, getCollection} = require('./file');
 
 class Merge {
@@ -9,9 +9,9 @@ class Merge {
   async* merge() {
     const findMin = (values) => {
       let minIdx = undefined;
-      for (const idx of _.range(number)) {
+      for (const idx of fp.range(0, number)) {
         const v = values[idx];
-        if (_.isUndefined(v)) {
+        if (fp.isUndefined(v)) {
           continue;
         }
         minIdx = minIdx === undefined ? idx : minIdx;
@@ -23,20 +23,18 @@ class Merge {
     };
 
     const number = await getNumber(this.filename);
-    const collections = _.map(_.range(number), (i) => {
-      return getCollection(this.filename, i);
-    });
+    const collections = fp.map((i) => getCollection(this.filename, i))(fp.range(0, number));
     const next = (i) => collections[i].next().then((x) => x.value);
 
     const initialValues = function* () {
-      for (const i of _.range(number)) {
+      for (const i of fp.range(0,number)) {
         yield next(i);
       }
     };
     const values = await Promise.all(initialValues());
 
     while (true) {
-      if (_.every(values, (v) => _.isUndefined(v))) {
+      if (fp.every(fp.isUndefined)(values)) {
         break;
       }
 
