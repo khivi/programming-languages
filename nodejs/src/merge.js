@@ -11,20 +11,18 @@ class Merge {
 
   async* merge() {
     const findMin = (values) => {
-      let min = undefined;
       let minIdx = undefined;
       for (const idx of _.range(number)) {
         const v = values[idx];
-        assert.ok(!_.isNull(v));
         if (_.isUndefined(v)) {
           continue;
         }
-        if (minIdx === undefined || v < min) {
-          min = v;
+        minIdx = (minIdx === undefined) ? idx : minIdx;
+        if (v < values[minIdx]) {
           minIdx = idx;
         }
       };
-      return [min, minIdx];
+      return minIdx;
     };
 
     const number = await getNumber(this.filename);
@@ -45,8 +43,8 @@ class Merge {
         break;
       }
 
-      const [min, minIdx] = findMin(values);
-      yield min;
+      const minIdx = findMin(values);
+      yield values[minIdx];
       values[minIdx] = await next(minIdx);
     }
   };
