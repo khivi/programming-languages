@@ -23,11 +23,13 @@ class Merge {
     };
 
     const number = await getNumber(this.filename);
-    const collections = fp.map((i) => getCollection(this.filename, i))(fp.range(0, number));
+    const collections = fp.map((i) => getCollection(this.filename, i))(
+        fp.range(0, number),
+    );
     const next = (i) => collections[i].next().then((x) => x.value);
 
     const initialValues = function* () {
-      for (const i of fp.range(0,number)) {
+      for (const i of fp.range(0, number)) {
         yield next(i);
       }
     };

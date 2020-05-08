@@ -17,12 +17,12 @@
     "rimraf": "^3.0.2"
   },
   "scripts": {
-    "pretest": "npm-run-all eslint",
+    "pretest": "npm-run-all --parallel eslint",
     "test": "ava",
     "test:watch": "ava --watch",
-    "posttest": "npm-run-all nyc",
-    "lint": "npm-run-all eslint prettier:eslint",
-    "coverage": "npm-run-all nyc nyc:report nyc:open",
+    "posttest": "npm-run-all --parallel nyc",
+    "lint": "npm-run-all --parallel eslint prettier:eslint",
+    "coverage": "npm-run-all --sequential nyc nyc:report nyc:open",
     "clean": "rimraf .nyc_output coverage",
     "nyc": "rimraf .nyc_output && nyc ava",
     "nyc:report": "rimraf coverage && nyc report --reporter=lcov",
