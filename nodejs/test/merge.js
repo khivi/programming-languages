@@ -49,3 +49,11 @@ test('merge err data', async (t) => {
   const actual = new Merge(fileName).merge();
   await notEqual(t, expected, actual);
 });
+
+test('merge zero data', async (t) => {
+  t.plan(1);
+  const fileName = DATA.ZERO;
+  const expected = getOutput(fileName);
+  const actual = new Merge(fileName).merge();
+  await equal(t, expected, actual);
+});
