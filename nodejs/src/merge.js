@@ -33,20 +33,20 @@ class Merge {
     });
     const next = async (i) => (await collections[i].next()).value;
 
-
-    const values = new Array(number).fill(null);
+    let values = new Array(number).fill(null);
     while (true) {
-      const updateValues = async () => {
-        for (const i of _.range(number)) {
-          if (_.isNull(values[i])) {
-            values[i] = await next(i);
-          }
+      const updatedValues = _.map(values, async (v, i) => {
+        if (_.isNull(v)) {
+          v = await next(i);
         }
-      };
-      await updateValues();
+        return v;
+      });
+      values = await Promise.all(updatedValues);
+
       if (_.every(values, (v) => _.isUndefined(v))) {
         break;
       }
+
       const [min, minIdx] = findMin(values);
       values[minIdx] = null;
       yield min;
