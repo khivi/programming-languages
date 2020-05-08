@@ -31,7 +31,7 @@ class Merge {
     const collections = _.map(_.range(number), (i) => {
       return getCollection(this.filename, i);
     });
-    const next = async (d) => (await d.next()).value;
+    const next = async (i) => (await collections[i].next()).value;
 
 
     const values = new Array(number).fill(null);
@@ -39,7 +39,7 @@ class Merge {
       const updateValues = async () => {
         for (const i of _.range(number)) {
           if (_.isNull(values[i])) {
-            values[i] = await next(collections[i]);
+            values[i] = await next(i);
           }
         }
       };
