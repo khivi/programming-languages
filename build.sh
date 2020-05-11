@@ -20,3 +20,6 @@ echo "****Golang****"
 cd $TOP_DIR/golang
 go test -v src/merge/*.go
 
+echo "***NodeJs***"
+cd $TOP_DIR/nodejs
+npm test
