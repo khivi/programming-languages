@@ -14,11 +14,14 @@
     "typescript": "^3.8.3"
   },
   "scripts": {
+    "compile":"npm run tsc",
+    "clean":"rimraf build",
     "pretest": "npm-run-all --parallel eslint",
     "test": "ava",
     "lint": "npm-run-all --parallel eslint prettier:eslint",
     "prettier": "prettier-eslint  --write $PWD/'**/*.js'",
     "prettier:eslint": "prettier-eslint  --list-difference $PWD/'**/*.js'",
-    "eslint": "eslint --ext .js --ignore-pattern .gitignore ."
+    "eslint": "eslint --ext .js --ignore-pattern .gitignore .",
+    "tsc": "tsc"
   }
 }
