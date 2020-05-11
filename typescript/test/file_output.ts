@@ -3,7 +3,7 @@ const {getOutput} = require('../src/file');
 const DATA = require('./helpers/data');
 const {fromData} = require('./helpers/data');
 
-function output(filename) {
+function output(filename: string) {
   const data = getOutput(filename);
   return fromData(data);
 }
