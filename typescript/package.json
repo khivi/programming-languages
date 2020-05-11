@@ -9,7 +9,6 @@
     "@typescript-eslint/eslint-plugin": "^2.24.0"
   },
   "devDependencies": {
-    "@ava/typescript": "^1.1.1",
     "@typescript-eslint/eslint-plugin": "^2.32.0",
     "@typescript-eslint/parser": "^2.32.0",
     "ava": "^3.8.2",
@@ -30,7 +29,7 @@
     "compile": "npm run tsc",
     "clean:compile": "rimraf build",
     "pre1test": "npm-run-all lint",
-    "test": "ava test/**",
+    "test": "ava",
     "clean": "npm-run-all --parallel clean:compile",
     "lint": "npm-run-all --parallel eslint",
     "eslint": "eslint --ext .ts --ignore-pattern .gitignore .",
@@ -58,11 +57,5 @@
     }
   },
   "ava": {
-    "typescript": {
-      "rewritePaths": {
-        "src/": "build/src/",
-        "test/": "build/test/"
-      }
-    }
   }
 }
