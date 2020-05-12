@@ -10,24 +10,24 @@ const tsProject = ts.createProject('tsconfig.json');
 
 
 gulp.task('compile', () => {
-  return gulp.src(tsFiles)
+  return gulp.src(tsFiles, {base: './'})
     .pipe(plumber())
     .pipe(tsProject())
     .pipe(gulp.dest('build'));
 });
 
 gulp.task('watch', () => {
-  gulp.watch(tsFiles, gulp.series('compile'));
+  gulp.watch(tsFiles, { ignoreInitial: false },  gulp.series('compile'));
 });
 
 gulp.task('clean', (done) => { 
-  del(['build']);
-  done();
+  del(['build'], done);
 });
 
-gulp.task('test', () => {
-  gulp.src('build/**/*.js')
+gulp.task('test', (done) => {
+  gulp.src('build/test/*.js')
     .pipe(ava());
+  done();
 });
 
 gulp.task('lint', () => {
