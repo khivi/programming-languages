@@ -21,7 +21,8 @@ gulp.task('watch', () => {
 });
 
 gulp.task('clean', (done: any) => { 
-  del(['build'], done);
+  del(['build']);
+  done();
 });
 
 gulp.task('test', (done: any) => {
@@ -60,10 +61,14 @@ gulp.task('lint', () => {
       "spaced-comment": "off"
     }
   };
-  return gulp.src(tsFiles)
+  const lintFiles = tsFiles.concat(['gulpfile.ts'])
+  return gulp.src(lintFiles)
     .pipe(eslint(config))
     .pipe(eslint.format())
+    .pipe(eslint.result((result: any) => {
+        console.log(`ESLint: ${result.filePath}`);
+    }))
     .pipe(eslint.failAfterError());
 });
 
-gulp.task('default', gulp.series('clean', 'compile', 'watch'));
+gulp.task('default', gulp.series('clean', 'compile', 'test'));
