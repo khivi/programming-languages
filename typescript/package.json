@@ -14,8 +14,16 @@
     "gulp-plumber": "^1.2.1",
     "gulp-typescript": "^6.0.0-alpha.1",
     "gulp-xo": "^0.24.0",
+    "json-schema": "^0.2.5",
+    "npm-force-resolutions": "0.0.3",
     "ts-node": "^8.10.1",
     "typescript": "^3.8.3",
     "xo": "^0.30.0"
+  },
+  "resolutions": {
+    "xo": "^0.30.0"
+  },
+  "scripts": {
+    "preinstall": "npx npm-force-resolutions"
   }
 }
