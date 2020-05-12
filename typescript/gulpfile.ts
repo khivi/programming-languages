@@ -2,7 +2,7 @@ const gulp = require('gulp');
 const ts = require('gulp-typescript');
 const plumber = require('gulp-plumber');
 const del = require('del');
-const eslint = require('gulp-eslint');
+const xo = require('gulp-xo');
 const ava = require('gulp-ava');
 
 const tsFiles = ['src/**/*.ts', 'test/**/*.ts'];
@@ -33,42 +33,13 @@ gulp.task('test', (done: any) => {
 
 gulp.task('lint', () => {
   const config = {
-    "root": true,
-    "ignorePath": ".gitignore",
-    "useEslintrc": false,
-    "extensions": [".ts"],
-    "warnFileIgnored": true,
-    "extends": [
-     'eslint:recommended',
-      'plugin:@typescript-eslint/eslint-recommended',
-      'plugin:@typescript-eslint/recommended',
-    ],
-    envs: ["node"],
-    "plugins": [
-      "@typescript-eslint"
-    ],
-    "parser": "@typescript-eslint/parser",
-    "parserOptions": {
-      "project": "./tsconfig.json",
-      "ecmaVersion": 6,
-      "sourceType": "module",
-      "ecmaFeatures": {
-        "module": true
-      },
-    },
-    "rules": {
-      "require-jsdoc": "off",
-      "spaced-comment": "off"
-    }
+    "ignores": ".gitignore"
   };
   const lintFiles = tsFiles.concat(['gulpfile.ts'])
   return gulp.src(lintFiles)
-    .pipe(eslint(config))
-    .pipe(eslint.format())
-    .pipe(eslint.result((result: any) => {
-        console.log(`ESLint: ${result.filePath}`);
-    }))
-    .pipe(eslint.failAfterError());
+    .pipe(xo(config))
+    .pipe(xo.format())
+    .pipe(xo.failAfterError());
 });
 
 gulp.task('default', gulp.series('clean', 'compile', 'test'));
