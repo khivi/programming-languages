@@ -42,12 +42,13 @@ gulp.task('lint', () => {
       'plugin:@typescript-eslint/eslint-recommended',
       'plugin:@typescript-eslint/recommended',
     ],
+    envs: ["node"],
     "plugins": [
       "@typescript-eslint"
     ],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
-      "project": "./tsconfig.json"
+      "project": "./tsconfig.json",
     },
     "rules": {
       "require-jsdoc": "off",

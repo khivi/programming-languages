@@ -8,7 +8,7 @@ exports.BAD = path.resolve(_DATA_DIR, 'bad.txt');
 exports.ZERO = path.resolve(_DATA_DIR, 'zero.txt');
 
 // data is a async generator so we need to do for.await...of
-export async function fromData(data: AsyncIterable<number>):Promise<Array<number>> {
+export async function fromData(data: AsyncIterable<number>): Promise<number[]> {
   const actual = [];
   for await (const n of data) {
     actual.push(n);
