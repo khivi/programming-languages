@@ -1,8 +1,8 @@
-const fs = require('fs');
+import fs = require('fs');
 const readline = require('readline');
 
-async function getNumber(file) {
-  const matchNumber = (line) => {
+async function getNumber(file: string) {
+  const matchNumber = (line: string) => {
     const regex = /^NUMBER=(\d+)$/;
     const match = line.match(regex);
     if (match) {
@@ -11,12 +11,12 @@ async function getNumber(file) {
     return undefined;
   };
 
-  const matchLine = (resolve, reject) => {
-    const error = function(error) {
+  return new Promise((resolve, reject) => {
+    const error = function(error: any) {
       return reject(error);
     };
 
-    const line = function(line) {
+    const line = function(line: string) {
       const number = matchNumber(line);
       if (number) {
         return resolve(number);
@@ -29,20 +29,18 @@ async function getNumber(file) {
     });
     rl.on('error', error);
     rl.once('line', line);
-  };
-
-  return new Promise(matchLine);
+  });
 }
 
-async function* getData(file, key) {
-  const matchLine = (line) => {
+async function* getData(file: string, key: string) {
+  const matchLine = (line: string) => {
     const regex = new RegExp(`^${key}:(.+)$`);
     return line.match(regex);
   };
 
-  const split = function* (str) {
+  const split = function* (str: string) {
     let pos = 0;
-    const number = (end) => parseInt(str.substr(pos, end));
+    const number = (end?: number) => parseInt(str.substr(pos, end));
     while (true) {
       const idx = str.indexOf(',', pos);
       if (idx == -1) {
@@ -67,8 +65,8 @@ async function* getData(file, key) {
   }
 }
 
-exports.getOutput = (filename) => getData(filename, 'OUTPUT');
-exports.getCollection = (filename, num) =>
+exports.getOutput = (filename: string) => getData(filename, 'OUTPUT');
+exports.getCollection = (filename: string, num: number) =>
   getData(filename, 'COLLECTION' + num);
 
 exports.getNumber = getNumber;

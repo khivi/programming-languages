@@ -1,4 +1,4 @@
-const test = require('ava');
+import test, {ExecutionContext} from 'ava';
 const {getOutput} = require('../src/file');
 const DATA = require('./helpers/data');
 const {fromData} = require('./helpers/data');
@@ -24,7 +24,7 @@ test('read output from err', async (t) => {
 
 test('read output from bad', async (t) => {
   t.plan(1);
-  const expected = [];
+  const expected: number[] = [];
   const actual = await output(DATA.BAD);
   t.deepEqual(actual, expected);
 });

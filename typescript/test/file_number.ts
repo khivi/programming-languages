@@ -1,4 +1,4 @@
-const test = require('ava');
+import test, {ExecutionContext} from 'ava';
 const {getNumber} = require('../src/file');
 const DATA = require('./helpers/data');
 

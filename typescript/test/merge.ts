@@ -1,16 +1,16 @@
-const test = require('ava');
+import test, {ExecutionContext} from 'ava';
 const {getOutput} = require('../src/file');
 const DATA = require('./helpers/data');
 const {Merge} = require('../src/merge');
 
-const next2 = (data1, data2) => {
-  const next = (d) => d.next().then((x) => x.value);
+const next2 = (data1: AsyncIterator<number>, data2: AsyncIterator<number>) => {
+  const next = (d: AsyncIterator<number>) => d.next().then((x) => x.value);
   const d1 = next(data1);
   const d2 = next(data2);
   return Promise.all([d1, d2]);
 };
 
-async function isEqual(t, expected, actual) {
+async function isEqual(t: ExecutionContext, expected: AsyncIterator<number>, actual: AsyncIterator<number>) {
   while (true) {
     const [e, a] = await next2(expected, actual);
     if (e != a) {
@@ -23,11 +23,11 @@ async function isEqual(t, expected, actual) {
   }
 }
 
-async function equal(t, expected, actual) {
+async function equal(t: ExecutionContext, expected: AsyncIterator<number>, actual: AsyncIterator<number>) {
   t.truthy(await isEqual(t, expected, actual));
 }
 
-async function notEqual(t, expected, actual) {
+async function notEqual(t: ExecutionContext, expected: AsyncIterator<number>, actual: AsyncIterator<number>) {
   t.falsy(await isEqual(t, expected, actual));
 }
 

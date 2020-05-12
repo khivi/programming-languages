@@ -17,7 +17,7 @@ gulp.task('compile', () => {
 });
 
 gulp.task('watch', () => {
-  gulp.watch(tsFiles, { ignoreInitial: false },  gulp.series('compile'));
+  gulp.watch(tsFiles, { ignoreInitial: false },  gulp.series('compile', 'test'));
 });
 
 gulp.task('clean', (done) => { 
@@ -49,6 +49,11 @@ gulp.task('lint', () => {
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
       "project": "./tsconfig.json",
+      "ecmaVersion": 6,
+      "sourceType": "module",
+      "ecmaFeatures": {
+        "module": true
+      },
     },
     "rules": {
       "require-jsdoc": "off",

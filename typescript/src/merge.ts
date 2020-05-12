@@ -1,13 +1,14 @@
-const fp = require('lodash/fp');
+import fp = require('lodash/fp');
 const {getNumber, getCollection} = require('./file');
 
 class Merge {
-  constructor(filename) {
+  filename: string;
+  constructor(filename: string) {
     this.filename = filename;
   }
 
   async* merge() {
-    const findMin = (values) => {
+    const findMin = (values: number[]) => {
       let minIdx = undefined;
       for (const idx of fp.range(0, number)) {
         const v = values[idx];
@@ -26,7 +27,7 @@ class Merge {
     const collections = fp.map((i) => getCollection(this.filename, i))(
         fp.range(0, number),
     );
-    const next = (i) => collections[i].next().then((x) => x.value);
+    const next = (i: number) => collections[i].next().then((x: IteratorResult<number>) => x.value);
 
     const initialValues = function* () {
       for (const i of fp.range(0, number)) {
@@ -41,6 +42,9 @@ class Merge {
       }
 
       const minIdx = findMin(values);
+      if (minIdx === undefined) {
+          break;
+      }
       yield values[minIdx];
       values[minIdx] = await next(minIdx);
     }
