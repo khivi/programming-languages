@@ -33,7 +33,14 @@ gulp.task('test', (done: any) => {
 
 gulp.task('lint', () => {
   const config = {
-    "ignores": ".gitignore"
+    "ignores": ".gitignore",
+    "space": true,
+    "rules": {
+        "unicorn/filename-case": "off"
+    },
+    "parserOptions": {
+        project: "./tsconfig.json"
+    }
   };
   const lintFiles = tsFiles.concat(['gulpfile.ts'])
   return gulp.src(lintFiles)
