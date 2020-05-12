@@ -20,11 +20,11 @@ gulp.task('watch', () => {
   gulp.watch(tsFiles, { ignoreInitial: false },  gulp.series('compile', 'test'));
 });
 
-gulp.task('clean', (done) => { 
+gulp.task('clean', (done: any) => { 
   del(['build'], done);
 });
 
-gulp.task('test', (done) => {
+gulp.task('test', (done: any) => {
   gulp.src('build/test/*.js')
     .pipe(ava());
   done();
