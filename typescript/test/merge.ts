@@ -1,7 +1,7 @@
 import test, {ExecutionContext} from 'ava';
-const {getOutput} = require('../src/file');
-const DATA = require('./helpers/data');
-const {Merge} = require('../src/merge');
+import {getOutput} from '../src/file';
+import * as  DATA from './helpers/data';
+import {Merge} from '../src/merge';
 
 const next2 = (data1: AsyncIterator<number>, data2: AsyncIterator<number>) => {
   const next = (d: AsyncIterator<number>) => d.next().then((x) => x.value);

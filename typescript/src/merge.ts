@@ -1,39 +1,42 @@
-import fp = require('lodash/fp');
-const {getNumber, getCollection} = require('./file');
+// SKIP import fp = require('lodash/fp');
+// SKIP const fp = require('lodash/fp');
+import fp from 'lodash/fp';
+import {getNumber, getCollection} from './file';
 
-class Merge {
-  filename: string;
+export class Merge {
+  readonly filename: string;
   constructor(filename: string) {
     this.filename = filename;
   }
 
-  async* merge() {
-    const findMin = (values: number[]) => {
-      let minIdx = undefined;
-      for (const idx of fp.range(0, number)) {
+  async * merge() {
+    const findMin = (values: readonly number[]) => {
+      let minIdx;
+      for (const idx of fp.range(0, values.length)) {
         const v = values[idx];
         if (fp.isUndefined(v)) {
           continue;
         }
+
         minIdx = minIdx === undefined ? idx : minIdx;
         if (v < values[minIdx]) {
           minIdx = idx;
         }
       }
+
       return minIdx;
     };
 
-    const number = await getNumber(this.filename);
-    const collections = fp.map((i) => getCollection(this.filename, i))(
-        fp.range(0, number),
-    );
-    const next = (i: number) => collections[i].next().then((x: IteratorResult<number>) => x.value);
+    const count = await getNumber(this.filename);
+    const collections = fp.map(i => getCollection(this.filename, i))(fp.range(0, count));
+    const next = async (i: number) => collections[i].next().then((x: IteratorResult<number>) => x.value);
 
-    const initialValues = function* () {
-      for (const i of fp.range(0, number)) {
+    const initialValues = function * () {
+      for (const i of fp.range(0, count)) {
         yield next(i);
       }
     };
+
     const values = await Promise.all(initialValues());
 
     while (true) {
@@ -43,8 +46,9 @@ class Merge {
 
       const minIdx = findMin(values);
       if (minIdx === undefined) {
-          break;
+        break;
       }
+
       yield values[minIdx];
       values[minIdx] = await next(minIdx);
     }

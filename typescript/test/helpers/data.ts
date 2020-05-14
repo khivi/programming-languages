@@ -1,18 +1,18 @@
-const path = require('path');
-const process = require('process');
+import path from 'path';
+import process = require('process');
 
 const _DATA_DIR = path.resolve(process.cwd(), '..', 'data');
-exports.TEST = path.resolve(_DATA_DIR, 'test.txt');
-exports.ERR = path.resolve(_DATA_DIR, 'err.txt');
-exports.BAD = path.resolve(_DATA_DIR, 'bad.txt');
-exports.ZERO = path.resolve(_DATA_DIR, 'zero.txt');
+export const TEST = path.resolve(_DATA_DIR, 'test.txt');
+export const ERR = path.resolve(_DATA_DIR, 'err.txt');
+export const BAD = path.resolve(_DATA_DIR, 'bad.txt');
+export const ZERO = path.resolve(_DATA_DIR, 'zero.txt');
 
-// data is a async generator so we need to do for.await...of
 export async function fromData(data: AsyncIterable<number>): Promise<number[]> {
   const actual = [];
   for await (const n of data) {
     actual.push(n);
   }
+
   return actual;
 }
 

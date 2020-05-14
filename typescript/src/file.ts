@@ -1,7 +1,7 @@
-import fs = require('fs');
-const readline = require('readline');
+import fs from 'fs';
+import readline from 'readline';
 
-async function getNumber(file: string) {
+export async function getNumber(file: string): Promise<number> {
   const matchNumber = (line: string) => {
     const regex = /^NUMBER=(\d+)$/;
     const match = line.match(regex);
@@ -32,7 +32,7 @@ async function getNumber(file: string) {
   });
 }
 
-async function* getData(file: string, key: string) {
+async function * getData(file: string, key: string) {
   const matchLine = (line: string) => {
     const regex = new RegExp(`^${key}:(.+)$`);
     return line.match(regex);
@@ -65,8 +65,7 @@ async function* getData(file: string, key: string) {
   }
 }
 
-exports.getOutput = (filename: string) => getData(filename, 'OUTPUT');
-exports.getCollection = (filename: string, num: number) =>
-  getData(filename, 'COLLECTION' + num);
+export const getOutput = (filename: string) => getData(filename, 'OUTPUT');
+// TODO FIX any
+export const  getCollection = (filename: string, num: any) => getData(filename, 'COLLECTION' + num);
 
-exports.getNumber = getNumber;

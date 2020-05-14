@@ -1,6 +1,6 @@
 import test from 'ava';
-const {getNumber} = require('../src/file');
-const DATA = require('./helpers/data');
+import {getNumber} from '../src/file';
+import * as DATA from './helpers/data';
 
 test('read number from test', async t => {
   t.plan(1);
@@ -17,6 +17,6 @@ test('read number from err', async t => {
 test('throw error from bad', async t => {
   t.plan(2);
   const promise = getNumber(DATA.BAD);
-  const e = await t.throwsAsync(promise);
-  t.is(e.message, 'Number not found');
+  const error = await t.throwsAsync(promise);
+  t.is(error.message, 'Number not found');
 });
