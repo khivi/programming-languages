@@ -6,26 +6,28 @@ export async function getNumber(file: string): Promise<number> {
     const regex = /^NUMBER=(\d+)$/;
     const match = line.match(regex);
     if (match) {
-      return parseInt(match[1]);
+      return Number.parseInt(match[1]);
     }
+
     return undefined;
   };
 
   return new Promise((resolve, reject) => {
-    const error = function(error: any) {
+    const error = function (error: any) {
       return reject(error);
     };
 
-    const line = function(line: string) {
+    const line = function (line: string) {
       const number = matchNumber(line);
       if (number) {
         return resolve(number);
       }
+
       return reject(new Error('Number not found'));
     };
 
     const rl = readline.createInterface({
-      input: fs.createReadStream(file),
+      input: fs.createReadStream(file)
     });
     rl.on('error', error);
     rl.once('line', line);
@@ -38,22 +40,23 @@ async function * getData(file: string, key: string) {
     return line.match(regex);
   };
 
-  const split = function* (str: string) {
+  const split = function * (string: string) {
     let pos = 0;
-    const number = (end?: number) => parseInt(str.substr(pos, end));
+    const number = (end?: number) => Number.parseInt(string.substr(pos, end));
     while (true) {
-      const idx = str.indexOf(',', pos);
+      const idx = string.indexOf(',', pos);
       if (idx == -1) {
         yield number();
         return;
       }
+
       yield number(idx);
       pos = idx + 1;
     }
   };
 
   const rl = readline.createInterface({
-    input: fs.createReadStream(file),
+    input: fs.createReadStream(file)
   });
 
   for await (const line of rl) {
@@ -61,11 +64,12 @@ async function * getData(file: string, key: string) {
     if (!match) {
       continue;
     }
-    yield* split(match[1]);
+
+    yield * split(match[1]);
   }
 }
 
 export const getOutput = (filename: string) => getData(filename, 'OUTPUT');
 // TODO FIX any
-export const  getCollection = (filename: string, num: any) => getData(filename, 'COLLECTION' + num);
+export const getCollection = (filename: string, number: any) => getData(filename, 'COLLECTION' + number);
 

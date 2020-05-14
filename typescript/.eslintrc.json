@@ -2,7 +2,7 @@
     "parserOptions": {
       "sourceType": "module",
       "project": "./tsconfig.json",
-      "ecmaFeatures": 005
+      "ecmaFeatures": 2005
     },
     "rules": {
         "@typescript-eslint/indent": "off"

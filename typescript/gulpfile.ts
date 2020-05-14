@@ -30,24 +30,33 @@ gulp.task('test', (done: any) => {
   done();
 });
 
+const lintFiles = tsFiles.concat(['gulpfile.ts']);
+const lintConfig: any = {
+  ignores: '.gitignore',
+  space: true,
+  rules: {
+    'unicorn/filename-case': 'off',
+    '@typescript-eslint/prefer-readonly-parameter-types': 'off',
+    'ava/no-ignored-test-files': 'off'
+  },
+  parserOptions: {
+    project: './tsconfig.json'
+  }
+};
+
 gulp.task('lint', () => {
-  const lintFiles = tsFiles.concat(['gulpfile.ts']);
-  const config = {
-    ignores: '.gitignore',
-    space: true,
-    rules: {
-      'unicorn/filename-case': 'off',
-      '@typescript-eslint/prefer-readonly-parameter-types': 'off',
-      'ava/no-ignored-test-files': 'off'
-    },
-    parserOptions: {
-      project: './tsconfig.json'
-    }
-  };
-  return gulp.src(lintFiles)
-    .pipe(xo(config))
+  return gulp.src(lintFiles, {base: './'})
+    .pipe(xo(lintConfig))
     .pipe(xo.format())
     .pipe(xo.failAfterError());
+});
+
+gulp.task('lint-fix', () => {
+  lintConfig.fix = true;
+  return gulp.src(lintFiles, {base: './'})
+    .pipe(xo(lintConfig))
+    .pipe(xo.format())
+    .pipe(gulp.dest('.'));
 });
 
 gulp.task('default', gulp.series('clean', 'lint', 'compile', 'test'));
