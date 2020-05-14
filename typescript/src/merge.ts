@@ -40,7 +40,7 @@ export class Merge {
     const values = await Promise.all(initialValues());
 
     while (true) {
-      if (fp.every(fp.isUndefined)(values)) {
+      if (fp.every(x => fp.isUndefined(x))(values)) {
         break;
       }
 
@@ -50,7 +50,7 @@ export class Merge {
       }
 
       yield values[minIdx];
-      values[minIdx] = await next(minIdx);
+      /* eslint-disable no-await-in-loop */ values[minIdx] = await next(minIdx); /* eslint-enable no-await-in-loop */
     }
   }
 }

@@ -4,9 +4,9 @@ import readline from 'readline';
 export async function getNumber(file: string): Promise<number> {
   const matchNumber = (line: string) => {
     const regex = /^NUMBER=(\d+)$/;
-    const match = line.match(regex);
+    const match = regex.exec(line);
     if (match) {
-      return Number.parseInt(match[1]);
+      return Number.parseInt(match[1], 10);
     }
 
     return undefined;
@@ -37,15 +37,15 @@ export async function getNumber(file: string): Promise<number> {
 async function * getData(file: string, key: string) {
   const matchLine = (line: string) => {
     const regex = new RegExp(`^${key}:(.+)$`);
-    return line.match(regex);
+    return regex.exec(line);
   };
 
   const split = function * (string: string) {
     let pos = 0;
-    const number = (end?: number) => Number.parseInt(string.substr(pos, end));
+    const number = (end?: number) => Number.parseInt(string.slice(pos, end), 10);
     while (true) {
       const idx = string.indexOf(',', pos);
-      if (idx == -1) {
+      if (idx === -1) {
         yield number();
         return;
       }
@@ -71,5 +71,5 @@ async function * getData(file: string, key: string) {
 
 export const getOutput = (filename: string) => getData(filename, 'OUTPUT');
 // TODO FIX any
-export const getCollection = (filename: string, number: any) => getData(filename, 'COLLECTION' + number);
+export const getCollection = (filename: string, number: any) => getData(filename, `COLLECTION${number}`);
 

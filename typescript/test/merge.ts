@@ -3,26 +3,32 @@ import {getOutput} from '../src/file';
 import * as DATA from './helpers/data';
 import {Merge} from '../src/merge';
 
-const next2 = (data1: AsyncIterator<number>, data2: AsyncIterator<number>) => {
-  const next = (d: AsyncIterator<number>) => d.next().then(x => x.value);
+const next2 = async (data1: AsyncIterator<number>, data2: AsyncIterator<number>) => {
+  const next = async (d: AsyncIterator<number>) => d.next().then(x => x.value);
   const d1 = next(data1);
   const d2 = next(data2);
   return Promise.all([d1, d2]);
 };
 
 async function isEqual(t: ExecutionContext, expected: AsyncIterator<number>, actual: AsyncIterator<number>) {
-  while (true) {
+  let done = false;
+  while (!done) {
+    /* eslint-disable no-await-in-loop,unicorn/prevent-abbreviations */
     const [e, a] = await next2(expected, actual);
-    if (e != a) {
+    /* eslint-enable no-await-in-loop,unicorn/prevent-abbreviations */
+    if (e !== a) {
       return false;
     }
 
     if (e === undefined) {
-      return true;
+      done = true;
+      continue;
     }
 
     t.pass();
   }
+
+  return true;
 }
 
 async function equal(t: ExecutionContext, expected: AsyncIterator<number>, actual: AsyncIterator<number>) {

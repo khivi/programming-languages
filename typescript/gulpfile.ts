@@ -19,9 +19,8 @@ gulp.task('watch', () => {
   gulp.watch(tsFiles, {ignoreInitial: false}, gulp.series('compile', 'test'));
 });
 
-gulp.task('clean', (done: any) => {
-  del(['build']);
-  done();
+gulp.task('clean', async () => {
+  return del(['build']);
 });
 
 gulp.task('test', (done: any) => {
@@ -59,4 +58,4 @@ gulp.task('lint-fix', () => {
     .pipe(gulp.dest('.'));
 });
 
-gulp.task('default', gulp.series('clean', 'lint', 'compile', 'test'));
+gulp.task('default', gulp.series('clean', 'compile', 'test'));
