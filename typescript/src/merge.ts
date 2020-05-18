@@ -10,7 +10,7 @@ export class Merge {
   }
 
   async * merge() {
-    const findMin = (values: readonly number[]) => {
+    const findMin = (values: readonly number[]): number|undefined => {
       let minIdx;
       for (const idx of fp.range(0, values.length)) {
         const v = values[idx];
@@ -27,17 +27,17 @@ export class Merge {
       return minIdx;
     };
 
-    const count = await getNumber(this.filename);
-    const collections = fp.map((i: number) => getCollection(this.filename, i))(fp.range(0, count));
-    const next = async (i: number) => collections[i].next().then((x: IteratorResult<number>) => x.value);
+    const count: number = await getNumber(this.filename);
+    const collections: AsyncGenerator<number>[] = fp.map((i: number) => getCollection(this.filename, i))(fp.range(0, count));
+    const next = async (i: number): Promise<number> => collections[i].next().then((x: IteratorResult<number>) => x.value);
 
-    const initialValues = function * () {
+    const initialValues = function * (): Generator<Promise<number>> {
       for (const i of fp.range(0, count)) {
         yield next(i);
       }
     };
 
-    const values = await Promise.all(initialValues());
+    const values: number[] = await Promise.all(initialValues());
 
     while (true) {
       if (fp.every(x => fp.isUndefined(x))(values)) {

@@ -3,7 +3,7 @@ import {getCollection} from '../src/file';
 import * as DATA from './helpers/data';
 import {fromData} from './helpers/data';
 
-async function collection(filename: string, number: number) {
+async function collection(filename: string, number: number): Promise<number[]> {
   const data = getCollection(filename, number);
   return fromData(data);
 }

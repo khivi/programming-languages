@@ -2,7 +2,7 @@ import fs from 'fs';
 import readline from 'readline';
 
 export async function getNumber(file: string): Promise<number> {
-  const matchNumber = (line: string) => {
+  const matchNumber = (line: string): number|undefined => {
     const regex = /^NUMBER=(\d+)$/;
     const match = regex.exec(line);
     if (match) {
@@ -13,17 +13,17 @@ export async function getNumber(file: string): Promise<number> {
   };
 
   return new Promise((resolve, reject) => {
-    const error = function (error: any) {
+    const error = function (error: any): void {
       return reject(error);
     };
 
-    const line = function (line: string) {
+    const line = function (line: string): void {
       const number = matchNumber(line);
       if (number) {
-        return resolve(number);
+        resolve(number);
       }
 
-      return reject(new Error('Number not found'));
+      reject(new Error('Number not found'));
     };
 
     const rl = readline.createInterface({
@@ -34,13 +34,13 @@ export async function getNumber(file: string): Promise<number> {
   });
 }
 
-async function * getData(file: string, key: string) {
+async function * getData(file: string, key: string): AsyncGenerator<number> {
   const matchLine = (line: string) => {
     const regex = new RegExp(`^${key}:(.+)$`);
     return regex.exec(line);
   };
 
-  const split = function * (string: string) {
+  const split = function * (string: string): Generator<number> {
     let pos = 0;
     const number = (end?: number) => Number.parseInt(string.slice(pos, end), 10);
     while (true) {
@@ -69,6 +69,6 @@ async function * getData(file: string, key: string) {
   }
 }
 
-export const getOutput = (filename: string) => getData(filename, 'OUTPUT');
-export const getCollection = (filename: string, number: number) => getData(filename, `COLLECTION${number}`);
+export const getOutput = (filename: string): AsyncGenerator<number> => getData(filename, 'OUTPUT');
+export const getCollection = (filename: string, number: number): AsyncGenerator<number> => getData(filename, `COLLECTION${number}`);
 
