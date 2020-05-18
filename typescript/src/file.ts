@@ -70,6 +70,5 @@ async function * getData(file: string, key: string) {
 }
 
 export const getOutput = (filename: string) => getData(filename, 'OUTPUT');
-// TODO FIX any
-export const getCollection = (filename: string, number: any) => getData(filename, `COLLECTION${number}`);
+export const getCollection = (filename: string, number: number) => getData(filename, `COLLECTION${number}`);
 

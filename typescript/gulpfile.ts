@@ -60,4 +60,4 @@ gulp.task('lint-fix', () => {
     .pipe(gulp.dest('.'));
 });
 
-gulp.task('default', gulp.series('clean', 'compile', 'test'));
+gulp.task('default', gulp.series('lint', 'clean', 'compile', 'test'));

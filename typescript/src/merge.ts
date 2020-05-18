@@ -28,7 +28,7 @@ export class Merge {
     };
 
     const count = await getNumber(this.filename);
-    const collections = fp.map(i => getCollection(this.filename, i))(fp.range(0, count));
+    const collections = fp.map((i: number) => getCollection(this.filename, i))(fp.range(0, count));
     const next = async (i: number) => collections[i].next().then((x: IteratorResult<number>) => x.value);
 
     const initialValues = function * () {
