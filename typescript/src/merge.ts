@@ -28,16 +28,16 @@ export class Merge {
     };
 
     const count: number = await getNumber(this.filename);
-    const collections: AsyncGenerator<number>[] = fp.map((i: number) => getCollection(this.filename, i))(fp.range(0, count));
+    const collections: Array<AsyncGenerator<number>> = fp.map((i: number) => getCollection(this.filename, i))(fp.range(0, count));
     const next = async (i: number): Promise<number> => collections[i].next().then((x: IteratorResult<number>) => x.value);
 
-    const initialValues = function * (): Generator<Promise<number>> {
+    const initialValues: Generator<Promise<number>> = (function * () {
       for (const i of fp.range(0, count)) {
         yield next(i);
       }
-    };
+    })();
 
-    const values: number[] = await Promise.all(initialValues());
+    const values: number[] = await Promise.all(initialValues);
 
     while (true) {
       if (fp.every(x => fp.isUndefined(x))(values)) {
