@@ -1,6 +1,5 @@
 import gulp from 'gulp';
 import ts from 'gulp-typescript';
-import plumber from 'gulp-plumber';
 import del from 'del';
 /* eslint-disable @typescript-eslint/no-var-requires */
 const xo = require('gulp-xo');
@@ -12,9 +11,8 @@ const tsProject = ts.createProject('tsconfig.json');
 
 gulp.task('compile', () => {
   return gulp.src(tsFiles, {base: './'})
-    .pipe(plumber())
     .pipe(tsProject())
-    .pipe(gulp.dest('build'));
+    .pipe(gulp.dest('bu ld'));
 });
 
 gulp.task('watch', () => {
