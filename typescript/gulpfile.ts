@@ -1,9 +1,11 @@
-const gulp = require('gulp');
-const ts = require('gulp-typescript');
-const plumber = require('gulp-plumber');
+import gulp from 'gulp';
+import ts from 'gulp-typescript';
+import plumber from 'gulp-plumber';
 import del from 'del';
+/* eslint-disable @typescript-eslint/no-var-requires */
 const xo = require('gulp-xo');
 const ava = require('gulp-ava');
+/* eslint-enable @typescript-eslint/no-var-requires */
 
 const tsFiles = ['src/**/*.ts', 'test/**/*.ts'];
 const tsProject = ts.createProject('tsconfig.json');
