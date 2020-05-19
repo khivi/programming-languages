@@ -20,10 +20,10 @@ export async function getNumber(file: string): Promise<number> {
     const line = function (line: string): void {
       const number = matchNumber(line);
       if (number) {
-        resolve(number);
+        return resolve(number);
       }
 
-      reject(new Error('Number not found'));
+      return reject(new Error('Number not found'));
     };
 
     const rl = readline.createInterface({

@@ -5,6 +5,7 @@ import {getNumber, getCollection} from './file';
 
 export class Merge {
   readonly filename: string;
+
   constructor(filename: string) {
     this.filename = filename;
   }
@@ -29,7 +30,7 @@ export class Merge {
 
     const count: number = await getNumber(this.filename);
     const collections: Array<AsyncGenerator<number>> = fp.map((i: number) => getCollection(this.filename, i))(fp.range(0, count));
-    const next = async (i: number): Promise<number> => collections[i].next().then((x: IteratorResult<number>) => x.value);
+    const next = async (i: number): Promise<number> => collections[i].next().then(x => x.value);
 
     const initialValues: Generator<Promise<number>> = (function * () {
       for (const i of fp.range(0, count)) {

@@ -23,10 +23,9 @@ gulp.task('clean', async () => {
   return del(['build']);
 });
 
-gulp.task('test', (done: any) => {
-  gulp.src('build/test/*.js')
+gulp.task('test', () => {
+  return gulp.src('build/test/*.js')
     .pipe(ava());
-  done();
 });
 
 const lintFiles = tsFiles.concat(['gulpfile.ts']);
