@@ -12,7 +12,7 @@ const tsProject = ts.createProject('tsconfig.json');
 gulp.task('compile', () => {
   return gulp.src(tsFiles, {base: './'})
     .pipe(tsProject())
-    .pipe(gulp.dest('bu ld'));
+    .pipe(gulp.dest('build'));
 });
 
 gulp.task('watch', () => {
