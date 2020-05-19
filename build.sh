@@ -23,3 +23,7 @@ go test -v src/merge/*.go
 echo "***NodeJs***"
 cd $TOP_DIR/nodejs
 npm test
+
+echo "***Typescript***"
+cd $TOP_DIR/typescript
+gulp default
