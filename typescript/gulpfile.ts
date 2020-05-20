@@ -16,7 +16,7 @@ gulp.task('compile', () => {
 });
 
 gulp.task('watch', () => {
-  gulp.watch(tsFiles, {ignoreInitial: false}, gulp.series('compile', 'test'));
+  gulp.watch(tsFiles, {ignoreInitial: false}, gulp.series('lint', 'compile', 'test'));
 });
 
 gulp.task('clean', async () => {

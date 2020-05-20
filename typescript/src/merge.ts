@@ -30,12 +30,7 @@ export class Merge {
     const collections: Array<AsyncGenerator<number>> = fp.map((i: number) => getCollection(this.filename, i))(fp.range(0, count));
     const next = async (i: number): Promise<number> => collections[i].next().then(x => x.value);
 
-    const initialValues: Generator<Promise<number>> = (function * () {
-      for (const i of fp.range(0, count)) {
-        yield next(i);
-      }
-    })();
-
+    const initialValues: Array<Promise<number>> = fp.map(async (i: number) => next(i))(fp.range(0, count));
     const values: number[] = await Promise.all(initialValues);
 
     while (true) {
