@@ -1,5 +1,3 @@
-// SKIP import fp = require('lodash/fp');
-// SKIP const fp = require('lodash/fp');
 import fp from 'lodash/fp';
 import {getNumber, getCollection} from './file';
 
@@ -15,7 +13,7 @@ export class Merge {
       let minIdx;
       for (const idx of fp.range(0, values.length)) {
         const v = values[idx];
-        if (fp.isUndefined(v)) {
+        if (v === undefined) {
           continue;
         }
 
@@ -41,10 +39,6 @@ export class Merge {
     const values: number[] = await Promise.all(initialValues);
 
     while (true) {
-      if (fp.every(x => fp.isUndefined(x))(values)) {
-        break;
-      }
-
       const minIdx = findMin(values);
       if (minIdx === undefined) {
         break;
