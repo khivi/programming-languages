@@ -1,10 +1,17 @@
 
 import React from "react";
 
-export default function Hello(props) {
-  if (props.name) {
-    return <h1>Hello, {props.name}!</h1>;
+interface HelloProps {
+    name?: string;
+}
+
+const Hello: React.FC<{name?: string}> = ({name}) =>   {
+  if (name) {
+    return <h1>Hello, {name}!</h1>;
   } else {
     return <span>Hey, stranger</span>;
   }
 }
+
+export default Hello;
+
