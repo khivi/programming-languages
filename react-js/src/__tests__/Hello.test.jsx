@@ -2,7 +2,7 @@ import React from 'react';
 import { render, unmountComponentAtNode } from "react-dom";
 import { act } from "react-dom/test-utils";
 
-import Hello from './Hello';
+import Hello from '../Hello';
 
 let container = null;
 beforeEach(() => {
