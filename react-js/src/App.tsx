@@ -1,7 +1,7 @@
 import React from 'react';
 import Hello from './Hello';
 
-function App() {
+const App: React.FC<null> = () =>   {
   return (
     <div className="App">
       <Hello/>
