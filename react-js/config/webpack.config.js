@@ -643,7 +643,7 @@ module.exports = function(webpackEnv) {
             '!**/__tests__/**',
             '!**/?(*.)(spec|test).*',
             '!**/src/setupProxy.*',
-            '!**/src/__tests__/setupTests.*',
+            '!**/src/setupTests.*',
           ],
           silent: true,
           // The formatter is invoked directly in WebpackDevServerUtils during development
