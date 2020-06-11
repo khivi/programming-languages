@@ -5,7 +5,7 @@ import App from '../App';
 
 test('renders witout name ', () => {
   const { getByText } = render(<App />);
-  const text = getByText(/hey/i);
+  const text = getByText(/Next/i);
   expect(text).toBeInTheDocument();
 });
 

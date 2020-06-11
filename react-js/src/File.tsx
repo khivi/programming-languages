@@ -25,7 +25,7 @@ export const File: React.FC<FileProps> = (props: FileProps) => {
             {props.name}
         </h1>
         <ul>
-            {data.map((d, i) => <li key={i}> {d} </li>)}
+            {data.map((d, i) => <li key={i}> {d}</li>)}
         </ul>
         </div>;
 }
