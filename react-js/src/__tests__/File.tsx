@@ -18,11 +18,36 @@ afterEach(() => {
 });
 
 
-it("renders file ", () => {
+it("file next ", () => { 
+  let listener: Listener;
   const subscribe = (l: Listener): void => {
+      listener = l;
   };
   act(() => {    
 	render(<File data={[1,2,3]} name={"foo"} subscribe={subscribe} />, container);
   });  
   expect(container.textContent).toBe("foo 3 2 1");
+  act(() => {   
+      listener.next();
+  });  
+  expect(container.textContent).toBe("foo 3 2");
+});
+
+it("file end ", () => { 
+  let listener: Listener;
+  const subscribe = (l: Listener): void => {
+      listener = l;
+  };
+  act(() => {    
+	render(<File data={[1,2,3]} name={"foo"} subscribe={subscribe} />, container);
+  });  
+  expect(container.textContent).toBe("foo 3 2 1");
+  act(() => {   
+      listener.next();
+      listener.next();
+      listener.next();
+      listener.next();
+      listener.next();
+  });  
+  expect(container.textContent).toBe("foo");
 });
