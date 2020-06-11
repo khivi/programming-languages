@@ -10,11 +10,11 @@ interface FileProps {
 
 export const File: React.FC<FileProps> = (props: FileProps) => {
     const subscribe = props.subscribe;
-    const [data, setData] = useState(props.data);
+    const [data, setData] = useState([...props.data].reverse());
 
     useEffect(() => {
         const listener: Listener = {
-            next: () => setData(data => data.slice(1))
+            next: () => setData(data => data.slice(0, -1))
         };
         subscribe(listener)
 
