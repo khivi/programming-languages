@@ -15,11 +15,13 @@ const App: React.FC<void> = () =>   {
 
   const data = [
       [1,3,4],
-      [2,4,5]
+      [2,4,5],
+      [8,9,11]
   ];
 
   const files = data.map((row, index) => {
-      return <File key={index} name={`file${index}`} data={row} subscribe={subscribe}/>;
+      const name = `file${index}`
+      return <File key={index} name={name} data={row} subscribe={subscribe}/>;
   });
 
   return (

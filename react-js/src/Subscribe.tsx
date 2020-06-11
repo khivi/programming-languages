@@ -7,11 +7,11 @@ export interface Listener {
 export const useSubscriber = (): {listeners: Listener[]; subscribe: (l: Listener) => void}  => {
     const [listeners, setListeners] = useState<Listener[]>([]);
 
-    return {listeners,
-        subscribe: useCallback(
-            (l: Listener): void => setListeners((v) => [...v, l]),
-            [])
+    const subscribe = useCallback(
+        (l: Listener): void => setListeners((v) => [...v, l])
+        ,[]
+    );
 
-    };
+    return {listeners, subscribe };
 }
 
