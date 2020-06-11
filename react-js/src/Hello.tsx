@@ -1,17 +1,28 @@
+import React, {useState}  from "react";
 
-import React from "react";
-
-interface HelloProps {
-    name?: string;
+interface DataProps {
+    name: string;
+    data: number[];
 }
 
-const Hello: React.FC<{name?: string}> = ({name}) =>   {
-  if (name) {
-    return <h1>Hello, {name}!</h1>;
-  } else {
-    return <span>Hey, stranger</span>;
-  }
+
+export const Data: React.FC<DataProps> = (props: DataProps) => {
+    const [data, setData] = useState(props.data);
+
+    const next = (): void => {
+        setData(data => data.slice(1));
+    };
+
+    return <div>
+        <h1>
+            {props.name}
+        </h1>
+        <ul>
+            {data.map((d, i) => <li key={i}> {d} </li>)}
+        </ul>
+        <button onClick={next}>{props.name}</button>
+        </div>;
 }
 
-export default Hello;
+
 
