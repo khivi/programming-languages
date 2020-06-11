@@ -13,10 +13,18 @@ const App: React.FC<void> = () =>   {
     }
   }
 
+  const data = [
+      [1,3,4],
+      [2,4,5]
+  ];
+
+  const files = data.map((row, index) => {
+      return <File key={index} name={`file${index}`} data={row} subscribe={subscribe}/>;
+  });
+
   return (
     <div className="App">
-      <File name="file1" data={[1,3,4]} subscribe={subscribe}/>
-      <File name="file2" data={[2,4,5]} subscribe={subscribe}/>
+      {[...files]}
       <button onClick={next}>Next</button>
     </div>
   );
