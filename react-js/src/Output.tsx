@@ -1,18 +1,20 @@
 import React from 'react';
 
-import {Listener} from './Subscribe';
-
 
 interface OutputProps {
-    listeners: Listener[];
+    iterables: Iterable<number>[];
 }
 
 
 export const Output: React.FC<OutputProps> = (props: OutputProps) =>   {
 
   const next = (): void => {
-    for (const listener of props.listeners) {
-        listener.next();
+    for (const iterable of props.iterables) {
+        //const iterator = iterable[Symbol.iterator]();
+        //const i = iterator.next().value;
+        for (const i of iterable) {
+            console.log(i);
+        }
     }
   }
 

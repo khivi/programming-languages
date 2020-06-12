@@ -1,31 +1,27 @@
-import React, {useState, useCallback, useEffect}  from "react";
-import {Listener} from './Subscribe';
+import React from "react";
 
 interface FileProps {
-    name: string;
-    data: number[];
-    subscribe(listener: Listener): void;
+    index: number;
+    iterable: Iterable<number>;
 }
 
 
 export const File: React.FC<FileProps> = (props: FileProps) => {
-    const subscribe = props.subscribe;
-    const [data, setData] = useState([...props.data].reverse());
-
-    const next = useCallback(
-        () => setData(data => data.slice(0, -1)),
-        []);
-
-    useEffect(() => {
-        subscribe({next})
-    }, [subscribe, next]);
-
+    const iterable = props.iterable;
+    const name = `file${props.index}`;
+    const rows = [];
+    let i = 0;
+    for (const d of iterable) {
+        rows.push(<li key={i}> {d}</li>);
+        i += 1;
+    }
+        
     return <div>
         <h1>
-            {props.name}
+            {name}
         </h1>
         <ul>
-            {data.map((d, i) => <li key={i}> {d}</li>)}
+            {[...rows]}
         </ul>
         </div>;
 }

@@ -3,12 +3,12 @@ import React from 'react';
 import {Page} from './Page';
 
 const App: React.FC<void> = () =>   {
-  const data = [
-      [1,3,4],
-      [2,4,5],
-      [8,9,11]
+  const data: Iterable<number>[] = [
+      [1],
+      [2],
+      [1,2,3]
   ];
-  return  <Page data={data}/>;
+  return  <Page iterables={data}/>;
 
 }
 

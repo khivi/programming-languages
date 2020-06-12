@@ -1,17 +1,13 @@
 import {useState,useCallback} from 'react';
 
-export interface Listener {
-    next(): void;
-}
-
-export const useSubscriber = (): {listeners: Listener[]; subscribe: (l: Listener) => void}  => {
-    const [listeners, setListeners] = useState<Listener[]>([]);
+export const useSubscriber = (): {iterables: Iterable<number>[]; subscribe: (l: Iterable<number>) => void}  => {
+    const [iterables, setIterables] = useState<Iterable<number>[]>([]);
 
     const subscribe = useCallback(
-        (l: Listener): void => setListeners((v) => [...v, l])
+         (l: Iterable<number>): void => setIterables((v) => [...v, l])
         ,[]
     );
 
-    return {listeners, subscribe };
+    return {iterables, subscribe };
 }
 
