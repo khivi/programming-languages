@@ -1,9 +1,6 @@
 import React from 'react';
-import {File} from './File';
-import {useSubscriber} from './Subscribe';
 
-
-import Page from '../Page';
+import {Page} from './Page';
 
 const App: React.FC<void> = () =>   {
   const data = [

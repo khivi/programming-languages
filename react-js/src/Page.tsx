@@ -1,29 +1,27 @@
 import React from 'react';
-import {File} from './File';
+
 import {useSubscriber} from './Subscribe';
+import {File} from './File';
+import {Output} from './Output';
+
+interface PageProps {
+    data: number[][];
+}
 
 
-
-const Page: React.FC<void> = ({data}) =>   {
+export const Page: React.FC<PageProps> = (props: PageProps) =>   {
   const {listeners, subscribe} = useSubscriber();
 
-  const next = (): void => {
-    for (const listener of listeners) {
-        listener.next();
-    }
-  }
 
-  const files = data.map((row, index) => {
+  const files = props.data.map((row, index) => {
       const name = `file${index}`
       return <File key={index} name={name} data={row} subscribe={subscribe}/>;
   });
 
   return (
-    <div className="App">
+    <div className="Page">
       {[...files]}
-      <button onClick={next}>Next</button>
+      <Output listeners={listeners}/>
     </div>
   );
 }
-
-export default Page;
