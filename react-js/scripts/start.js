@@ -19,7 +19,6 @@ const fs = require('fs');
 const chalk = require('react-dev-utils/chalk');
 const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
-const clearConsole = require('react-dev-utils/clearConsole');
 const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
 const {
   createCompiler,
@@ -31,7 +30,6 @@ const configFactory = require('../config/webpack.config');
 const createDevServerConfig = require('../config/webpackDevServer.config');
 
 const useYarn = fs.existsSync(paths.yarnLockFile);
-const isInteractive = process.stdout.isTTY;
 
 // Warn and crash if required files are missing
 if (!checkRequiredFiles([paths.appHtml, paths.appIndexJs])) {
@@ -78,22 +76,6 @@ devServer.listen(DEFAULT_PORT, HOST, err => {
   if (err) {
     return console.log(err);
   }
-  if (isInteractive) {
-    clearConsole();
-  }
-
-  // We used to support resolving modules according to `NODE_PATH`.
-  // This now has been deprecated in favor of jsconfig/tsconfig.json
-  // This lets you use absolute paths in imports inside large monorepos:
-  if (process.env.NODE_PATH) {
-    console.log(
-      chalk.yellow(
-        'Setting NODE_PATH to resolve modules absolutely has been deprecated in favor of setting baseUrl in jsconfig.json (or tsconfig.json if you are using TypeScript) and will be removed in a future major release of create-react-app.'
-      )
-    );
-    console.log();
-  }
-
   console.log(chalk.cyan('Starting the development server...\n'));
   openBrowser(urls.localUrlForBrowser);
 });
@@ -105,11 +87,3 @@ devServer.listen(DEFAULT_PORT, HOST, err => {
   });
 });
 
-if (isInteractive || process.env.CI !== 'true') {
-  // Gracefully exit when stdin ends
-  process.stdin.on('end', function() {
-    devServer.close();
-    process.exit();
-  });
-  process.stdin.resume();
-}
