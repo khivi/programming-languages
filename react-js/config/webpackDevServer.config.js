@@ -9,7 +9,7 @@ const sockHost = process.env.WDS_SOCKET_HOST;
 const sockPath = process.env.WDS_SOCKET_PATH; // default: '/sockjs-node'
 const sockPort = process.env.WDS_SOCKET_PORT;
 
-module.exports = function(allowedHost) {
+module.exports = function() {
   return {
     // Enable gzip compression of generated files.
     compress: true,
@@ -75,6 +75,5 @@ module.exports = function(allowedHost) {
       disableDotRule: true,
       index: paths.publicUrlOrPath,
     },
-    public: allowedHost,
   };
 };
