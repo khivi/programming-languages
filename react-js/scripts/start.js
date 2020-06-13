@@ -19,12 +19,7 @@ const fs = require('fs');
 const chalk = require('react-dev-utils/chalk');
 const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
-const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
-const {
-  createCompiler,
-  prepareUrls,
-} = require('react-dev-utils/WebpackDevServerUtils');
-const openBrowser = require('react-dev-utils/openBrowser');
+
 const paths = require('../config/paths');
 const configFactory = require('../config/webpack.config');
 const createDevServerConfig = require('../config/webpackDevServer.config');
@@ -44,29 +39,13 @@ const protocol = process.env.HTTPS === 'true' ? 'https' : 'http';
 const appName = require(paths.appPackageJson).name;
 const useTypeScript = fs.existsSync(paths.appTsConfig);
 const tscCompileOnError = process.env.TSC_COMPILE_ON_ERROR === 'true';
-const urls = prepareUrls(
-  'http',
-  HOST,
-  DEFAULT_PORT,
-  paths.publicUrlOrPath.slice(0, -1)
-);
 const devSocket = {
   warnings: warnings =>
     devServer.sockWrite(devServer.sockets, 'warnings', warnings),
   errors: errors =>
     devServer.sockWrite(devServer.sockets, 'errors', errors),
 };
-// Create a webpack compiler that is configured with custom messages.
-const compiler = createCompiler({
-  appName,
-  config,
-  devSocket,
-  urls,
-  useYarn,
-  useTypeScript,
-  tscCompileOnError,
-  webpack,
-});
+const compiler = webpack(config);
 
 const serverConfig = createDevServerConfig();
 const devServer = new WebpackDevServer(compiler, serverConfig);
@@ -75,8 +54,6 @@ devServer.listen(DEFAULT_PORT, HOST, err => {
   if (err) {
     return console.log(err);
   }
-  console.log(chalk.cyan('Starting the development server...\n'));
-  openBrowser(urls.localUrlForBrowser);
 });
 
 ['SIGINT', 'SIGTERM'].forEach(function(sig) {
@@ -86,3 +63,20 @@ devServer.listen(DEFAULT_PORT, HOST, err => {
   });
 });
 
+function checkRequiredFiles(files) {
+  var currentFilePath;
+  try {
+    files.forEach(filePath => {
+      currentFilePath = filePath;
+      fs.accessSync(filePath, fs.F_OK);
+    });
+    return true;
+  } catch (err) {
+    var dirName = path.dirname(currentFilePath);
+    var fileName = path.basename(currentFilePath);
+    console.log(chalk.red('Could not find a required file.'));
+    console.log(chalk.red('  Name: ') + chalk.cyan(fileName));
+    console.log(chalk.red('  Searched in: ') + chalk.cyan(dirName));
+    return false;
+  }
+}
