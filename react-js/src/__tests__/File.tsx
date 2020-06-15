@@ -10,11 +10,13 @@ import {File} from '../File';
 it("file next ", () => { 
   const iterable: Iterable<number> = [1,2,3];
   let callback: Callback;
-  const subscribe = (c: Callback): void => {
+  const subscribe = (i: number, c: Callback): void => {
       callback = c;
   }
-  const unsubscribe = (c: Callback): void => {
-      callback = null;
+  const unsubscribe = (i: number, c: Callback): void => {
+      if (c === callback) { 
+        callback = null;
+      }
   }
   const {container} =  render(<File index={1} iterable={iterable} subscribe={subscribe} unsubscribe={unsubscribe} />);
   expect(container.textContent).toBe("file1");

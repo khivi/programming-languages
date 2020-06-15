@@ -4,8 +4,6 @@ import { render, fireEvent} from '@testing-library/react'
 
 import {Output} from '../Output';
 
-import Callback from "./Subscribe";
-
 test('click output ', () => {
   const NUM = 3;
   const onClick = jest.fn();

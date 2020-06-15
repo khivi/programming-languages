@@ -5,8 +5,8 @@ import {Callback} from "./Subscribe";
 interface FileProps {
     index: number;
     iterable: Iterable<number>;
-    subscribe(callback: Callback): void;
-    unsubscribe(callback: Callback): void;
+    subscribe(i: number, callback: Callback): void;
+    unsubscribe(i: number, callback: Callback): void;
 }
 
 
@@ -16,7 +16,7 @@ export const File: React.FC<FileProps> = (props: FileProps) => {
     const subscribe = props.subscribe;
     const unsubscribe = props.unsubscribe;
 
-    const iterator: Iterator = useMemo(() => {
+    const iterator: Iterator<number> = useMemo(() => {
         return iterable[Symbol.iterator]();
     }, [iterable]);
 
@@ -33,11 +33,11 @@ export const File: React.FC<FileProps> = (props: FileProps) => {
 
     useEffect(() =>  {
         const callback = {onClick}
-        subscribe(callback);
+        subscribe(index, callback);
         return function cleanup(): void {
-            unsubscribe(callback);
+            unsubscribe(index, callback);
         }
-    }, [subscribe, unsubscribe, onClick]);
+    }, [index, subscribe, unsubscribe, onClick]);
 
     const name = `file${index}`;
     return <div>

@@ -7,31 +7,24 @@ export interface Callback {
 
 interface Result {
     callbacks: Callback[];
-    subscribe(callback: Callback): void;
-    unsubscribe(callback: Callback): void;
+    subscribe(i: number, callback: Callback): void;
+    unsubscribe(i: number, callback: Callback): void;
 }
 
-
-function remove(v: Callback[], l: Callback): Callback[] {
-    const index = v.indexOf(l);
-    return v.slice(0,index).concat(v.slice(index+1));
-}
-
-function add(v: Callback[], l: Callback): Callback[] {
-    return [...v, l];
-}
 
 
 export const useSubscriber = (): Result   => {
-    const [callbacks, setCallbacks] = useState<Callback[]>([]);
+    const callbacks = useState<Callback[]>([])[0];
 
-    const subscribe = useCallback((l: Callback) => { 
-         setCallbacks((v) => add(v,l));
-    } ,[setCallbacks]);
+    const subscribe = useCallback((i: number, l: Callback) => { 
+        callbacks[i] = l;
+    } ,[callbacks]);
 
-    const unsubscribe = useCallback((l: Callback) => { 
-        setCallbacks((v) => remove(v,l));
-    } ,[setCallbacks]);
+    const unsubscribe = useCallback((i: number, l: Callback) => { 
+        if (callbacks[i] === l) { 
+            delete callbacks[i];
+        }
+    } ,[callbacks]);
 
     return {callbacks, subscribe, unsubscribe };
 }
