@@ -1,9 +1,9 @@
 import React, {useState, useCallback} from 'react';
 
-import {Callback} from "./Subscribe";
+import {OnClick} from "./Subscribe";
 
 interface OutputProps {
-    callbacks: Callback[];
+    callbacks: OnClick[];
 }
 
 
@@ -16,7 +16,7 @@ export const Output: React.FC<OutputProps> = (props: OutputProps) => {
   const next = useCallback((): void => {
     callbacks.forEach((callback, i) => {
         if (values[i] === undefined) {
-            values[i] = callback.onClick();
+            values[i] = callback();
         }
     });
     let minIdx: number|undefined = undefined;
@@ -44,7 +44,7 @@ export const Output: React.FC<OutputProps> = (props: OutputProps) => {
 
   return <div className="Page">
     <h1>Output </h1>
-    {min && <div className="min">{min}</div>}
+    {min && <div role="min">{min}</div>}
     <button onClick={next}>Next</button>
     </div>;
   

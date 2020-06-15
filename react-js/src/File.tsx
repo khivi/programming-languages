@@ -32,7 +32,7 @@ export const File: React.FC<FileProps> = (props: FileProps) => {
     }, [next, setCurrent]);
 
     useEffect(() =>  {
-        const callback = {onClick}
+        const callback = onClick;
         subscribe(index, callback);
         return function cleanup(): void {
             unsubscribe(index, callback);

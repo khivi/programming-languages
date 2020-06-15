@@ -1,15 +1,12 @@
 
 import {useState,useCallback} from 'react';
 
-export interface Callback {
-    onClick(): number|undefined;
-}
-
-export type Subscribe = (i: number, callback: Callback) => void
-export type Unsubscribe = (i: number, callback: Callback) => void
+export type OnClick = () => number|undefined;
+export type Subscribe = (i: number, callback: OnClick) => void
+export type Unsubscribe = (i: number, callback: OnClick) => void
 
 interface Result {
-    callbacks: Callback[];
+    callbacks: OnClick[];
     subscribe: Subscribe;
     unsubscribe: Unsubscribe;
 }
@@ -17,7 +14,7 @@ interface Result {
 
 
 export const useSubscriber = (): Result   => {
-    const callbacks = useState<Callback[]>([])[0];
+    const callbacks = useState<OnClick[]>([])[0];
 
     const subscribe: Subscribe = useCallback((i, l) => { 
         callbacks[i] = l;
