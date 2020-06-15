@@ -1,12 +1,12 @@
 import React, {useMemo, useState, useCallback, useEffect} from "react";
 
-import {Callback} from "./Subscribe";
+import {Subscribe, Unsubscribe} from "./Subscribe";
 
 interface FileProps {
     index: number;
     iterable: Iterable<number>;
-    subscribe(i: number, callback: Callback): void;
-    unsubscribe(i: number, callback: Callback): void;
+    subscribe: Subscribe;
+    unsubscribe: Unsubscribe;
 }
 
 

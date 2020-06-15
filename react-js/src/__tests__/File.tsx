@@ -2,7 +2,7 @@ import React from 'react';
 import { act } from "react-dom/test-utils";
 import { render } from '@testing-library/react'
 
-import {Callback} from "./Subscribe";
+import {Callback, Subscribe, Unsubscribe} from "./Subscribe";
 
 import {File} from '../File';
 
@@ -10,10 +10,10 @@ import {File} from '../File';
 it("file next ", () => { 
   const iterable: Iterable<number> = [1,2,3];
   let callback: Callback;
-  const subscribe = (i: number, c: Callback): void => {
+  const subscribe: Subscribe = (i, c) => {
       callback = c;
   }
-  const unsubscribe = (i: number, c: Callback): void => {
+  const unsubscribe: Unsubscribe = (i, c) => {
       if (c === callback) { 
         callback = null;
       }

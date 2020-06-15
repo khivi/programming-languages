@@ -5,10 +5,13 @@ export interface Callback {
     onClick(): number|undefined;
 }
 
+export type Subscribe = (i: number, callback: Callback) => void
+export type Unsubscribe = (i: number, callback: Callback) => void
+
 interface Result {
     callbacks: Callback[];
-    subscribe(i: number, callback: Callback): void;
-    unsubscribe(i: number, callback: Callback): void;
+    subscribe: Subscribe;
+    unsubscribe: Unsubscribe;
 }
 
 
@@ -16,11 +19,11 @@ interface Result {
 export const useSubscriber = (): Result   => {
     const callbacks = useState<Callback[]>([])[0];
 
-    const subscribe = useCallback((i: number, l: Callback) => { 
+    const subscribe: Subscribe = useCallback((i, l) => { 
         callbacks[i] = l;
     } ,[callbacks]);
 
-    const unsubscribe = useCallback((i: number, l: Callback) => { 
+    const unsubscribe: Unsubscribe = useCallback((i, l) => { 
         if (callbacks[i] === l) { 
             delete callbacks[i];
         }
