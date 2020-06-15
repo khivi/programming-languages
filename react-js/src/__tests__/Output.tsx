@@ -4,15 +4,15 @@ import { render, fireEvent} from '@testing-library/react'
 
 import {Output} from '../Output';
 
+import Callback from "./Subscribe";
+
 test('click output ', () => {
-  const NUM = 5;
-  //const onClick = jest.fn();
-  //const listener: Listener  = {
-      //next: onClick,
-  //};
-  const iterables = Array(NUM).fill([1,2,3]);
-  const {getByText} = render(<Output  iterables={iterables} />);
+  const NUM = 3;
+  const onClick = jest.fn();
+  const callback = {onClick};
+  const callbacks = Array(NUM).fill(callback);
+  const {getByText} = render(<Output  callbacks={callbacks} />);
   fireEvent.click(getByText('Next'));
-  //expect(onClick).toHaveBeenCalledTimes(NUM);
+  expect(onClick).toHaveBeenCalledTimes(NUM);
 });
 

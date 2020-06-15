@@ -1,20 +1,18 @@
 import React from 'react';
 
+import Callback from "./Subscribe";
 
 interface OutputProps {
-    iterables: Iterable<number>[];
+    callbacks: Callback[];
 }
 
 
 export const Output: React.FC<OutputProps> = (props: OutputProps) =>   {
 
   const next = (): void => {
-    for (const iterable of props.iterables) {
-        //const iterator = iterable[Symbol.iterator]();
-        //const i = iterator.next().value;
-        for (const i of iterable) {
-            console.log(i);
-        }
+    for (const c of props.callbacks) {
+        const i = c.onClick();
+        console.log(i);
     }
   }
 
