@@ -8,6 +8,7 @@ import {Output} from '../Output';
 import {OnClick} from '../Subscribe';
 
 test('click output ', () => {
+  expect.assertions(1);
   const NUM = 3;
   const onClick = jest.fn();
   const callbacks = Array(NUM).fill(onClick);
@@ -16,10 +17,10 @@ test('click output ', () => {
   expect(onClick).toHaveBeenCalledTimes(NUM);
 });
 
-const onClick =  function(data: Generator<number>): OnClick {
-  const gen = data();
+const onClick =  function(gen: Generator<number>): OnClick {
+  const g = gen();
   return (): number|undefined => {
-     const next = gen.next();
+     const next = g.next();
      if (next.done) {
          return undefined;
      }
@@ -27,25 +28,27 @@ const onClick =  function(data: Generator<number>): OnClick {
  }
 };
 
-test('min output ', () => {
-  const data = [
-    function*(): Generator<number> {
-        yield 1;
-    },
-    function*(): Generator<number> {
-      yield 1;
-      yield 2;
-    },
-     function*(): Generator<number> {
-      yield 2;
-      yield 3;
-    }];
+const arrToGen: Generator<number> = function (arr: number[]) {
+    const gen = function*(): number[] { 
+        for (const a of arr) {
+            yield a;
+        }
+        return;
+    }
+    return gen;
+}
 
-  const callbacks = data.map((d) => onClick(d));
+test('min output ', () => {
+  expect.assertions(7);
+  const data = [ [1], [1, 2] , [2, 3]];
+  const callbacks = data.map((arr) => arrToGen(arr)).
+                        map((gen) => onClick(gen));
+
   const {getByText, getByRole, queryByRole} = render(<Output  callbacks={callbacks} />);
+  const button = getByText('Next');
   const next = (): void => {
       act(() => {
-        fireEvent.click(getByText('Next'));
+        fireEvent.click(button);
       });
   };
   const check = (n: number): void => {
@@ -54,7 +57,7 @@ test('min output ', () => {
   };
   const nocheck = (): void => {
       next();
-      expect(queryByRole('min')).toBe(null);
+      expect(queryByRole('min')).toBeNull();
   };
   check(1);
   check(1);

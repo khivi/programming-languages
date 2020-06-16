@@ -44,7 +44,7 @@ export const File: React.FC<FileProps> = (props: FileProps) => {
         <h1>
             {name}
         </h1>
-        {current &&  <ul><li> {current}</li></ul>}
+        {current &&  <ul><li role='file'> {current}</li></ul>}
         </div>;
 }
 
