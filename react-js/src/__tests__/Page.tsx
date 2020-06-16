@@ -18,9 +18,7 @@ test('next page ', () => {
   const { getByText, getByRole, queryByRole, queryAllByRole } = render(<Page iterables={iterables}/>);
   const button = getByText('Next');
   const next = (): void => {
-      act(() => {
-        fireEvent.click(button);
-      });
+    fireEvent.click(button);
   };
   const check = (min: number, files: number[]): void => {
       next();

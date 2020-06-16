@@ -1,50 +1,58 @@
 import React, {useState, useCallback} from 'react';
 
-import {OnClick} from "./Subscribe";
-
 interface OutputProps {
-    callbacks: OnClick[];
+    iterators: Iterator<number>[];
 }
 
 
 export const Output: React.FC<OutputProps> = (props: OutputProps) => {
 
-  const callbacks = props.callbacks;
-  const values = useState<(number|undefined)[]>([])[0];
-  const [min, setMin] = useState<(number|undefined)>();
+  const iterators = props.iterators;
+  const values = useState<IteratorResult<number>[]>([])[0];
+  const [min, setMin] = useState<IteratorResult<number>>();
 
   const next = useCallback((): void => {
-    callbacks.forEach((callback, i) => {
-        if (values[i] === undefined) {
-            values[i] = callback();
+
+    for (let i = 0; i < iterators.length; i++) {
+        const v = values[i];
+        const iterator = iterators[i];
+        if (v && v.done) {
+            continue;
         }
-    });
-    let minIdx: number|undefined = undefined;
-    values.forEach((v, i) => {
-        if (v !== undefined) {
-            if (minIdx == undefined) {
+        if (v && v.value !== undefined) {
+            continue;
+        }
+        values[i] = iterator.next();
+    }
+
+    let minIdx: number|undefined;
+    for (let i = 0; i < iterators.length; i++) {
+        const v = values[i];
+        if (v === undefined || v.done) {
+            continue;
+        }
+        if (minIdx === undefined) {
+            minIdx = i;
+        } else {
+            const min = values[minIdx];
+            if (min !== undefined && min.value > v.value) { 
                 minIdx = i;
             }
-            else {
-                const min = values[minIdx];
-                if (min !== undefined && min > v) { 
-                    minIdx = i;
-                }
-            }
         }
-    });
-    let min  = undefined;
-    if (minIdx !== undefined) {
-        min = values[minIdx];
-        values[minIdx] = undefined;
     }
-    setMin(min)
-  }, [callbacks, values, setMin]);
+     
+    let min = undefined;
+    if (minIdx !== undefined) {
+        min = {...values[minIdx]};
+        values[minIdx].value = undefined;
+    }
+    setMin(min);
+  }, [iterators, values, setMin]);
 
 
   return <div className="Page">
     <h1>Output </h1>
-    {min && <div role="min">{min}</div>}
+    {min && !min.done && <div role="min">{min.value}</div>}
     <button onClick={next}>Next</button>
     </div>;
   

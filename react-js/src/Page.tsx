@@ -11,7 +11,7 @@ interface PageProps {
 
 export const Page: React.FC<PageProps> = (props: PageProps) =>   {
   const iterables = props.iterables;
-  const {callbacks, subscribe, unsubscribe} = useSubscriber();
+  const {iterators, subscribe, unsubscribe} = useSubscriber();
 
 
   const files = useMemo(() => {
@@ -23,7 +23,7 @@ export const Page: React.FC<PageProps> = (props: PageProps) =>   {
   return (
     <div className="Page">
       {[...files]}
-      <Output callbacks={callbacks}/>
+      <Output iterators={iterators}/>
     </div>
   );
 }

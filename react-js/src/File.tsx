@@ -1,4 +1,4 @@
-import React, {useMemo, useState, useCallback, useEffect} from "react";
+import React, {useMemo, useState, useEffect} from "react";
 
 import {Subscribe, Unsubscribe} from "./Subscribe";
 
@@ -20,31 +20,30 @@ export const File: React.FC<FileProps> = (props: FileProps) => {
         return iterable[Symbol.iterator]();
     }, [iterable]);
 
-    const next = useCallback(() => {
-        return iterator.next().value;
-    }, [iterator]);
-    const [current, setCurrent] = useState<number|undefined>(undefined);
+    const [current, setCurrent] = useState<IteratorResult<number>>();
 
-    const onClick = useCallback((): number|undefined =>  {
-        const current = next();
-        setCurrent(current);
-        return current;
-    }, [next, setCurrent]);
 
     useEffect(() =>  {
-        const callback = onClick;
-        subscribe(index, callback);
-        return function cleanup(): void {
-            unsubscribe(index, callback);
+        const wrapIterator: Iterator<number> = {
+            next: function() { 
+                const value = iterator.next();
+                setCurrent({...value});
+                return value;
+
+            }
         }
-    }, [index, subscribe, unsubscribe, onClick]);
+        subscribe(index, wrapIterator);
+        return function cleanup(): void {
+            unsubscribe(index, wrapIterator);
+        }
+    }, [index, iterator, subscribe, unsubscribe]);
 
     const name = `file${index}`;
     return <div>
         <h1>
             {name}
         </h1>
-        {current &&  <ul><li role='file'> {current}</li></ul>}
+        {current &&  !current.done && <ul><li role='file'> {current.value}</li></ul>}
         </div>;
 }
 
