@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@babel/core": "7.9.0",
+    "@babel/preset-typescript": "^7.10.1",
     "@svgr/webpack": "4.3.3",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^10.2.1",
@@ -27,6 +28,7 @@
     "eslint-loader": "3.0.3",
     "eslint-plugin-flowtype": "4.6.0",
     "eslint-plugin-import": "2.20.1",
+    "eslint-plugin-jest": "^23.13.2",
     "eslint-plugin-jsx-a11y": "6.2.3",
     "eslint-plugin-react": "7.19.0",
     "eslint-plugin-react-hooks": "^4.0.4",
@@ -36,6 +38,7 @@
     "identity-obj-proxy": "3.0.0",
     "jest": "24.9.0",
     "jest-environment-jsdom-fourteen": "1.0.1",
+    "jest-extended": "^0.11.5",
     "jest-resolve": "24.9.0",
     "jest-watch-typeahead": "0.4.2",
     "mini-css-extract-plugin": "0.9.0",
@@ -94,7 +97,8 @@
       "react-app-polyfill/jsdom"
     ],
     "setupFilesAfterEnv": [
-      "<rootDir>/src/setupTests.js"
+      "@testing-library/jest-dom/extend-expect",
+      "jest-extended"
     ],
     "testMatch": [
       "<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}",
@@ -132,7 +136,8 @@
   },
   "babel": {
     "presets": [
-      "react-app"
+      "react-app",
+      "@babel/preset-typescript"
     ]
   }
 }

@@ -23,7 +23,7 @@ test('next page ', () => {
       const minNode = getByRole('min');
       expect(minNode).toHaveTextContent(min);
       const fileNodes = queryAllByRole('file');
-      expect(fileNodes.length).toBe(files.length);
+      expect(fileNodes).toBeArrayOfSize(files.length);
       files.forEach((v, i) => {
         expect(fileNodes[i]).toHaveTextContent(v);
       });

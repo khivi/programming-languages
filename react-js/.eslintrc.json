@@ -3,9 +3,14 @@
     "eslint:recommended",
     "plugin:react/recommended",
     "plugin:react-hooks/recommended",
-    "plugin:@typescript-eslint/recommended"
+    "plugin:@typescript-eslint/recommended",
+    "plugin:jest/recommended"
   ],
-  "plugins": ["react", "@typescript-eslint"],
+  "plugins": [
+      "react",
+      "@typescript-eslint",
+      "jest"
+  ],
   "env": {
     "browser": true,
     "jasmine": true,
