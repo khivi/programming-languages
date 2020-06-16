@@ -29,7 +29,6 @@ export const File: React.FC<FileProps> = (props: FileProps) => {
                 const value = iterator.next();
                 setCurrent({...value});
                 return value;
-
             }
         }
         subscribe(index, wrapIterator);

@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { render, fireEvent} from '@testing-library/react'
-import { act } from "react-dom/test-utils";
 
 import {Output} from '../Output';
 
@@ -28,19 +27,17 @@ test('min output ', () => {
     fireEvent.click(button);
   };
   const check = (n: number): void => {
-      next();
       expect(getByRole('min')).toHaveTextContent(n);
   };
   const nocheck = (): void => {
-      next();
       expect(queryByRole('min')).not.toBeInTheDocument();
   };
-  check(1);
-  check(1);
-  check(2);
-  check(2);
-  check(3);
-  nocheck();
-  nocheck();
+  next(); check(1);
+  next(); check(1);
+  next(); check(2);
+  next(); check(2);
+  next(); check(3);
+  next(); nocheck();
+  next(); nocheck();
 });
 

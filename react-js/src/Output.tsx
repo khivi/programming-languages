@@ -25,26 +25,22 @@ export const Output: React.FC<OutputProps> = (props: OutputProps) => {
         values[i] = iterator.next();
     }
 
-    let minIdx: number|undefined;
-    for (let i = 0; i < iterators.length; i++) {
-        const v = values[i];
+    let min: IteratorResult<number>|undefined;
+    for (const v of values) {
         if (v === undefined || v.done) {
             continue;
         }
-        if (minIdx === undefined) {
-            minIdx = i;
-        } else {
-            const min = values[minIdx];
-            if (min !== undefined && min.value > v.value) { 
-                minIdx = i;
-            }
+        if (min === undefined) {
+            min = v;
+        } else if (min.value > v.value) {
+            min = v;
         }
     }
      
-    let min = undefined;
-    if (minIdx !== undefined) {
-        min = {...values[minIdx]};
-        values[minIdx].value = undefined;
+    if (min !== undefined) {
+        const copyMin = {...min}
+        min.value = undefined;
+        min = copyMin
     }
     setMin(min);
   }, [iterators, values, setMin]);
