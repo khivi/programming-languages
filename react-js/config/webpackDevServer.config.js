@@ -8,7 +8,5 @@ module.exports = function() {
   return {
     compress: true,
     contentBase: paths.appPublic,
-    contentBasePublicPath: paths.publicUrlOrPath,
-    publicPath: paths.publicUrlOrPath.slice(0, -1),
   };
 };
