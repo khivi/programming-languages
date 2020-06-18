@@ -37,7 +37,7 @@ module.exports = function(webpackEnv) {
     mode: isEnvProduction ? 'production' : isEnvDevelopment && 'development',
     bail: isEnvProduction,
     devtool: isEnvProduction ? 'source-map' : isEnvDevelopment && 'cheap-module-source-map',
-    entry: [ paths.appIndexJs ]
+    entry: [ paths.appIndexJs ],
 
     output: {
       path: isEnvProduction ? paths.appBuild : undefined,
