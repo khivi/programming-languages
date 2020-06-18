@@ -7,22 +7,22 @@ import {Output} from './Output';
 import API from './api';
 
 
-export const Page: React.FC<void> = () =>   {
+export const Page: React.FC = () =>   {
   const {iterators, subscribe, unsubscribe} = useSubscriber();
   const [count, setCount] = useState<number>(0);
   const [iterables, setIterables] = useState<Iterable<number>[]>([]);
 
 
   useEffect(() => {
-      const fetchData =   async (): void => {
-          const result: number = await API.get('/count');
+      const fetchData = async (): Promise<void> => {
+          const result = await API.get('/count');
           setCount(result.data);
       }
       fetchData();
   }, []);
 
   useEffect(() => {
-      const fetchData =   async (): void => {
+      const fetchData = async (): Promise<void> => {
           for await (const fileId of [...Array(count).keys()]) {
               API.get(`/file/${fileId}`).then((result) => {
                   setIterables(iterables => {
