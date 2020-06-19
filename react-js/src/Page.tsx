@@ -10,7 +10,6 @@ import API from './api';
 export const Page: React.FC = () =>   {
   const {nexts, subscribe, unsubscribe} = useSubscriber();
   const [count, setCount] = useState<number>(0);
-  const [iterables, setIterables] = useState<Iterable<number>[]>([]);
 
 
   useEffect(() => {
@@ -21,34 +20,11 @@ export const Page: React.FC = () =>   {
       fetchData();
   }, []);
 
-  useEffect(() => {
-      let isMounted = true;
-      async function fetchData(): Promise<void> {
-          for await (const fileId of [...Array(count).keys()]) {
-              API.get(`/file/${fileId}`).then((result) => {
-                  if (isMounted) {
-                      setIterables(iterables => {
-                          const newIterables = [...iterables];
-                          newIterables[fileId] = result.data;
-                          return newIterables;
-                      });
-                  }
-              });
-          }
-      }
-      fetchData();
-      return (): void => {
-          isMounted = false;
-          return;
-      }
-  }, [count]);
-
-
   const files = useMemo(() => {
-      return iterables.map((iterable, index) => {
-        return <File key={index} index={index} iterable={iterable} subscribe={subscribe} unsubscribe={unsubscribe} />;
+      return [...Array(count).keys()].map((iterable, index) => {
+        return <File key={index} index={index} subscribe={subscribe} unsubscribe={unsubscribe} />;
         });
-  }, [iterables, subscribe, unsubscribe]);
+  }, [count, subscribe, unsubscribe]);
 
   return (
     <div>

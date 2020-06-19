@@ -1,10 +1,11 @@
-import React, {useMemo, useState, useEffect} from "react";
+import React, {useState, useEffect} from "react";
 
 import {Subscribe, Unsubscribe} from "./Subscribe";
 
+import API from './api';
+
 interface FileProps {
     index: number;
-    iterable: Iterable<number>;
     subscribe: Subscribe;
     unsubscribe: Unsubscribe;
 }
@@ -12,18 +13,33 @@ interface FileProps {
 
 export const File: React.FC<FileProps> = (props: FileProps) => {
     const index = props.index;
-    const iterable = props.iterable;
     const subscribe = props.subscribe;
     const unsubscribe = props.unsubscribe;
 
-    const iterator: Iterator<number> = useMemo(() => {
-        return iterable[Symbol.iterator]();
-    }, [iterable]);
-
+    const [iterator, setIterator] = useState<Iterator<number>>();
     const [current, setCurrent] = useState<IteratorResult<number>>();
+    useEffect(() => {
+      let isMounted = true;
+      async function fetchData(): Promise<void> {
+        API.get(`/file/${index}`).then((result) => {
+          if (isMounted) {
+              const iterator = result.data[Symbol.iterator]()
+              setIterator(iterator);
+          }
+        });
+      }
+      fetchData();
+      return (): void => {
+        isMounted = false;
+        return;
+      }
+    }, [index]);
 
 
-    useEffect(() =>  {
+    useEffect(() => {
+        if (iterator === undefined) {
+            return;
+        }
         const next = (): IteratorResult<number> =>  {
             const value = iterator.next();
             setCurrent({...value});
