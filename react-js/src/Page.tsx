@@ -48,7 +48,7 @@ export const Page: React.FC = () =>   {
   }, [iterables, subscribe, unsubscribe]);
 
   return (
-    <div className="Page">
+    <div>
       {[...files]}
       <Output iterators={iterators}/>
     </div>

@@ -46,7 +46,7 @@ export const Output: React.FC<OutputProps> = (props: OutputProps) => {
   }, [iterators, values, setMin]);
 
 
-  return <div className="Page">
+  return <div>
     <h1>Output </h1>
     {min && !min.done && <div role="min">{min.value}</div>}
     <button onClick={next}>Next</button>
