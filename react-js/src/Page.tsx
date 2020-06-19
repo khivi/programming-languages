@@ -14,7 +14,7 @@ export const Page: React.FC = () =>   {
 
 
   useEffect(() => {
-      const fetchData = async (): Promise<void> => {
+      async function fetchData(): Promise<void> {
           const result = await API.get('/count');
           setCount(result.data);
       }
@@ -22,9 +22,10 @@ export const Page: React.FC = () =>   {
   }, []);
 
   useEffect(() => {
-      const fetchData = async (): Promise<void> => {
+      async function fetchData(): Promise<void> {
           for await (const fileId of [...Array(count).keys()]) {
               API.get(`/file/${fileId}`).then((result) => {
+                  console.log(result);
                   setIterables(iterables => {
                       const newIterables = [...iterables];
                       newIterables[fileId] = result.data;
