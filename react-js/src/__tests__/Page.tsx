@@ -1,5 +1,7 @@
 import React from 'react';
+import { waitFor } from '@testing-library/dom';
 import { render, fireEvent, act } from '@testing-library/react';
+import '@testing-library/jest-dom'
 import 'babel-polyfill' 
 
 import {Page} from '../Page';
@@ -22,7 +24,7 @@ test('renders page ', () => {
 });
 
 test('next page ', async () => {
-  expect.assertions(35);
+  //expect.assertions(38);
   const apiData = [[1,2,3], [2,3], [3,4]];
   
   type DataType = number | number[]
@@ -44,29 +46,36 @@ test('next page ', async () => {
       return Promise.resolve(urls[url]);
   });
 
-  let renderReturn;
-  await act(async () =>  {
-    renderReturn = render(<Page/>);
-  });
-  expect(API.get).toHaveBeenCalledTimes(4);
-  const {getByText, getByRole, queryByRole, queryAllByRole} = renderReturn;
+  const {getByText, getByRole, queryByRole, queryAllByRole} = render(<Page/>);
+  await waitFor(() => expect(API.get).toHaveBeenCalledTimes(4));
+
   const next = (): void => {
     const button = getByText('Next');
     fireEvent.click(button);
   };
   const check = (min: number, files: number[]): void => {
-      const minNode = getByRole('min');
-      expect(minNode).toHaveTextContent(min);
-      const fileNodes = queryAllByRole('file');
-      expect(fileNodes).toBeArrayOfSize(files.length);
-      files.forEach((v, i) => {
-        expect(fileNodes[i]).toHaveTextContent(v);
-      });
+      try {
+          const minNode = getByRole('min');
+          expect(minNode).toHaveTextContent(min);
+          const fileNodes = queryAllByRole('file');
+          expect(fileNodes).toBeArrayOfSize(files.length);
+          files.forEach((v, i) => {
+            expect(fileNodes[i]).toHaveTextContent(v);
+          });
+      } catch (error) {
+         Error.captureStackTrace(error, check);
+         throw error;
+      }
   };
   const nocheck = (): void => {
-      expect(queryByRole('min')).toBeNull();
-      const fileNodes = queryAllByRole('file');
-      expect(fileNodes.length).toBe(0);
+      try {
+          expect(queryByRole('min')).toBeNull();
+          const fileNodes = queryAllByRole('file');
+          expect(fileNodes).toBeArrayOfSize(0);
+      } catch (error) {
+         Error.captureStackTrace(error, nocheck);
+         throw error;
+      }
   };
   next(); check(1, [1,2,3]);
   next(); check(2, [2,2,3]);
