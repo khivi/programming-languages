@@ -26,10 +26,13 @@ test('next page ', async () => {
   const apiData = [[1,2,3], [2,3], [3,4]];
   
   type DataType = number | number[]
-  type UrlsType = { [r: string]: DataType };
+  type ValueType = { data: DataType}
+  type UrlsType = { [r: string]: ValueType };
   const urls = (function (apiData): UrlsType {
     const ret: UrlsType  = {};
-    const url = (k, d): void => ret[k] = {data: d};
+    const url = (k: string, d: DataType): void => { 
+        ret[k] = {data: d};
+    };
     url('/count', apiData.length);
     for (let i=0; i<apiData.length; i++) {
         url(`/file/${i}`, apiData[i]);
@@ -37,7 +40,7 @@ test('next page ', async () => {
     return ret;
   })(apiData);
 
-  API.get.mockImplementation((url: string): Promise<DataType> => {
+  API.get.mockImplementation((url: string): Promise<ValueType> => {
       return Promise.resolve(urls[url]);
   });
 

@@ -37,7 +37,7 @@ export const Page: React.FC = () =>   {
           }
       }
       fetchData();
-      return () => isMounted = false;
+      return (): void => isMounted = false;
   }, [count]);
 
 
