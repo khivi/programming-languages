@@ -8,23 +8,23 @@ import {Output} from '../Output';
 test('click output ', () => {
   expect.assertions(1);
   const NUM = 3;
-  const onNext = jest.fn();
-  const onNexts = Array(NUM).fill(onNext);
-  const {getByText} = render(<Output onNexts={onNexts} />);
+  const next = jest.fn();
+  const nexts = Array(NUM).fill(next);
+  const {getByText} = render(<Output nexts={nexts} />);
   fireEvent.click(getByText('Next'));
-  expect(onNext).toHaveBeenCalledTimes(NUM);
+  expect(next).toHaveBeenCalledTimes(NUM);
 });
 
 
 test('min output ', () => {
   expect.assertions(7);
   const data = [ [1], [1, 2] , [2, 3]];
-  const onNexts = data.map((arr) =>  {
+  const nexts = data.map((arr) =>  {
       const iterator = arr[Symbol.iterator]();
       return (): IteratorResult<number> => iterator.next();
   });
 
-  const {getByText, getByRole, queryByRole} = render(<Output onNexts={onNexts} />);
+  const {getByText, getByRole, queryByRole} = render(<Output nexts={nexts} />);
   const next = (): void => {
     const button = getByText('Next');
     fireEvent.click(button);

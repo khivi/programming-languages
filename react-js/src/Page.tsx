@@ -8,7 +8,7 @@ import API from './api';
 
 
 export const Page: React.FC = () =>   {
-  const {onNexts, subscribe, unsubscribe} = useSubscriber();
+  const {nexts, subscribe, unsubscribe} = useSubscriber();
   const [count, setCount] = useState<number>(0);
   const [iterables, setIterables] = useState<Iterable<number>[]>([]);
 
@@ -53,7 +53,7 @@ export const Page: React.FC = () =>   {
   return (
     <div>
       {[...files]}
-      <Output onNexts={onNexts}/>
+      <Output nexts={nexts}/>
     </div>
   );
 }

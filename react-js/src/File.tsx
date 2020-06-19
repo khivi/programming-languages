@@ -24,14 +24,14 @@ export const File: React.FC<FileProps> = (props: FileProps) => {
 
 
     useEffect(() =>  {
-        const onNext = (): IteratorResult<number> =>  {
+        const next = (): IteratorResult<number> =>  {
             const value = iterator.next();
             setCurrent({...value});
             return value;
         }
-        subscribe(index, onNext);
+        subscribe(index, next);
         return function cleanup(): void {
-            unsubscribe(index, onNext);
+            unsubscribe(index, next);
         }
     }, [index, iterator, subscribe, unsubscribe]);
 
