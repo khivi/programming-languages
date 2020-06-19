@@ -8,7 +8,7 @@ import API from './api';
 
 
 export const Page: React.FC = () =>   {
-  const {iterators, subscribe, unsubscribe} = useSubscriber();
+  const {onNexts, subscribe, unsubscribe} = useSubscriber();
   const [count, setCount] = useState<number>(0);
   const [iterables, setIterables] = useState<Iterable<number>[]>([]);
 
@@ -37,7 +37,10 @@ export const Page: React.FC = () =>   {
           }
       }
       fetchData();
-      return (): void => isMounted = false;
+      return (): void => {
+          isMounted = false;
+          return;
+      }
   }, [count]);
 
 
@@ -50,7 +53,7 @@ export const Page: React.FC = () =>   {
   return (
     <div>
       {[...files]}
-      <Output iterators={iterators}/>
+      <Output onNexts={onNexts}/>
     </div>
   );
 }

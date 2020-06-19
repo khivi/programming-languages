@@ -1,11 +1,12 @@
 
 import {useState,useCallback} from 'react';
 
-export type Subscribe = (i: number, iterator: Iterator<number>) => void
-export type Unsubscribe = (i: number, iterator: Iterator<number>) => void
+export type OnNext = () => IteratorResult<number>;
+export type Subscribe = (i: number, onNext: OnNext) => void;
+export type Unsubscribe = (i: number, onNext: OnNext) => void;
 
 interface Result {
-    iterators: Iterator<number>[];
+    onNexts: OnNext[];
     subscribe: Subscribe;
     unsubscribe: Unsubscribe;
 }
@@ -13,18 +14,18 @@ interface Result {
 
 
 export const useSubscriber = (): Result   => {
-    const iterators = useState<Iterator<number>[]>([])[0];
+    const onNexts = useState<OnNext[]>([])[0];
 
     const subscribe: Subscribe = useCallback((i, l) => { 
-        iterators[i] = l;
-    } ,[iterators]);
+        onNexts[i] = l;
+    } ,[onNexts]);
 
     const unsubscribe: Unsubscribe = useCallback((i, l) => { 
-        if (iterators[i] === l) { 
-            delete iterators[i];
+        if (onNexts[i] === l) { 
+            delete onNexts[i];
         }
-    } ,[iterators]);
+    } ,[onNexts]);
 
-    return {iterators, subscribe, unsubscribe };
+    return {onNexts, subscribe, unsubscribe };
 }
 

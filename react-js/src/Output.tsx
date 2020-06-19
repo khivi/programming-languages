@@ -1,28 +1,30 @@
 import React, {useState, useCallback} from 'react';
 
+import {OnNext} from "./Subscribe";
+
 interface OutputProps {
-    iterators: Iterator<number>[];
+    onNexts: OnNext[];
 }
 
 
 export const Output: React.FC<OutputProps> = (props: OutputProps) => {
 
-  const iterators = props.iterators;
+  const onNexts = props.onNexts;
   const values = useState<IteratorResult<number>[]>([])[0];
   const [min, setMin] = useState<IteratorResult<number>>();
 
-  const next = useCallback((): void => {
+  const onNext = useCallback((): void => {
 
-    for (let i = 0; i < iterators.length; i++) {
+    for (let i = 0; i < onNexts.length; i++) {
         const v = values[i];
-        const iterator = iterators[i];
+        const onNext = onNexts[i];
         if (v && v.done) {
             continue;
         }
         if (v && v.value !== undefined) {
             continue;
         }
-        values[i] = iterator.next();
+        values[i] = onNext();
     }
 
     let min: IteratorResult<number>|undefined;
@@ -43,13 +45,13 @@ export const Output: React.FC<OutputProps> = (props: OutputProps) => {
         min = copyMin
     }
     setMin(min);
-  }, [iterators, values, setMin]);
+  }, [onNexts, values, setMin]);
 
 
   return <div>
     <h1>Output </h1>
     {min && !min.done && <div role="min">{min.value}</div>}
-    <button onClick={next}>Next</button>
+    <button onClick={onNext}>Next</button>
     </div>;
   
 }

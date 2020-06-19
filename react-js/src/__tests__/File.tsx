@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, act } from '@testing-library/react'
 
-import {Subscribe, Unsubscribe} from "../Subscribe";
+import {OnNext, Subscribe, Unsubscribe} from "../Subscribe";
 
 import {File} from '../File';
 
@@ -9,13 +9,13 @@ import {File} from '../File';
 it("file next ", () => { 
   expect.assertions(6);
   const iterable: Iterable<number> = [1,2,3];
-  let iterator: Iterator<number>|undefined;
-  const subscribe: Subscribe = (i, c) => {
-      iterator = c;
+  let onNext: OnNext|undefined;
+  const subscribe: Subscribe = (i, n) => {
+      onNext = n;
   }
-  const unsubscribe: Unsubscribe = (i, c) => {
-      if (c === iterator) { 
-        iterator = undefined;
+  const unsubscribe: Unsubscribe = (i, n) => {
+      if (n === onNext) { 
+        onNext = undefined;
       }
   }
   const {container} =  render(<File index={1} iterable={iterable} subscribe={subscribe} unsubscribe={unsubscribe} />);
@@ -24,8 +24,8 @@ it("file next ", () => {
   };
   const next = (): void => {
     act(() => {
-        if (iterator !== undefined) {
-            iterator.next();
+        if (onNext !== undefined) {
+            onNext();
         }
     });
   };

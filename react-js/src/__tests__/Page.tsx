@@ -1,6 +1,6 @@
 import React from 'react';
 import { waitFor } from '@testing-library/dom';
-import { render, fireEvent, act } from '@testing-library/react';
+import { render, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom'
 import 'babel-polyfill' 
 
