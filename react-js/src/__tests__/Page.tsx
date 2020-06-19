@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
+import { render, fireEvent, act } from '@testing-library/react';
 import 'babel-polyfill' 
 
 import {Page} from '../Page';
@@ -21,34 +21,32 @@ test('renders page ', () => {
   expect(text).toBeInTheDocument();
 });
 
-test('next page ', () => {
-  //expect.assertions(34);
+test('next page ', async () => {
+  expect.assertions(35);
+  const apiData = [[1,2,3], [2,3], [3,4]];
   
   type DataType = number | number[]
-  type UrlsType = { [r: string]: Promise<DataType> };
-  const urls = (function (): UrlsType {
-    const apiData = [[1,2,3], [2,3], [3,4]];
-    return (function (): UrlsType {
-        const routes = (function(): { [r: string]: DataType } { 
-            const ret: { [r: string]: DataType } = {};
-            ret['/count'] = apiData.length;
-            for (let i=0; i<apiData.length; i++) {
-                ret[`/file/${i}`] = apiData[i];
-            }
-            return ret;
-        })();
-        const ret: UrlsType = {}
-        for (const k of Object.keys(routes)) {
-            ret[k] = Promise.resolve({data: routes[k]});
-        }
-        return ret;
-    })();
-  })();
+  type UrlsType = { [r: string]: DataType };
+  const urls = (function (apiData): UrlsType {
+    const ret: UrlsType  = {};
+    const url = (k, d): void => ret[k] = {data: d};
+    url('/count', apiData.length);
+    for (let i=0; i<apiData.length; i++) {
+        url(`/file/${i}`, apiData[i]);
+    }
+    return ret;
+  })(apiData);
+
   API.get.mockImplementation((url: string): Promise<DataType> => {
-      return urls[url];
+      return Promise.resolve(urls[url]);
   });
 
-  const { getByText, getByRole, queryByRole, queryAllByRole } = render(<Page/>);
+  let renderReturn;
+  await act(async () =>  {
+    renderReturn = render(<Page/>);
+  });
+  expect(API.get).toHaveBeenCalledTimes(4);
+  const {getByText, getByRole, queryByRole, queryAllByRole} = renderReturn;
   const next = (): void => {
     const button = getByText('Next');
     fireEvent.click(button);

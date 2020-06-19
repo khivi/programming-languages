@@ -22,19 +22,22 @@ export const Page: React.FC = () =>   {
   }, []);
 
   useEffect(() => {
+      let isMounted = true;
       async function fetchData(): Promise<void> {
           for await (const fileId of [...Array(count).keys()]) {
               API.get(`/file/${fileId}`).then((result) => {
-                  console.log(result);
-                  setIterables(iterables => {
-                      const newIterables = [...iterables];
-                      newIterables[fileId] = result.data;
-                      return newIterables;
-                  });
+                  if (isMounted) {
+                      setIterables(iterables => {
+                          const newIterables = [...iterables];
+                          newIterables[fileId] = result.data;
+                          return newIterables;
+                      });
+                  }
               });
           }
       }
       fetchData();
+      return () => isMounted = false;
   }, [count]);
 
 

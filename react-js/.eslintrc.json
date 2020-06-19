@@ -7,13 +7,15 @@
     "plugin:jest/recommended",
     "plugin:import/errors",
     "plugin:import/warnings",
-    "plugin:import/typescript"
+    "plugin:import/typescript",
+    "plugin:testing-library/recommended"
   ],
   "plugins": [
       "react",
       "@typescript-eslint",
       "jest",
-      "import"
+      "import",
+      "testing-library"
   ],
   "env": {
     "browser": true,
