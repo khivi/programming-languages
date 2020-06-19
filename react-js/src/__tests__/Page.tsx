@@ -24,7 +24,6 @@ test('renders page ', () => {
 });
 
 test('next page ', async () => {
-  //expect.assertions(38);
   const apiData = [[1,2,3], [2,3], [3,4]];
   
   type DataType = number | number[]
