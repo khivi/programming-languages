@@ -1,15 +1,7 @@
-
 use std::fs::File;
 use std::io::{self, BufRead};
 use std::path::Path;
 use regex::Regex;
-
-
-
-pub fn add(a: i32, b: i32) -> i32 {
-    a+b
-}
-
 
 #[macro_use]
 extern crate lazy_static;
@@ -37,11 +29,6 @@ fn read_lines<P: AsRef<Path>>(filename: P) -> io::Result<io::Lines<io::BufReader
 #[cfg(test)]
 mod tests {
     use super::*;
-
-    #[test]
-    fn it_works() {
-        assert_eq!(add(2,2) , 4);
-    }
 
     #[test]
     fn get_test_number() {
