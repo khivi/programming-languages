@@ -5,15 +5,14 @@ use regex::Regex;
 
 #[macro_use]
 extern crate lazy_static;
-pub fn get_number<P: AsRef<Path>>(filename: P) -> io::Result<i32> {
+pub fn get_number<P: AsRef<Path>>(filename: P) -> io::Result<u32> {
     lazy_static! {
         static ref RE: Regex = Regex::new(r"NUMBER=(\d+)").unwrap();
     }
-    let lines = read_lines(filename)?;
-    for line in lines {
-        if let Some(n) = RE.captures(&line.unwrap()) {
-            if let Some(n) = n.get(1) {
-                return Ok(n.as_str().parse().unwrap());
+    if let Ok(lines) = read_lines(filename) {
+        for line in lines {
+            if let Some(n) = RE.captures(&line.unwrap()) {
+                return Ok(n.get(1).unwrap().as_str().parse().unwrap());
             }
         }
     }
