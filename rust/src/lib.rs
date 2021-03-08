@@ -11,7 +11,7 @@ pub fn get_number<P: AsRef<Path>>(filename: P) -> io::Result<u32> {
     }
     if let Ok(lines) = read_lines(filename) {
         for line in lines {
-            if let Some(n) = RE.captures(&line.unwrap()) {
+            if let Some(n) = RE.captures(&line) {
                 return Ok(n.get(1).unwrap().as_str().parse().unwrap());
             }
         }
@@ -19,10 +19,39 @@ pub fn get_number<P: AsRef<Path>>(filename: P) -> io::Result<u32> {
     Ok(0)
 }
 
+/*
 fn read_lines<P: AsRef<Path>>(filename: P) -> io::Result<io::Lines<io::BufReader<File>>> {
     let file = File::open(filename)?;
     Ok(io::BufReader::new(file).lines())
 }
+*/
+
+fn read_lines<P: AsRef<Path>>(filename: P) -> io::Result<impl Iterator<Item = String>> {
+    let file = File::open(filename)?;
+    Ok(FileReader::new(file))
+}
+
+struct FileReader {
+    lines: io::Lines<io::BufReader<File>>
+}
+
+impl FileReader {
+    fn new(file: File) -> FileReader {
+        FileReader{ lines: io::BufReader::new(file).lines() }
+    }
+}
+
+impl Iterator for FileReader {
+    type Item = String;
+    fn next(&mut self) -> Option<Self::Item> {
+        if let Some(line) = self.lines.next() {
+            return Some(line.unwrap());
+        }
+        None
+    }
+}
+
+
 
 
 #[cfg(test)]
