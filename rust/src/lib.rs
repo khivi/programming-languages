@@ -9,14 +9,14 @@ pub fn get_number<P: AsRef<Path>>(filename: P) -> io::Result<u32> {
     lazy_static! {
         static ref RE: Regex = Regex::new(r"NUMBER=(\d+)").unwrap();
     }
-    if let Ok(lines) = read_lines(filename) {
-        for line in lines {
-            if let Some(n) = RE.captures(&line) {
-                return Ok(n.get(1).unwrap().as_str().parse().unwrap());
-            }
-        }
-    }
-    Ok(0)
+    let mut matches = match_lines(filename, &RE)?;
+    return Ok(matches.next().unwrap().parse().unwrap());
+}
+
+fn match_lines<P: AsRef<Path>>(filename: P, regex: &'static Regex) -> io::Result<impl Iterator<Item = String>> {
+    let lines = read_lines(filename)?;
+    let matches = lines.filter_map(move |line| regex.captures(&line).map(|captures| captures[1].to_string()));
+    Ok(matches)
 }
 
 fn read_lines<P: AsRef<Path>>(filename: P) -> io::Result<impl Iterator<Item = String>> {
