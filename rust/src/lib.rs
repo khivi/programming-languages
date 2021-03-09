@@ -19,39 +19,12 @@ pub fn get_number<P: AsRef<Path>>(filename: P) -> io::Result<u32> {
     Ok(0)
 }
 
-/*
-fn read_lines<P: AsRef<Path>>(filename: P) -> io::Result<io::Lines<io::BufReader<File>>> {
-    let file = File::open(filename)?;
-    Ok(io::BufReader::new(file).lines())
-}
-*/
-
 fn read_lines<P: AsRef<Path>>(filename: P) -> io::Result<impl Iterator<Item = String>> {
     let file = File::open(filename)?;
-    Ok(FileReader::new(file))
+    return Ok(io::BufReader::new(file).lines().map(|line| 
+        line.unwrap()
+    ));
 }
-
-struct FileReader {
-    lines: io::Lines<io::BufReader<File>>
-}
-
-impl FileReader {
-    fn new(file: File) -> FileReader {
-        FileReader{ lines: io::BufReader::new(file).lines() }
-    }
-}
-
-impl Iterator for FileReader {
-    type Item = String;
-    fn next(&mut self) -> Option<Self::Item> {
-        if let Some(line) = self.lines.next() {
-            return Some(line.unwrap());
-        }
-        None
-    }
-}
-
-
 
 
 #[cfg(test)]
