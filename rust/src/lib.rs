@@ -16,14 +16,15 @@ pub fn get_number<P: AsRef<Path>>(filename: P) -> io::Result<u32> {
 
 
 
-pub fn get_output<'a, P:'a + AsRef<Path>>(filename: P) -> io::Result<impl Iterator<Item = i32> + 'a> {
+pub fn get_output<'a, P:'a + AsRef<Path>>(filename: P) -> io::Result<impl Iterator<Item = u32> + 'a> {
     lazy_static! {
         static ref RE: Regex = Regex::new(r"OUTPUT:(.*)").unwrap();
     }
     let matches = match_lines(filename, &*RE)?;
-    let values = matches.map(|s| 
-        s.split(',').map(|v| v.parse().unwrap()).collect::<Vec<_>>().into_iter()
-    ).flatten();
+    let values = matches.map(|s| {
+        let numbers = s.split(',').map(|v| v.parse::<u32>().unwrap());
+        numbers.collect::<Vec<_>>()
+    }).flatten();
     Ok(values)
 }
 
