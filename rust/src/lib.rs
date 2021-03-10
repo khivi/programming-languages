@@ -137,17 +137,33 @@ mod tests {
         assert_eq!(get_collection("../data/test.txt", 1).unwrap().collect::<Vec<_>>(), output);
     }
 
-    fn merge(filename: &str) -> (Vec<u32>, Vec<u32>) {
-        let result = Merge::new(filename).collect::<Vec<u32>>();
-        let output = get_output(filename).unwrap().collect::<Vec<u32>>();
+    fn merge(filename: &str) -> (impl Iterator<Item = u32>, impl Iterator<Item = u32>) {
+        let result = Merge::new(filename);
+        let output = get_output(filename).unwrap();
         (result, output)
+    }
+
+    fn assert_iterator(iter1: &mut impl Iterator<Item = u32>, iter2: &mut impl Iterator<Item = u32>) -> bool {
+        loop {
+            let v1 = iter1.next();
+            let v2 = iter2.next();
+            if v1.is_none() && v2.is_none() {
+                return true;
+            }
+            else if v1.is_some() && v2.is_some() {
+                if v1.unwrap() == v2.unwrap() {
+                    continue;
+                }
+            }
+            return false;
+        }
     }
 
     #[test]
     fn test_merge() {
         let filename = "../data/test.txt";
-        let (result, output) = merge(filename);
-        assert_eq!(result, output);
+        let (mut result, mut output) = merge(filename);
+        assert!(assert_iterator(&mut result, &mut output));
     }
 
     #[test]
@@ -160,16 +176,15 @@ mod tests {
     #[test]
     fn test_zero_merge() {
         let filename = "../data/zero.txt";
-        let (result, output) = merge(filename);
-        assert_eq!(output.len(), 0);
-        assert_eq!(result.len(), 0);
-        assert_eq!(result, output);
+        let (mut result, mut output) = merge(filename);
+        assert!(result.next().is_none());
+        assert!(output.next().is_none());
     }
 
     #[test]
     fn test_err() {
         let filename = "../data/err.txt";
-        let (result, output) = merge(filename);
-        assert_ne!(result, output);
+        let (mut result, mut output) = merge(filename);
+        assert!(!assert_iterator(&mut result, &mut output));
     }
 }
