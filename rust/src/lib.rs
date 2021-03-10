@@ -85,15 +85,15 @@ pub fn get_collection(filename: &str, idx: usize) -> io::Result<impl Iterator<It
 
 fn get_numbers(filename: &str, regex: &Regex) -> io::Result<impl Iterator<Item = u32>> {
     let matches = match_lines(filename, regex)?;
-    let to_int = |v: &str| -> u32 { 
+    let to_int = |v: &str| -> Option<u32> { 
         if let Ok(i) = v.parse::<u32>() {
-            i
+            Some(i)
         } else {
-            0
+            None
         }
     };
     let values = matches.map(move |s| {
-        let numbers = s.split(',').map(|v| to_int(&v));
+        let numbers = s.split(',').filter_map(|v| to_int(&v));
         numbers.collect::<Vec<_>>()
     }).flatten();
     Ok(values)
