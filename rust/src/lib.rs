@@ -31,7 +31,7 @@ pub fn get_collection<'a, P:'a + AsRef<Path>>(filename: P, idx: u32) -> io::Resu
     get_numbers(filename, &regex)
 }
 
-pub fn get_numbers<'a, P:'a + AsRef<Path>>(filename: P, regex: &'a Regex) -> io::Result<impl Iterator<Item = u32> + 'a> {
+pub fn get_numbers<'a, P:'a + AsRef<Path>>(filename: P, regex: &Regex) -> io::Result<impl Iterator<Item = u32> + 'a> {
     let matches = match_lines(filename, regex)?;
     let values = matches.map(|s| {
         let numbers = s.split(',').map(|v| v.parse::<u32>().unwrap());
@@ -41,15 +41,16 @@ pub fn get_numbers<'a, P:'a + AsRef<Path>>(filename: P, regex: &'a Regex) -> io:
 }
 
 
-fn match_lines<'a, P: 'a + AsRef<Path>>(filename: P, regex: &'a Regex) -> io::Result<impl Iterator<Item = String> + 'a> {
+fn match_lines<'a, P: 'a + AsRef<Path>>(filename: P, regex: &Regex) -> io::Result<impl Iterator<Item = String> + 'a> {
     let read_lines = move || -> io::Result<_> {
         let file = File::open(filename)?;
         Ok(io::BufReader::new(file).lines().map(|line| 
             line.unwrap()))
     };
     let lines = read_lines()?;
+    let r = regex.clone(); // TODO
     let matches = lines.filter_map(move |line| {
-        regex.captures(&line).map(|captures|
+        r.captures(&line).map(|captures|
             captures[1].to_string()
         )
     });
@@ -73,7 +74,7 @@ mod tests {
 
     #[test]
     fn test_collection() {
-        let output = [1,1,2,2,3,4,4,6,7,9,9,20,21];
+        let output = [2, 4, 6, 9, 20];
         assert_eq!(get_collection("../data/test.txt", 1).unwrap().collect::<Vec<_>>(), output);
     }
 }
