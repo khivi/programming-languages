@@ -6,14 +6,67 @@ use regex::Regex;
 #[macro_use]
 extern crate lazy_static;
 
-pub fn get_number(filename: &str) -> io::Result<u32> {
+
+struct State<T>(Box<dyn Iterator<Item = T>>, Option<T>);
+pub struct Merge {
+    count: usize,
+    states: Vec<State<u32>>
+}
+
+impl Merge {
+    pub fn new(filename: &str) -> Self { 
+        let count = get_number(filename).unwrap();
+        let mut states: Vec<State<u32>> = Vec::with_capacity(count);
+        for i in 0..count {
+            let collection = Box::new(get_collection(filename, i).unwrap());
+            let state = State(collection, None);
+            states.push(state);
+        }
+        Merge{count: count, states: states}
+    }
+}
+
+impl Iterator for Merge  {
+    type Item = u32;
+    fn next(&mut self) -> Option<Self::Item> {
+        let count = self.count;
+        let states = &mut self.states;
+        loop {
+            for i in 0..count {
+                let mut state = &mut states[i];
+                if state.1.is_none() {
+                    state.1 = state.0.next();
+                }
+            }
+            let not_done = states.iter().any(|s| s.1.is_some());
+            if !not_done {
+                return None;
+            }
+
+            let mut min = u32::MAX;
+            let mut min_index = usize::MIN;
+            for i in 0..count {
+                let state = &mut states[i];
+                if let Some(val) = state.1 {
+                    if val < min { 
+                        min = val;
+                        min_index = i;
+                    }
+                }
+            }
+            states[min_index].1 = None;
+            return Some(min);
+        }
+    }
+}
+
+pub fn get_number(filename: &str) -> io::Result<usize> {
     lazy_static! {
         static ref RE: Regex = Regex::new(r"NUMBER=(\d+)").unwrap();
     }
     let mut matches = match_lines(filename, &*RE)?;
     return Ok(matches.next().unwrap().parse().unwrap());
 }
-
 
 pub fn get_output(filename: &str) -> io::Result<impl Iterator<Item = u32>> {
     lazy_static! {
@@ -22,7 +75,7 @@ pub fn get_output(filename: &str) -> io::Result<impl Iterator<Item = u32>> {
     get_numbers(filename, &*RE)
 }
 
-pub fn get_collection(filename: &str, idx: u32) -> io::Result<impl Iterator<Item = u32>> {
+pub fn get_collection(filename: &str, idx: usize) -> io::Result<impl Iterator<Item = u32>> {
     let regex: Regex = { 
         let r = format!("COLLECTION{}:(.*)", idx);
         Regex::new(&r).unwrap()
@@ -30,7 +83,7 @@ pub fn get_collection(filename: &str, idx: u32) -> io::Result<impl Iterator<Item
     get_numbers(filename, &regex)
 }
 
-pub fn get_numbers(filename: &str, regex: &Regex) -> io::Result<impl Iterator<Item = u32>> {
+fn get_numbers(filename: &str, regex: &Regex) -> io::Result<impl Iterator<Item = u32>> {
     let matches = match_lines(filename, regex)?;
     let values = matches.map(|s| {
         let numbers = s.split(',').map(|v| v.parse::<u32>().unwrap());
@@ -75,5 +128,13 @@ mod tests {
     fn test_collection() {
         let output = [2, 4, 6, 9, 20];
         assert_eq!(get_collection("../data/test.txt", 1).unwrap().collect::<Vec<_>>(), output);
+    }
+
+    #[test]
+    fn test_merge() {
+        let file_name = "../data/test.txt";
+        let result = Merge::new(file_name).collect::<Vec<u32>>();
+        let output = get_output(file_name).unwrap().collect::<Vec<u32>>();
+        assert_eq!(result, output);
     }
 }
