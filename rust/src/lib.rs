@@ -30,12 +30,10 @@ pub fn get_output<'a, P:'a + AsRef<Path>>(filename: P) -> io::Result<impl Iterat
 
 fn match_lines<'a, P: 'a + AsRef<Path>>(filename: P, regex: &'a Regex) -> io::Result<impl Iterator<Item = String> + 'a> {
     let lines = read_lines(filename)?;
-    let matches = lines.filter_map(move |line|  {
-        if let Some(captures) = regex.captures(&line) {
-            Some(captures[1].to_string())
-        } else {
-            None
-        }
+    let matches = lines.filter_map(move |line| {
+        regex.captures(&line).map(|captures|
+            captures[1].to_string()
+        )
     });
     Ok(matches)
 }
