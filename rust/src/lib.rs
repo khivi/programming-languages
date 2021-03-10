@@ -130,11 +130,30 @@ mod tests {
         assert_eq!(get_collection("../data/test.txt", 1).unwrap().collect::<Vec<_>>(), output);
     }
 
+    fn merge(filename: &str) -> (Vec<u32>, Vec<u32>) {
+        let result = Merge::new(filename).collect::<Vec<u32>>();
+        let output = get_output(filename).unwrap().collect::<Vec<u32>>();
+        (result, output)
+    }
+
     #[test]
     fn test_merge() {
-        let file_name = "../data/test.txt";
-        let result = Merge::new(file_name).collect::<Vec<u32>>();
-        let output = get_output(file_name).unwrap().collect::<Vec<u32>>();
+        let filename = "../data/test.txt";
+        let (result, output) = merge(filename);
         assert_eq!(result, output);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_bad_merge() {
+        let filename = "../data/bad.txt";
+        let (_result, _output) = merge(filename);
+    }
+
+    #[test]
+    fn test_zero_merge() {
+        let filename = "../data/zero.txt";
+        let (result, output) = merge(filename);
+        assert_ne!(result, output);
     }
 }
