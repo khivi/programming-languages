@@ -165,4 +165,11 @@ mod tests {
         assert_eq!(result.len(), 0);
         assert_eq!(result, output);
     }
+
+    #[test]
+    fn test_err() {
+        let filename = "../data/err.txt";
+        let (result, output) = merge(filename);
+        assert_ne!(result, output);
+    }
 }
