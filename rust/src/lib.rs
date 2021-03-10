@@ -1,20 +1,18 @@
-
+use regex::Regex;
 use std::fs::File;
 use std::io::{self, BufRead};
-use regex::Regex;
 
 #[macro_use]
 extern crate lazy_static;
 
-
 struct State<T>(Box<dyn Iterator<Item = T>>, Option<T>);
 pub struct Merge {
     count: usize,
-    states: Vec<State<u32>>
+    states: Vec<State<u32>>,
 }
 
 impl Merge {
-    pub fn new(filename: &str) -> Self { 
+    pub fn new(filename: &str) -> Self {
         let count = get_number(filename).unwrap();
         let mut states: Vec<State<u32>> = Vec::with_capacity(count);
         for i in 0..count {
@@ -22,11 +20,14 @@ impl Merge {
             let state = State(collection, None);
             states.push(state);
         }
-        Merge{count: count, states: states}
+        Merge {
+            count: count,
+            states: states,
+        }
     }
 }
 
-impl Iterator for Merge  {
+impl Iterator for Merge {
     type Item = u32;
     fn next(&mut self) -> Option<Self::Item> {
         let count = self.count;
@@ -48,7 +49,7 @@ impl Iterator for Merge  {
             for i in 0..count {
                 let state = &mut states[i];
                 if let Some(val) = state.1 {
-                    if val < min { 
+                    if val < min {
                         min = val;
                         min_index = i;
                     }
@@ -76,7 +77,7 @@ pub fn get_output(filename: &str) -> io::Result<impl Iterator<Item = u32>> {
 }
 
 pub fn get_collection(filename: &str, idx: usize) -> io::Result<impl Iterator<Item = u32>> {
-    let regex: Regex = { 
+    let regex: Regex = {
         let r = format!("COLLECTION{}:(.*)", idx);
         Regex::new(&r).unwrap()
     };
@@ -85,34 +86,31 @@ pub fn get_collection(filename: &str, idx: usize) -> io::Result<impl Iterator<It
 
 fn get_numbers(filename: &str, regex: &Regex) -> io::Result<impl Iterator<Item = u32>> {
     let matches = match_lines(filename, regex)?;
-    let to_int = |v: &str| -> Option<u32> { 
+    let to_int = |v: &str| -> Option<u32> {
         if let Ok(i) = v.parse::<u32>() {
             Some(i)
         } else {
             None
         }
     };
-    let values = matches.map(move |s| {
-        let numbers = s.split(',').filter_map(|v| to_int(&v));
-        numbers.collect::<Vec<_>>()
-    }).flatten();
+    let values = matches
+        .map(move |s| {
+            let numbers = s.split(',').filter_map(|v| to_int(&v));
+            numbers.collect::<Vec<_>>()
+        })
+        .flatten();
     Ok(values)
 }
-
 
 fn match_lines(filename: &str, regex: &Regex) -> io::Result<impl Iterator<Item = String>> {
     let read_lines = move || -> io::Result<_> {
         let file = File::open(filename)?;
-        Ok(io::BufReader::new(file).lines().map(|line| 
-            line.unwrap()))
+        Ok(io::BufReader::new(file).lines().map(|line| line.unwrap()))
     };
     let lines = read_lines()?;
     let r = regex.clone(); // TODO
-    let matches = lines.filter_map(move |line| {
-        r.captures(&line).map(|captures|
-            captures[1].to_string()
-        )
-    });
+    let matches =
+        lines.filter_map(move |line| r.captures(&line).map(|captures| captures[1].to_string()));
     Ok(matches)
 }
 
@@ -122,19 +120,27 @@ mod tests {
 
     #[test]
     fn test_number() {
-        assert_eq!(get_number("../data/test.txt").unwrap() , 3);
+        assert_eq!(get_number("../data/test.txt").unwrap(), 3);
     }
 
     #[test]
     fn test_output() {
-        let output = [1,1,2,2,3,4,4,6,7,9,9,20,21];
-        assert_eq!(get_output("../data/test.txt").unwrap().collect::<Vec<_>>(), output);
+        let output = [1, 1, 2, 2, 3, 4, 4, 6, 7, 9, 9, 20, 21];
+        assert_eq!(
+            get_output("../data/test.txt").unwrap().collect::<Vec<_>>(),
+            output
+        );
     }
 
     #[test]
     fn test_collection() {
         let output = [2, 4, 6, 9, 20];
-        assert_eq!(get_collection("../data/test.txt", 1).unwrap().collect::<Vec<_>>(), output);
+        assert_eq!(
+            get_collection("../data/test.txt", 1)
+                .unwrap()
+                .collect::<Vec<_>>(),
+            output
+        );
     }
 
     fn merge(filename: &str) -> (impl Iterator<Item = u32>, impl Iterator<Item = u32>) {
@@ -143,12 +149,15 @@ mod tests {
         (result, output)
     }
 
-    fn assert_iterator(iter1: &mut impl Iterator<Item = u32>, iter2: &mut impl Iterator<Item = u32>) -> bool {
+    fn assert_iterator(
+        iter1: &mut impl Iterator<Item = u32>,
+        iter2: &mut impl Iterator<Item = u32>,
+    ) -> bool {
         loop {
             match (iter1.next(), iter2.next()) {
                 (None, None) => return true,
                 (Some(v1), Some(v2)) if v1 == v2 => continue,
-                _ => return false
+                _ => return false,
             }
         }
     }
