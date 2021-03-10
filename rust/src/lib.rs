@@ -7,13 +7,14 @@ use std::str::FromStr;
 extern crate lazy_static;
 
 struct State<T>(Box<dyn Iterator<Item = T>>, Option<T>);
-pub struct Merge {
+pub struct Merge<T> {
+    max: T, // TODO
     count: usize,
-    states: Vec<State<u32>>,
+    states: Vec<State<T>>,
 }
 
-impl Merge {
-    pub fn new(filename: &str) -> Self {
+impl<T: 'static + FromStr> Merge<T> {
+    pub fn new(filename: &str, max: T) -> Self {
         let count = get_number(filename).unwrap();
         let states = (0..count).map(|i| {
             let collection = Box::new(get_collection(filename, i).unwrap());
@@ -22,14 +23,16 @@ impl Merge {
         Merge {
             count: count,
             states: states,
+            max: max,
         }
     }
 }
 
-impl Iterator for Merge {
-    type Item = u32;
+impl<T: 'static + PartialOrd + Copy> Iterator for Merge<T> {
+    type Item = T;
     fn next(&mut self) -> Option<Self::Item> {
         let count = self.count;
+        let max = self.max;
         let states = &mut self.states;
         loop {
             for i in 0..count {
@@ -43,7 +46,7 @@ impl Iterator for Merge {
                 return None;
             }
 
-            let (mut min, mut min_index) = (u32::MAX, usize::MIN);
+            let (mut min, mut min_index) = (max, usize::MIN);
             for i in 0..count {
                 if let Some(val) = states[i].1 {
                     if val < min {
@@ -141,7 +144,7 @@ mod tests {
     }
 
     fn merge(filename: &str) -> (impl Iterator<Item = u32>, impl Iterator<Item = u32>) {
-        let result = Merge::new(filename);
+        let result = Merge::new(filename, u32::MAX);
         let output = get_output(filename).unwrap();
         (result, output)
     }
