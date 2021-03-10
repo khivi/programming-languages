@@ -14,12 +14,10 @@ pub struct Merge {
 impl Merge {
     pub fn new(filename: &str) -> Self {
         let count = get_number(filename).unwrap();
-        let mut states: Vec<State<u32>> = Vec::with_capacity(count);
-        for i in 0..count {
+        let states: Vec<State<u32>> = (0..count).map(|i| {
             let collection = Box::new(get_collection(filename, i).unwrap());
-            let state = State(collection, None);
-            states.push(state);
-        }
+            State(collection, None)
+        }).collect();
         Merge {
             count: count,
             states: states,
