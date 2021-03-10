@@ -6,6 +6,7 @@ use regex::Regex;
 
 #[macro_use]
 extern crate lazy_static;
+
 pub fn get_number<P: AsRef<Path>>(filename: P) -> io::Result<u32> {
     lazy_static! {
         static ref RE: Regex = Regex::new(r"NUMBER=(\d+)").unwrap();
@@ -15,12 +16,23 @@ pub fn get_number<P: AsRef<Path>>(filename: P) -> io::Result<u32> {
 }
 
 
-
 pub fn get_output<'a, P:'a + AsRef<Path>>(filename: P) -> io::Result<impl Iterator<Item = u32> + 'a> {
     lazy_static! {
         static ref RE: Regex = Regex::new(r"OUTPUT:(.*)").unwrap();
     }
-    let matches = match_lines(filename, &*RE)?;
+    get_numbers(filename, &*RE)
+}
+
+pub fn get_collection<'a, P:'a + AsRef<Path>>(filename: P, idx: u32) -> io::Result<impl Iterator<Item = u32> + 'a> {
+    let regex: Regex = { 
+        let r = format!("COLLECTION{}:(.*)", idx);
+        Regex::new(&r).unwrap()
+    };
+    get_numbers(filename, &regex)
+}
+
+pub fn get_numbers<'a, P:'a + AsRef<Path>>(filename: P, regex: &'a Regex) -> io::Result<impl Iterator<Item = u32> + 'a> {
+    let matches = match_lines(filename, regex)?;
     let values = matches.map(|s| {
         let numbers = s.split(',').map(|v| v.parse::<u32>().unwrap());
         numbers.collect::<Vec<_>>()
@@ -57,5 +69,11 @@ mod tests {
     fn test_output() {
         let output = [1,1,2,2,3,4,4,6,7,9,9,20,21];
         assert_eq!(get_output("../data/test.txt").unwrap().collect::<Vec<_>>(), output);
+    }
+
+    #[test]
+    fn test_collection() {
+        let output = [1,1,2,2,3,4,4,6,7,9,9,20,21];
+        assert_eq!(get_collection("../data/test.txt", 1).unwrap().collect::<Vec<_>>(), output);
     }
 }
