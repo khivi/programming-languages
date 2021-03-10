@@ -32,7 +32,7 @@ impl Iterator for Merge {
         let states = &mut self.states;
         loop {
             for i in 0..count {
-                let mut state = &mut states[i];
+                let state = &mut states[i];
                 if state.1.is_none() {
                     state.1 = state.0.next();
                 }
@@ -42,11 +42,9 @@ impl Iterator for Merge {
                 return None;
             }
 
-            let mut min = u32::MAX;
-            let mut min_index = usize::MIN;
+            let (mut min, mut min_index) = (u32::MAX, usize::MIN);
             for i in 0..count {
-                let state = &mut states[i];
-                if let Some(val) = state.1 {
+                if let Some(val) = states[i].1 {
                     if val < min {
                         min = val;
                         min_index = i;
