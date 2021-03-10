@@ -15,7 +15,7 @@ pub struct Merge {
 impl Merge {
     pub fn new(filename: &str) -> Self {
         let count = get_number(filename).unwrap();
-        let states: Vec<State<u32>> = (0..count).map(|i| {
+        let states = (0..count).map(|i| {
             let collection = Box::new(get_collection(filename, i).unwrap());
             State(collection, None)
         }).collect();
