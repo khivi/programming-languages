@@ -29,7 +29,12 @@ pub fn get_output<'a, P:'a + AsRef<Path>>(filename: P) -> io::Result<impl Iterat
 
 
 fn match_lines<'a, P: 'a + AsRef<Path>>(filename: P, regex: &'a Regex) -> io::Result<impl Iterator<Item = String> + 'a> {
-    let lines = read_lines(filename)?;
+    let read_lines = move || -> io::Result<_> {
+        let file = File::open(filename)?;
+        Ok(io::BufReader::new(file).lines().map(|line| 
+            line.unwrap()))
+    };
+    let lines = read_lines()?;
     let matches = lines.filter_map(move |line| {
         regex.captures(&line).map(|captures|
             captures[1].to_string()
@@ -37,14 +42,6 @@ fn match_lines<'a, P: 'a + AsRef<Path>>(filename: P, regex: &'a Regex) -> io::Re
     });
     Ok(matches)
 }
-
-fn read_lines<P: AsRef<Path>>(filename: P) -> io::Result<impl Iterator<Item = String>> {
-    let file = File::open(filename)?;
-    return Ok(io::BufReader::new(file).lines().map(|line| 
-        line.unwrap()
-    ));
-}
-
 
 #[cfg(test)]
 mod tests {
