@@ -127,7 +127,7 @@ mod tests {
     fn test_output() {
         let output = [1, 1, 2, 2, 3, 4, 4, 6, 7, 9, 9, 20, 21];
         assert_eq!(
-            get_output("../data/test.txt").unwrap().collect::<Vec<u32>>(),
+            get_output("../data/test.txt").unwrap().collect::<Vec<32>>(),
             output
         );
     }
@@ -149,9 +149,9 @@ mod tests {
         (result, output)
     }
 
-    fn assert_iterator(
-        iter1: &mut impl Iterator<Item = u32>,
-        iter2: &mut impl Iterator<Item = u32>,
+    fn assert_iterator<T: PartialOrd>(
+        iter1: &mut impl Iterator<Item = T>,
+        iter2: &mut impl Iterator<Item = T>,
     ) -> bool {
         loop {
             match (iter1.next(), iter2.next()) {
