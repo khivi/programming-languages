@@ -1,6 +1,7 @@
 use regex::Regex;
 use std::fs::File;
 use std::io::{self, BufRead};
+use std::str::FromStr;
 
 #[macro_use]
 extern crate lazy_static;
@@ -65,14 +66,14 @@ pub fn get_number(filename: &str) -> io::Result<usize> {
     return Ok(matches.next().unwrap().parse().unwrap());
 }
 
-pub fn get_output(filename: &str) -> io::Result<impl Iterator<Item = u32>> {
+pub fn get_output<T: FromStr>(filename: &str) -> io::Result<impl Iterator<Item = T>> {
     lazy_static! {
         static ref RE: Regex = Regex::new(r"OUTPUT:(.*)").unwrap();
     }
     get_numbers(filename, &*RE)
 }
 
-pub fn get_collection(filename: &str, idx: usize) -> io::Result<impl Iterator<Item = u32>> {
+pub fn get_collection<T: FromStr>(filename: &str, idx: usize) -> io::Result<impl Iterator<Item = T>> {
     let regex: Regex = {
         let r = format!("COLLECTION{}:(.*)", idx);
         Regex::new(&r).unwrap()
@@ -80,10 +81,10 @@ pub fn get_collection(filename: &str, idx: usize) -> io::Result<impl Iterator<It
     get_numbers(filename, &regex)
 }
 
-fn get_numbers(filename: &str, regex: &Regex) -> io::Result<impl Iterator<Item = u32>> {
+fn get_numbers<T: FromStr>(filename: &str, regex: &Regex) -> io::Result<impl Iterator<Item = T>> {
     let matches = match_lines(filename, regex)?;
-    let to_int = |v: &str| -> Option<u32> {
-        if let Ok(i) = v.parse::<u32>() {
+    let to_int = |v: &str| -> Option<T> {
+        if let Ok(i) = v.parse::<T>() {
             Some(i)
         } else {
             None
@@ -123,7 +124,7 @@ mod tests {
     fn test_output() {
         let output = [1, 1, 2, 2, 3, 4, 4, 6, 7, 9, 9, 20, 21];
         assert_eq!(
-            get_output("../data/test.txt").unwrap().collect::<Vec<_>>(),
+            get_output("../data/test.txt").unwrap().collect::<Vec<u32>>(),
             output
         );
     }
@@ -134,7 +135,7 @@ mod tests {
         assert_eq!(
             get_collection("../data/test.txt", 1)
                 .unwrap()
-                .collect::<Vec<_>>(),
+                .collect::<Vec<u32>>(),
             output
         );
     }
