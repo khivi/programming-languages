@@ -145,17 +145,11 @@ mod tests {
 
     fn assert_iterator(iter1: &mut impl Iterator<Item = u32>, iter2: &mut impl Iterator<Item = u32>) -> bool {
         loop {
-            let v1 = iter1.next();
-            let v2 = iter2.next();
-            if v1.is_none() && v2.is_none() {
-                return true;
+            match (iter1.next(), iter2.next()) {
+                (None, None) => return true,
+                (Some(v1), Some(v2)) if v1 == v2 => continue,
+                _ => return false
             }
-            else if v1.is_some() && v2.is_some() {
-                if v1.unwrap() == v2.unwrap() {
-                    continue;
-                }
-            }
-            return false;
         }
     }
 
