@@ -85,8 +85,15 @@ pub fn get_collection(filename: &str, idx: usize) -> io::Result<impl Iterator<It
 
 fn get_numbers(filename: &str, regex: &Regex) -> io::Result<impl Iterator<Item = u32>> {
     let matches = match_lines(filename, regex)?;
-    let values = matches.map(|s| {
-        let numbers = s.split(',').map(|v| v.parse::<u32>().unwrap());
+    let to_int = |v: &str| -> u32 { 
+        if let Ok(i) = v.parse::<u32>() {
+            i
+        } else {
+            0
+        }
+    };
+    let values = matches.map(move |s| {
+        let numbers = s.split(',').map(|v| to_int(&v));
         numbers.collect::<Vec<_>>()
     }).flatten();
     Ok(values)
@@ -154,6 +161,8 @@ mod tests {
     fn test_zero_merge() {
         let filename = "../data/zero.txt";
         let (result, output) = merge(filename);
-        assert_ne!(result, output);
+        assert_eq!(output.len(), 0);
+        assert_eq!(result.len(), 0);
+        assert_eq!(result, output);
     }
 }
