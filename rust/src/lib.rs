@@ -186,12 +186,13 @@ mod tests {
 
     #[test]
     fn test_assert_iterator() {
-        // TODO  let mut result = (0..3).into_iter().cloned();
-        let mut result = [0, 1, 2].iter().cloned();
-        let mut output = [0, 1, 2].iter().cloned();
+        // TODO let mut result = (0..3).to_iter();
+        let mut result = [0, 1, 2].iter();
+        let mut output = [0, 1, 2].iter();
         assert!(assert_iterator(&mut result, &mut output));
-        let mut result = [1].iter().cloned();
-        let mut output = [0, 1, 2].iter().cloned();
+
+        let mut result = [1].iter();
+        let mut output = [0, 1, 2].iter();
         assert!(!assert_iterator(&mut result, &mut output));
     }
 
