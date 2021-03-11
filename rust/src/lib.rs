@@ -139,13 +139,13 @@ mod tests {
         );
     }
 
-    fn merge(filename: &str) -> (impl Iterator<Item = u32>, impl Iterator<Item = u32>) {
+    fn merge<T: 'static + FromStr + PartialOrd + Copy>(filename: &str) -> (impl Iterator<Item = T>, impl Iterator<Item = T>) {
         let result = Merge::new(filename);
         let output = get_output(filename).unwrap();
         (result, output)
     }
 
-    fn assert_iterator<T: PartialOrd>(
+    fn assert_iterator<T: PartialEq>(
         iter1: &mut impl Iterator<Item = T>,
         iter2: &mut impl Iterator<Item = T>,
     ) -> bool {
@@ -161,7 +161,7 @@ mod tests {
     #[test]
     fn test_merge() {
         let filename = "../data/test.txt";
-        let (mut result, mut output) = merge(filename);
+        let (mut result, mut output) = merge::<u32>(filename);
         assert!(assert_iterator(&mut result, &mut output));
     }
 
@@ -169,13 +169,13 @@ mod tests {
     #[should_panic]
     fn test_bad_merge() {
         let filename = "../data/bad.txt";
-        let (_result, _output) = merge(filename);
+        let (_result, _output) = merge::<u32>(filename);
     }
 
     #[test]
     fn test_zero_merge() {
         let filename = "../data/zero.txt";
-        let (mut result, mut output) = merge(filename);
+        let (mut result, mut output) = merge::<u32>(filename);
         assert!(result.next().is_none());
         assert!(output.next().is_none());
     }
@@ -183,7 +183,7 @@ mod tests {
     #[test]
     fn test_err() {
         let filename = "../data/err.txt";
-        let (mut result, mut output) = merge(filename);
+        let (mut result, mut output) = merge::<u32>(filename);
         assert!(!assert_iterator(&mut result, &mut output));
     }
 }
