@@ -1,4 +1,34 @@
-before_script:
-  -   - curl --create-dirs -L -o $HOME/.sbt/launchers/0.13.17/sbt-launch.jar https://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.13.17/sbt-launch.jar
-script: "./build.sh"
+jobs:
+  include:
+    - language: java
+      jdk: openjdk15
+      script:
+	  - cd java && ant test
 
+    - language: scala
+      script:
+	  - cd java && sbt test
+
+    - language: python
+      script:
+	  - cd python && nosetests test
+
+    - language: go
+      script:
+	  - cd golang && go test -v src/merge/*.go
+
+    - language: node_js
+      script:
+	  - cd nodejs && npm test
+
+    - language: node_js
+      script:
+	  - cd typescript && gulp default
+		
+    - language: node_js
+      script:
+      - cd react-js && yarn test && yarn build
+
+    - language: rust
+      script:
+      - cd rust && cargo test
