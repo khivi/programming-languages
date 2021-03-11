@@ -7,13 +7,14 @@ use std::str::FromStr;
 extern crate lazy_static;
 extern crate if_chain;
 
-struct State<T>(Box<dyn Iterator<Item = T>>, Option<T>);
-pub struct Merge<T> {
+struct State<'a, T>(Box<dyn 'a + Iterator<Item = T>>, Option<T>);
+
+pub struct Merge<'a, T> {
     count: usize,
-    states: Vec<State<T>>,
+    states: Vec<State<'a, T>>,
 }
 
-impl<T: 'static + FromStr> Merge<T> {
+impl<'a, T: 'a + FromStr> Merge<'a, T> {
     pub fn new(filename: &str) -> Self {
         let count = get_number(filename).unwrap();
         let states = (0..count).map(|i| {
@@ -27,7 +28,7 @@ impl<T: 'static + FromStr> Merge<T> {
     }
 }
 
-impl<T: PartialOrd> Iterator for Merge<T> {
+impl<'a, T: PartialOrd> Iterator for Merge<'a, T> {
     type Item = T;
     fn next(&mut self) -> Option<Self::Item> {
         let count = self.count;
@@ -146,7 +147,7 @@ mod tests {
         );
     }
 
-    fn merge<T: 'static + FromStr + PartialOrd>(filename: &str) -> (impl Iterator<Item = T>, impl Iterator<Item = T>) {
+    fn merge<'a, T: 'a + FromStr + PartialOrd>(filename: &str) -> (impl 'a + Iterator<Item = T>, impl Iterator<Item = T>) {
         let result = Merge::new(filename);
         let output = get_output(filename).unwrap();
         (result, output)
