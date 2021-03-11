@@ -17,10 +17,12 @@ pub struct Merge<'a, T> {
 impl<'a, T: 'a + FromStr> Merge<'a, T> {
     pub fn new(filename: &str) -> Self {
         let count = get_number(filename).unwrap();
-        let states = (0..count).map(|i| {
-            let collection = Box::new(get_collection(filename, i).unwrap());
-            State(collection, None)
-        }).collect();
+        let states = (0..count)
+            .map(|i| {
+                let collection = Box::new(get_collection(filename, i).unwrap());
+                State(collection, None)
+            })
+            .collect();
         Merge {
             count: count,
             states: states,
@@ -58,7 +60,7 @@ impl<'a, T: PartialOrd> Iterator for Merge<'a, T> {
                 }
             }
         }
-        if let Some(m) = min_index { 
+        if let Some(m) = min_index {
             return states[m].1.take();
         }
         return None;
@@ -80,7 +82,10 @@ pub fn get_output<T: FromStr>(filename: &str) -> io::Result<impl Iterator<Item =
     get_numbers(filename, &*RE)
 }
 
-pub fn get_collection<T: FromStr>(filename: &str, idx: usize) -> io::Result<impl Iterator<Item = T>> {
+pub fn get_collection<T: FromStr>(
+    filename: &str,
+    idx: usize,
+) -> io::Result<impl Iterator<Item = T>> {
     let regex: Regex = {
         let r = format!("COLLECTION{}:(.*)", idx);
         Regex::new(&r).unwrap()
@@ -131,7 +136,9 @@ mod tests {
     fn test_output() {
         let output = [1, 1, 2, 2, 3, 4, 4, 6, 7, 9, 9, 20, 21];
         assert_eq!(
-            get_output("../data/test.txt").unwrap().collect::<Vec<u32>>(),
+            get_output("../data/test.txt")
+                .unwrap()
+                .collect::<Vec<u32>>(),
             output
         );
     }
@@ -147,7 +154,9 @@ mod tests {
         );
     }
 
-    fn merge<'a, T: 'a + FromStr + PartialOrd>(filename: &str) -> (impl 'a + Iterator<Item = T>, impl Iterator<Item = T>) {
+    fn merge<'a, T: 'a + FromStr + PartialOrd>(
+        filename: &str,
+    ) -> (impl 'a + Iterator<Item = T>, impl Iterator<Item = T>) {
         let result = Merge::new(filename);
         let output = get_output(filename).unwrap();
         (result, output)
