@@ -42,20 +42,18 @@ impl<T: 'static + PartialOrd> Iterator for Merge<T> {
         for i in 0..count {
             if_chain::if_chain! {
                 if let Some(_) = states[i].1.as_ref();
+                if min_index.is_none();
                 then {
-                    if min_index.is_none() {
-                        min_index.replace(i);
-                    }
+                    min_index.replace(i);
                 }
             }
             if_chain::if_chain! {
                 if let Some(val) = states[i].1.as_ref();
                 if let Some(m) = min_index;
                 if let Some(min) = states[m].1.as_ref();
+                if val < min;
                 then {
-                    if val < min {
-                        min_index.replace(i);
-                    }
+                    min_index.replace(i);
                 }
             }
         }
