@@ -10,3 +10,4 @@ edition = "2018"
 [dependencies]
 regex = "1"
 lazy_static = "1.4.0"
+if_chain = "1.0.1"

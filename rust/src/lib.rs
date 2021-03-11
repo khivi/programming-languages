@@ -5,6 +5,7 @@ use std::str::FromStr;
 
 #[macro_use]
 extern crate lazy_static;
+extern crate if_chain;
 
 struct State<T>(Box<dyn Iterator<Item = T>>, Option<T>);
 pub struct Merge<T> {
@@ -39,15 +40,22 @@ impl<T: 'static + PartialOrd> Iterator for Merge<T> {
         }
         let mut min_index: Option<usize> = None;
         for i in 0..count {
-            if let Some(val) = states[i].1.as_ref() {
-                if let Some(m) = min_index { 
-                    if let Some(min) = states[m].1.as_ref() {
-                        if val < min {
-                            min_index.replace(i);
-                        }
+            if_chain::if_chain! {
+                if let Some(_) = states[i].1.as_ref();
+                then {
+                    if min_index.is_none() {
+                        min_index.replace(i);
                     }
-                } else {
-                    min_index.replace(i);
+                }
+            }
+            if_chain::if_chain! {
+                if let Some(val) = states[i].1.as_ref();
+                if let Some(m) = min_index;
+                if let Some(min) = states[m].1.as_ref();
+                then {
+                    if val < min {
+                        min_index.replace(i);
+                    }
                 }
             }
         }
