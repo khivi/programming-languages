@@ -32,3 +32,7 @@ echo "***ReactJS***"
 cd $TOP_DIR/react-js
 yarn test
 yarn build
+
+echo "***Rust***"
+cd $TOP_DIR/rust
+cargo test
