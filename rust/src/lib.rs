@@ -8,13 +8,12 @@ extern crate lazy_static;
 
 struct State<T>(Box<dyn Iterator<Item = T>>, Option<T>);
 pub struct Merge<T> {
-    max: T, // TODO
     count: usize,
     states: Vec<State<T>>,
 }
 
 impl<T: 'static + FromStr> Merge<T> {
-    pub fn new(filename: &str, max: T) -> Self {
+    pub fn new(filename: &str) -> Self {
         let count = get_number(filename).unwrap();
         let states = (0..count).map(|i| {
             let collection = Box::new(get_collection(filename, i).unwrap());
@@ -23,7 +22,6 @@ impl<T: 'static + FromStr> Merge<T> {
         Merge {
             count: count,
             states: states,
-            max: max,
         }
     }
 }
@@ -32,7 +30,6 @@ impl<T: 'static + PartialOrd + Copy> Iterator for Merge<T> {
     type Item = T;
     fn next(&mut self) -> Option<Self::Item> {
         let count = self.count;
-        let max = self.max;
         let states = &mut self.states;
         loop {
             for i in 0..count {
@@ -41,22 +38,23 @@ impl<T: 'static + PartialOrd + Copy> Iterator for Merge<T> {
                     state.1 = state.0.next();
                 }
             }
-            let not_done = states.iter().any(|s| s.1.is_some());
-            if !not_done {
-                return None;
-            }
-
-            let (mut min, mut min_index) = (max, usize::MIN);
+            let mut min_index: Option<usize> = None;
             for i in 0..count {
                 if let Some(val) = states[i].1 {
-                    if val < min {
-                        min = val;
-                        min_index = i;
+                    if let Some(m) = min_index { 
+                        let min = states[m].1.unwrap();
+                        if val < min {
+                            min_index.replace(i);
+                        }
+                    } else {
+                        min_index.replace(i);
                     }
                 }
             }
-            states[min_index].1 = None;
-            return Some(min);
+            if let Some(m) = min_index { 
+                return states[m].1.take();
+            }
+            return None;
         }
     }
 }
@@ -144,7 +142,7 @@ mod tests {
     }
 
     fn merge(filename: &str) -> (impl Iterator<Item = u32>, impl Iterator<Item = u32>) {
-        let result = Merge::new(filename, u32::MAX);
+        let result = Merge::new(filename);
         let output = get_output(filename).unwrap();
         (result, output)
     }
