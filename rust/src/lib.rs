@@ -185,6 +185,17 @@ mod tests {
     }
 
     #[test]
+    fn test_assert_iterator() {
+        // TODO  let mut result = (0..3).into_iter().cloned();
+        let mut result = [0, 1, 2].iter().cloned();
+        let mut output = [0, 1, 2].iter().cloned();
+        assert!(assert_iterator(&mut result, &mut output));
+        let mut result = [1].iter().cloned();
+        let mut output = [0, 1, 2].iter().cloned();
+        assert!(!assert_iterator(&mut result, &mut output));
+    }
+
+    #[test]
     fn test_merge() {
         let filename = "../data/test.txt";
         let (mut result, mut output) = merge::<u32>(filename);
