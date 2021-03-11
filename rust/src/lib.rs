@@ -72,7 +72,16 @@ pub fn get_number(filename: &str) -> io::Result<usize> {
         static ref RE: Regex = Regex::new(r"NUMBER=(\d+)").unwrap();
     }
     let mut matches = match_lines(filename, &*RE)?;
-    return Ok(matches.next().unwrap().parse().unwrap());
+    if_chain::if_chain! {
+        if let Some(m) = matches.next();
+        if let Ok(number) = m.parse();
+        then {
+            Ok(number)
+        }
+        else {
+            Err(io::Error::new(io::ErrorKind::Other, "oh no!"))
+        }
+    }
 }
 
 pub fn get_output<T: FromStr>(filename: &str) -> io::Result<impl Iterator<Item = T>> {
