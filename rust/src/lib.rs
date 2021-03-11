@@ -27,7 +27,7 @@ impl<T: 'static + FromStr> Merge<T> {
     }
 }
 
-impl<T: 'static + PartialOrd> Iterator for Merge<T> {
+impl<T: PartialOrd> Iterator for Merge<T> {
     type Item = T;
     fn next(&mut self) -> Option<Self::Item> {
         let count = self.count;
