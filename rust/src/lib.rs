@@ -127,7 +127,7 @@ mod tests {
     fn test_output() {
         let output = [1, 1, 2, 2, 3, 4, 4, 6, 7, 9, 9, 20, 21];
         assert_eq!(
-            get_output("../data/test.txt").unwrap().collect::<Vec<32>>(),
+            get_output("../data/test.txt").unwrap().collect::<Vec<u32>>(),
             output
         );
     }
