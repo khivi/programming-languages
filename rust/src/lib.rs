@@ -26,7 +26,7 @@ impl<T: 'static + FromStr> Merge<T> {
     }
 }
 
-impl<T: 'static + PartialOrd + Copy> Iterator for Merge<T> {
+impl<T: 'static + PartialOrd> Iterator for Merge<T> {
     type Item = T;
     fn next(&mut self) -> Option<Self::Item> {
         let count = self.count;
@@ -39,11 +39,12 @@ impl<T: 'static + PartialOrd + Copy> Iterator for Merge<T> {
         }
         let mut min_index: Option<usize> = None;
         for i in 0..count {
-            if let Some(val) = states[i].1 {
+            if let Some(val) = states[i].1.as_ref() {
                 if let Some(m) = min_index { 
-                    let min = states[m].1.unwrap();
-                    if val < min {
-                        min_index.replace(i);
+                    if let Some(min) = states[m].1.as_ref() {
+                        if val < min {
+                            min_index.replace(i);
+                        }
                     }
                 } else {
                     min_index.replace(i);
@@ -139,7 +140,7 @@ mod tests {
         );
     }
 
-    fn merge<T: 'static + FromStr + PartialOrd + Copy>(filename: &str) -> (impl Iterator<Item = T>, impl Iterator<Item = T>) {
+    fn merge<T: 'static + FromStr + PartialOrd>(filename: &str) -> (impl Iterator<Item = T>, impl Iterator<Item = T>) {
         let result = Merge::new(filename);
         let output = get_output(filename).unwrap();
         (result, output)
