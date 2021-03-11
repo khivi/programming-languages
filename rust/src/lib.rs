@@ -31,31 +31,29 @@ impl<T: 'static + PartialOrd + Copy> Iterator for Merge<T> {
     fn next(&mut self) -> Option<Self::Item> {
         let count = self.count;
         let states = &mut self.states;
-        loop {
-            for i in 0..count {
-                let state = &mut states[i];
-                if state.1.is_none() {
-                    state.1 = state.0.next();
-                }
+        for i in 0..count {
+            let state = &mut states[i];
+            if state.1.is_none() {
+                state.1 = state.0.next();
             }
-            let mut min_index: Option<usize> = None;
-            for i in 0..count {
-                if let Some(val) = states[i].1 {
-                    if let Some(m) = min_index { 
-                        let min = states[m].1.unwrap();
-                        if val < min {
-                            min_index.replace(i);
-                        }
-                    } else {
+        }
+        let mut min_index: Option<usize> = None;
+        for i in 0..count {
+            if let Some(val) = states[i].1 {
+                if let Some(m) = min_index { 
+                    let min = states[m].1.unwrap();
+                    if val < min {
                         min_index.replace(i);
                     }
+                } else {
+                    min_index.replace(i);
                 }
             }
-            if let Some(m) = min_index { 
-                return states[m].1.take();
-            }
-            return None;
         }
+        if let Some(m) = min_index { 
+            return states[m].1.take();
+        }
+        return None;
     }
 }
 
