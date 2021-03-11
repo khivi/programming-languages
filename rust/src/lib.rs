@@ -23,10 +23,7 @@ impl<'a, T: 'a + FromStr> Merge<'a, T> {
                 State(collection, None)
             })
             .collect();
-        Merge {
-            count: count,
-            states: states,
-        }
+        Merge { count, states }
     }
 }
 
@@ -35,8 +32,7 @@ impl<'a, T: PartialOrd> Iterator for Merge<'a, T> {
     fn next(&mut self) -> Option<Self::Item> {
         let count = self.count;
         let states = &mut self.states;
-        for i in 0..count {
-            let state = &mut states[i];
+        for state in states.iter_mut() {
             if state.1.is_none() {
                 state.1 = state.0.next();
             }
@@ -63,7 +59,7 @@ impl<'a, T: PartialOrd> Iterator for Merge<'a, T> {
         if let Some(m) = min_index {
             return states[m].1.take();
         }
-        return None;
+        None
     }
 }
 
