@@ -10,7 +10,7 @@ jobs:
       - cd scala && sbt test
 
     - language: python
-      python: 2.7.8 
+      python: 2.7.16
       script:
       - cd python && nosetests test
 
@@ -21,17 +21,18 @@ jobs:
     - language: node_js
       node_js: 14.16.0
       script:
-      - cd nodejs && && npm install && npm test
+      - cd nodejs && npm install && npm test
 
     - language: node_js
       node_js: 14.16.0
       script:
       - npm install --global gulp-cli
-      - cd typescript && gulp default
+      - cd typescript && npm install && gulp default
         
     - language: node_js
       node_js: 14.16.0
       script:
+      - yarn add --dev jest
       - cd react-js && yarn test && yarn build
 
     - language: rust
