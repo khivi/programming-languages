@@ -7,9 +7,10 @@ jobs:
 
     - language: scala
       script:
-      - cd java && sbt test
+      - cd scala && sbt test
 
     - language: python
+      python: 2.7.8 
       script:
       - cd python && nosetests test
 
@@ -18,14 +19,18 @@ jobs:
       - cd golang && go test -v src/merge/*.go
 
     - language: node_js
+      node_js: 14.16.0
       script:
-      - cd nodejs && npm test
+      - cd nodejs && && npm install && npm test
 
     - language: node_js
+      node_js: 14.16.0
       script:
+      - npm install --global gulp-cli
       - cd typescript && gulp default
         
     - language: node_js
+      node_js: 14.16.0
       script:
       - cd react-js && yarn test && yarn build
 
