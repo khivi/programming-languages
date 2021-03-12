@@ -3,28 +3,28 @@ jobs:
     - language: java
       jdk: openjdk15
       script:
-	  - cd java && ant test
+      - cd java && ant test
 
     - language: scala
       script:
-	  - cd java && sbt test
+      - cd java && sbt test
 
     - language: python
       script:
-	  - cd python && nosetests test
+      - cd python && nosetests test
 
     - language: go
       script:
-	  - cd golang && go test -v src/merge/*.go
+      - cd golang && go test -v src/merge/*.go
 
     - language: node_js
       script:
-	  - cd nodejs && npm test
+      - cd nodejs && npm test
 
     - language: node_js
       script:
-	  - cd typescript && gulp default
-		
+      - cd typescript && gulp default
+        
     - language: node_js
       script:
       - cd react-js && yarn test && yarn build
