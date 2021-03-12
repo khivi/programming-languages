@@ -29,3 +29,4 @@ class MergeSorted<E> {
    * Result lines are of form OUTPUT=\d+,\d+,
 
 
+[![Build Status](https://travis-ci.org/khivi/programming-languages.svg?branch=master)](https://travis-ci.org/khivi/programming-languages)
