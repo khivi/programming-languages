@@ -51,6 +51,7 @@
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "jest --watch src",
+    "test:ci": "jest src",
     "lint": "eslint --max-warnings=0 './src/**/*.{ts,tsx}'"
   },
   "browserslist": {
